@@ -84,7 +84,7 @@ namespace com.vrsuya.suyasuyafacial {
 			if (VerifyVariable()) {
 				UpdateSuyasuyaAnimationClips();
 				StatusCode = "COMPLETED";
-				Debug.Log("[VRSuya Suyasuya Facial] Update Animation Clips Completed");
+				Debug.Log("[VRSuya] Update Animation Clips Completed");
             }
 			return;
         }
@@ -272,7 +272,7 @@ namespace com.vrsuya.suyasuyafacial {
 					Undo.CollapseUndoOperations(UndoGroupIndex);
 				}
 			}
-			Debug.Log("[VRSuya SuyasuyaFacial] " + CountUpdatedCurve + " blendshapes have been added to the animation clip");
+			Debug.Log($"[VRSuya] {CountUpdatedCurve} blendshapes have been added to the animation clip");
 			return;
 		}
 

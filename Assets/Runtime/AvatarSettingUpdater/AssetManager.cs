@@ -256,7 +256,7 @@ namespace com.vrsuya.installer {
 					if (Array.Exists(dictIgnorePrefabName, Name => AvatarName == Name)) continue;
 					Avatar AvatarType;
 					if (Enum.TryParse<Avatar>(AvatarName, out AvatarType)) AvatarNames = AvatarNames.Concat(new Avatar[] { AvatarType }).ToArray();
-					// if (!Enum.TryParse<Avatar>(AvatarName, out AvatarType)) Debug.LogError("[VRSuya AvatarSettingUpdater] Prefab 아바타 이름 오류 : " + AssetDatabase.GUIDToAssetPath(AssetGUID));
+					// if (!Enum.TryParse<Avatar>(AvatarName, out AvatarType)) Debug.LogError($"[VRSuya] Prefab 아바타 이름 오류 : {AssetDatabase.GUIDToAssetPath(AssetGUID)}");
 				}
 			}
 

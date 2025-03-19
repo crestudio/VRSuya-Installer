@@ -141,7 +141,7 @@ namespace com.vrsuya.avatarrebuilder {
 				AvatarHandler.RequestCheckNewAvatar();
 				RecoveryAvatar.GetSkinnedMeshRenderers();
 				RecoveryAvatar.Recovery();
-				Debug.Log("[VRSuya AvatarRebuilder] Update Completed");
+				Debug.Log("[VRSuya] Update Completed");
 				ActiveAvatarRebuilder = false;
 				DestroyImmediate(this);
 			}

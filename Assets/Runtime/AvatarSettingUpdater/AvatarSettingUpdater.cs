@@ -276,7 +276,7 @@ namespace com.vrsuya.installer {
 						UnitySetup.GetAvatarMeshRenderers();
 						UnitySetup.UpdateAvatarData();
 
-						Debug.Log("[VRSuya AvatarSettingUpdater] Update Completed");
+						Debug.Log("[VRSuya] Update Completed");
 						DestroyImmediate(this);
 					}
 				}
