@@ -118,7 +118,7 @@ namespace com.vrsuya.installer {
 		public enum Avatar {
 			General, None, 
 			Airi, Aldina, Angura, Anon, Anri, Ash, 
-			Chiffon, Chocolat, Cygnet, 
+			Chiffon, Chise, Chocolat, Cygnet, 
 			Emmelie, EYO, 
 			Firina, Fuzzy, 
 			Glaze, Grus, 

@@ -40,7 +40,7 @@ namespace com.vrsuya.avatarrebuilder {
 		public enum Avatar {
 			General,
 			Airi, Aldina, Angura, Anon, Anri, Ash,
-			Chiffon, Chocolat, Cygnet,
+			Chiffon, Chise, Chocolat, Cygnet,
 			Emmelie, EYO,
 			Firina, Fuzzy,
 			Glaze, Grus,

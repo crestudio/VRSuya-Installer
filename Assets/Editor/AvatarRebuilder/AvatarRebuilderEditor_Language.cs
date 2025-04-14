@@ -151,6 +151,7 @@ namespace com.vrsuya.avatarrebuilder {
 			{ AvatarRebuilder.Avatar.Anri, new string[] { "Anri", "안리", "杏里" } },
 			{ AvatarRebuilder.Avatar.Ash, new string[] { "Ash", "애쉬", "アッシュ" } },
 			{ AvatarRebuilder.Avatar.Chiffon, new string[] { "Chiffon", "쉬폰", "シフォン" } },
+			{ AvatarRebuilder.Avatar.Chise, new string[] { "Chise", "치세", "チセ" } },
 			{ AvatarRebuilder.Avatar.Chocolat, new string[] { "Chocolat", "쇼콜라", "ショコラ" } },
 			{ AvatarRebuilder.Avatar.Cygnet, new string[] { "Cygnet", "시그넷", "シグネット" } },
 			{ AvatarRebuilder.Avatar.Emmelie, new string[] { "Emmelie", "에밀리", "Emmelie" } },
