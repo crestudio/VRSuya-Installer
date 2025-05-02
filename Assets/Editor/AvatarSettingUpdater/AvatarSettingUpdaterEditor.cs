@@ -35,7 +35,7 @@ namespace com.vrsuya.installer {
 		SerializedProperty SerializedInstalledProductHandmotion;
 		SerializedProperty SerializedInstalledProductSuyasuya;
 		SerializedProperty SerializedInstalledProductSoundPad;
-		// 검색용 업데이트 위치
+		// 검색용 VRSuya 아이템 업데이트 위치
 
 		SerializedProperty SerializedInstallProductAFK;
 		SerializedProperty SerializedInstallProductMogumogu;
@@ -46,7 +46,7 @@ namespace com.vrsuya.installer {
 		SerializedProperty SerializedInstallProductHandmotion;
 		SerializedProperty SerializedInstallProductSuyasuya;
 		SerializedProperty SerializedInstallProductSoundPad;
-		// 검색용 업데이트 위치
+		// 검색용 VRSuya 아이템 업데이트 위치
 
 		public static int LanguageIndex = 0;
         public readonly string[] LanguageType = new[] { "English", "한국어", "日本語" };
@@ -81,7 +81,7 @@ namespace com.vrsuya.installer {
 			SerializedInstalledProductHandmotion = serializedObject.FindProperty("InstalledProductHandmotionEditor");
 			SerializedInstalledProductSuyasuya = serializedObject.FindProperty("InstalledProductSuyasuyaEditor");
 			SerializedInstalledProductSoundPad = serializedObject.FindProperty("InstalledProductSoundPadEditor");
-			// 검색용 업데이트 위치
+			// 검색용 VRSuya 아이템 업데이트 위치
 
 			SerializedInstallProductAFK = serializedObject.FindProperty("InstallProductAFKEditor");
 			SerializedInstallProductMogumogu = serializedObject.FindProperty("InstallProductMogumoguEditor");
@@ -92,7 +92,7 @@ namespace com.vrsuya.installer {
 			SerializedInstallProductHandmotion = serializedObject.FindProperty("InstallProductHandmotionEditor");
 			SerializedInstallProductSuyasuya = serializedObject.FindProperty("InstallProductSuyasuyaEditor");
 			SerializedInstallProductSoundPad = serializedObject.FindProperty("InstallProductSoundPadEditor");
-			// 검색용 업데이트 위치
+			// 검색용 VRSuya 아이템 업데이트 위치
 		}
 
         public override void OnInspectorGUI() {
@@ -153,7 +153,7 @@ namespace com.vrsuya.installer {
 			EditorGUILayout.PropertyField(SerializedInstallProductSuyasuya, new GUIContent(LanguageHelper.GetContextString("String_ProductSuyasuya")));
 			GUI.enabled = ReturnInstalled(AvatarSettingUpdater.ProductName.SoundPad, SerializedInstalledProductSoundPad);
 			EditorGUILayout.PropertyField(SerializedInstallProductSoundPad, new GUIContent(LanguageHelper.GetContextString("String_ProductSoundPad")));
-			// 검색용 업데이트 위치
+			// 검색용 VRSuya 아이템 업데이트 위치
 
 			EditorGUI.indentLevel--;
 			GUI.enabled = true;

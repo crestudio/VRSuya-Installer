@@ -84,7 +84,7 @@ namespace com.vrsuya.installer {
 			{ "String_ProductHandmotion", "Handmotion" },
 			{ "String_ProductSuyasuya", "Suyasuya" },
 			{ "String_ProductSoundPad", "SoundPad" },
-			// 검색용 업데이트 위치
+			// 검색용 VRSuya 아이템 업데이트 위치
 
 			// 에러 코드
 			{ "NO_AVATAR", "No Avatar is selected" },
@@ -127,7 +127,7 @@ namespace com.vrsuya.installer {
 			{ "String_ProductHandmotion", "핸드모션" },
 			{ "String_ProductSuyasuya", "스야스야" },
 			{ "String_ProductSoundPad", "사운드패드" },
-			// 검색용 업데이트 위치
+			// 검색용 VRSuya 아이템 업데이트 위치
 
 			// 에러 코드
 			{ "NO_AVATAR", "아바타가 지정되지 않았습니다" },
@@ -170,7 +170,7 @@ namespace com.vrsuya.installer {
 			{ "String_ProductHandmotion", "ハンドモーション" },
 			{ "String_ProductSuyasuya", "すやすや" },
 			{ "String_ProductSoundPad", "サウンドパッド" },
-			// 검색용 업데이트 위치
+			// 검색용 VRSuya 아이템 업데이트 위치
 
 			// 에러 코드
 			{ "NO_AVATAR", "アバターが指定されていません" },
@@ -259,6 +259,7 @@ namespace com.vrsuya.installer {
 			{ AvatarSettingUpdater.Avatar.Yoll, new string[] { "Yoll", "요루", "ヨル" } },
             { AvatarSettingUpdater.Avatar.YUGI_MIYO, new string[] { "YUGI MIYO", "유기 미요", "ユギ ミヨ" } },
             { AvatarSettingUpdater.Avatar.Yuuko, new string[] { "Yuuko", "유우코", "幽狐" } }
+			// 검색용 신규 아바타 추가 위치
 		};
 	}
 }

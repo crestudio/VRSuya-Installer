@@ -58,6 +58,7 @@ namespace com.vrsuya.avatarrebuilder {
 			Ukon, Usasaki, Uzuki,
 			Wolferia,
 			Yoll, YUGI_MIYO, Yuuko
+			// 검색용 신규 아바타 추가 위치
 		}
 
 		protected enum BoneNameType {

@@ -42,7 +42,7 @@ namespace com.vrsuya.installer {
 		public bool InstalledProductHandmotionEditor = false;
 		public bool InstalledProductSuyasuyaEditor = false;
 		public bool InstalledProductSoundPadEditor = false;
-		// 검색용 업데이트 위치
+		// 검색용 VRSuya 아이템 업데이트 위치
 
 		public bool InstallProductAFKEditor = false;
 		public bool InstallProductMogumoguEditor = false;
@@ -53,7 +53,7 @@ namespace com.vrsuya.installer {
 		public bool InstallProductHandmotionEditor = false;
 		public bool InstallProductSuyasuyaEditor = false;
 		public bool InstallProductSoundPadEditor = false;
-		// 검색용 업데이트 위치
+		// 검색용 VRSuya 아이템 업데이트 위치
 
 		public int StatusNeedMoreSpaceMenuEditor = 0;
 		public int StatusNeedMoreSpaceParameterEditor = 0;
@@ -112,7 +112,7 @@ namespace com.vrsuya.installer {
 			Handmotion,
 			Suyasuya,
 			SoundPad
-			// 검색용 업데이트 위치
+			// 검색용 VRSuya 아이템 업데이트 위치
 		}
 
 		public enum Avatar {
@@ -136,6 +136,7 @@ namespace com.vrsuya.installer {
 			Ukon, Usasaki, Uzuki, 
 			Wolferia,
 			Yoll, YUGI_MIYO, Yuuko
+			// 검색용 신규 아바타 추가 위치
 		}
 
 		public enum VRCAssetType {
@@ -152,7 +153,7 @@ namespace com.vrsuya.installer {
 		protected static bool InstalledProductHandmotion = false;
 		protected static bool InstalledProductSuyasuya = false;
 		protected static bool InstalledProductSoundPad = false;
-		// 검색용 업데이트 위치
+		// 검색용 VRSuya 아이템 업데이트 위치
 
 		protected static bool InstallProductAFK = false;
 		protected static bool InstallProductMogumogu = false;
@@ -163,7 +164,7 @@ namespace com.vrsuya.installer {
 		protected static bool InstallProductHandmotion = false;
 		protected static bool InstallProductSuyasuya = false;
 		protected static bool InstallProductSoundPad = false;
-		// 검색용 업데이트 위치
+		// 검색용 VRSuya 아이템 업데이트 위치
 
 		// 추가될 VRSuya 데이터
 		protected static VRSuyaProduct[] InstalledVRSuyaProducts;
@@ -199,7 +200,7 @@ namespace com.vrsuya.installer {
 			InstallProductHandmotion = InstallProductHandmotionEditor;
 			InstallProductSuyasuya = InstallProductSuyasuyaEditor;
 			InstallProductSoundPad = InstallProductSoundPadEditor;
-			// 검색용 업데이트 위치
+			// 검색용 VRSuya 아이템 업데이트 위치
 			return;
         }
 
@@ -216,7 +217,7 @@ namespace com.vrsuya.installer {
 			InstalledProductHandmotionEditor = InstalledProductHandmotion;
 			InstalledProductSuyasuyaEditor = InstalledProductSuyasuya;
 			InstalledProductSoundPadEditor = InstalledProductSoundPad;
-			// 검색용 업데이트 위치
+			// 검색용 VRSuya 아이템 업데이트 위치
 			InstalledVRSuyaProductAvatarsEditor = InstalledVRSuyaProductAvatars;
 			StatusCodeEditor = StatusCode;
 			return;
@@ -318,7 +319,7 @@ namespace com.vrsuya.installer {
 			InstalledProductHandmotion = false;
 			InstalledProductSuyasuya = false;
 			InstalledProductSoundPad = false;
-			// 검색용 업데이트 위치
+			// 검색용 VRSuya 아이템 업데이트 위치
 			InstalledVRSuyaProducts = new VRSuyaProduct[0];
 			InstalledVRSuyaProductAvatars = new Avatar[0];
 			RequestSetupVRSuyaProductList = new VRSuyaProduct[0];
@@ -394,7 +395,7 @@ namespace com.vrsuya.installer {
 				VRSuyaProduct RequestProduct = Array.Find(InstalledVRSuyaProducts, Product => Product.ProductName == ProductName.SoundPad);
 				RequestSetupVRSuyaProductList = RequestSetupVRSuyaProductList.Concat(new VRSuyaProduct[] { RequestProduct }).ToArray();
 			}
-			// 검색용 업데이트 위치
+			// 검색용 VRSuya 아이템 업데이트 위치
 			return;
 		}
 

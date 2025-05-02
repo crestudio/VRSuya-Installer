@@ -59,7 +59,7 @@ namespace com.vrsuya.installer {
 			if (typeof(ProductSetup).IsAssignableFrom(typeof(ProductSetup_SoundPad))) {
 				if (Array.Exists(RequestSetupVRSuyaProductList, Product => Product.ProductName == ProductName.SoundPad)) ProductSetup_SoundPad.RequestSetting();
 			}
-			// 검색용 업데이트 위치
+			// 검색용 VRSuya 아이템 업데이트 위치
 			if (RequestSetupVRSuyaProductList.Length > 0) {
 				foreach (var RequestedAllLayers in RequestSetupVRSuyaProductList.Select(Product => Product.RequiredAnimatorLayers)) {
 					foreach (KeyValuePair<VRCAvatarDescriptor.AnimLayerType, AnimatorControllerLayer[]> RequestedLayers in RequestedAllLayers) {
@@ -124,7 +124,7 @@ namespace com.vrsuya.installer {
 			if (typeof(ProductSetup).IsAssignableFrom(typeof(ProductSetup_Handmotion))) ProductSetup_Handmotion.RegisterProduct();
 			if (typeof(ProductSetup).IsAssignableFrom(typeof(ProductSetup_Suyasuya))) ProductSetup_Suyasuya.RegisterProduct();
 			if (typeof(ProductSetup).IsAssignableFrom(typeof(ProductSetup_SoundPad))) ProductSetup_SoundPad.RegisterProduct();
-			// 검색용 업데이트 위치
+			// 검색용 VRSuya 아이템 업데이트 위치
 			return;
 		}
 

@@ -214,6 +214,7 @@ namespace com.vrsuya.avatarrebuilder {
 			{ AvatarRebuilder.Avatar.Yoll, new string[] { "Yoll", "요루", "ヨル" } },
 			{ AvatarRebuilder.Avatar.YUGI_MIYO, new string[] { "YUGI MIYO", "유기 미요", "ユギ ミヨ" } },
 			{ AvatarRebuilder.Avatar.Yuuko, new string[] { "Yuuko", "유우코", "幽狐" } }
+			// 검색용 신규 아바타 추가 위치
 		};
 	}
 }
