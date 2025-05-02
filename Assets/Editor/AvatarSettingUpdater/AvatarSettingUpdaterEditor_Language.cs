@@ -209,6 +209,7 @@ namespace com.vrsuya.installer {
 			{ AvatarSettingUpdater.Avatar.IMERIS, new string[] { "IMERIS", "이메리스", "イメリス" } },
 			{ AvatarSettingUpdater.Avatar.Karin, new string[] { "Karin", "카린", "カリン" } },
 			{ AvatarSettingUpdater.Avatar.Kikyo, new string[] { "Kikyo", "키쿄", "桔梗" } },
+			{ AvatarSettingUpdater.Avatar.Kipfel, new string[] { "Kipfel", "키펠", "キプフェル" } },
 			{ AvatarSettingUpdater.Avatar.Kokoa, new string[] { "Kokoa", "코코아", "ここあ" } },
 			{ AvatarSettingUpdater.Avatar.Koyuki, new string[] { "Koyuki", "코유키", "狐雪" } },
 			{ AvatarSettingUpdater.Avatar.Kuronatu, new string[] { "Kuronatu", "쿠로나츠", "くろなつ" } },

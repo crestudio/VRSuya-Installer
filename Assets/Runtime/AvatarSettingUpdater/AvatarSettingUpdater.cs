@@ -124,7 +124,7 @@ namespace com.vrsuya.installer {
 			Glaze, Grus, 
 			Hakka, 
 			IMERIS,
-			Karin, Kikyo, Kokoa, Koyuki, Kuronatu, 
+			Karin, Kikyo, Kipfel, Kokoa, Koyuki, Kuronatu, 
 			Lapwing, Leefa, Leeme, Lime, Lunalitt, 
 			Maki, Mamehinata, MANUKA, Mariel, Marron, Maya, Merino, Milfy, Milk, Milltina, Minahoshi, Minase, Mint, Mir, Mishe, Moe, 
 			Nayu, 

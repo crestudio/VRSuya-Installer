@@ -164,6 +164,7 @@ namespace com.vrsuya.avatarrebuilder {
 			{ AvatarRebuilder.Avatar.IMERIS, new string[] { "IMERIS", "이메리스", "イメリス" } },
 			{ AvatarRebuilder.Avatar.Karin, new string[] { "Karin", "카린", "カリン" } },
 			{ AvatarRebuilder.Avatar.Kikyo, new string[] { "Kikyo", "키쿄", "桔梗" } },
+			{ AvatarRebuilder.Avatar.Kipfel, new string[] { "Kipfel", "키펠", "キプフェル" } },
 			{ AvatarRebuilder.Avatar.Kokoa, new string[] { "Kokoa", "코코아", "ここあ" } },
 			{ AvatarRebuilder.Avatar.Koyuki, new string[] { "Koyuki", "코유키", "狐雪" } },
 			{ AvatarRebuilder.Avatar.Kuronatu, new string[] { "Kuronatu", "쿠로나츠", "くろなつ" } },
