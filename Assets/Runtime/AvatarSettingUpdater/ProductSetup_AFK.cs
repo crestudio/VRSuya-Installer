@@ -41,7 +41,11 @@ namespace com.vrsuya.installer {
 				if (VRSuyaAFKGameObject) {
 					UpdateParentConstraints();
 					UpdatePrefabName();
-					if (AvatarType == Avatar.Sio || AvatarType == Avatar.Sugar || AvatarType == Avatar.Shinano) DisableExistAFKAnimatorLayer();
+					if (AvatarType == Avatar.Kipfel ||
+						AvatarType == Avatar.Milfy ||
+						AvatarType == Avatar.Sio ||
+						AvatarType == Avatar.Sugar ||
+						AvatarType == Avatar.Shinano) DisableExistAFKAnimatorLayer();
 				}
 			}
 			return;
