@@ -24,7 +24,7 @@ namespace com.vrsuya.installer {
 		private static GameObject VRSuyaMogumoguGameObject;
 		private static Transform[] AvatarCheekBoneTransforms;
 
-		private static readonly Avatar[] dictAlreadyHaveCheekBoneAvatar = new Avatar[] { Avatar.Airi, Avatar.Sio };
+		private static readonly Avatar[] dictAlreadyHaveCheekBoneAvatar = new Avatar[] { Avatar.Airi, Avatar.Milfy, Avatar.Sio };
 		private static readonly string[] dictSELESTIAMogumoguLayerName = new string[] { "Cheek_L_Stretch", "Cheek_R_Stretch" };
 		private static readonly string[] dictChocolatHairPhysBoneName = new string[] { "Hair_side_L", "Hair_side_R" };
 
@@ -122,11 +122,13 @@ namespace com.vrsuya.installer {
 				if (AvatarCheekBoneTransforms != null) {
 					foreach (Transform TargetTransform in AvatarCheekBoneTransforms) {
 						switch (TargetTransform.gameObject.name) {
+							case "Cheek.L":
 							case "Cheek1_L":
 							case "Cheek_Root_L":
 							case "Cheek_root_L":
 								Cheek_L = TargetTransform;
 								break;
+							case "Cheek.R":
 							case "Cheek1_R":
 							case "Cheek_Root_R":
 							case "Cheek_root_R":
