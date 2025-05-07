@@ -44,8 +44,11 @@ namespace com.vrsuya.animationoffsetupdater {
 
 		void OnEnable() {
             if (!AvatarGameObject) AvatarGameObject = this.gameObject;
-			AnimatorController AvatarFXLayer = GetAvatarFXAnimatorController(AvatarGameObject);
-			AvatarAnimationClips = GetVRSuyaMogumoguAnimations(AvatarFXLayer);
+			if (AvatarGameObject) {
+				VRSuya.Core.Avatar AvatarInstance = new VRSuya.Core.Avatar();
+				AnimatorController AvatarFXLayer = AvatarInstance.GetAnimatorController(AvatarGameObject, VRCAvatarDescriptor.AnimLayerType.FX);
+				AvatarAnimationClips = GetVRSuyaMogumoguAnimations(AvatarFXLayer);
+			}
 		}
 
 		/// <summary>아바타와 애니메이션으로부터 볼 본의 원점을 구합니다</summary>
@@ -74,7 +77,8 @@ namespace com.vrsuya.animationoffsetupdater {
 			if (TargetAvatarAuthorName != null) TargetAvatarAuthorType = (AvatarAuthor)Enum.Parse(typeof(AvatarAuthor), TargetAvatarAuthorName);
 			TargetCheekBoneNames = GetTargetCheekBoneNames();
 			if (Array.TrueForAll(AvatarAnimationClips, TargetAnimationClip => !TargetAnimationClip)) {
-				AnimatorController AvatarFXLayer = GetAvatarFXAnimatorController(AvatarGameObject);
+				VRSuya.Core.Avatar AvatarInstance = new VRSuya.Core.Avatar();
+				AnimatorController AvatarFXLayer = AvatarInstance.GetAnimatorController(AvatarGameObject, VRCAvatarDescriptor.AnimLayerType.FX);
 				AvatarAnimationClips = GetVRSuyaMogumoguAnimations(AvatarFXLayer);
 			}
 			if (VerifyVariable()) {
@@ -139,16 +143,6 @@ namespace com.vrsuya.animationoffsetupdater {
             return;
         }
 
-		/// <summary>아바타의 FX 레이어 애니메이터 컨트롤러를 찾습니다.</summary>
-		/// <returns>아바타의 FX 레이어 애니메이터 컨트롤러</returns>
-		private AnimatorController GetAvatarFXAnimatorController(GameObject TargetGameObject) {
-			AvatarGameObject.TryGetComponent(typeof(VRCAvatarDescriptor), out Component AvatarDescriptor);
-			if (AvatarDescriptor) {
-				VRCAvatarDescriptor.CustomAnimLayer TargetAnimatorController = Array.Find(AvatarDescriptor.GetComponent<VRCAvatarDescriptor>().baseAnimationLayers, AnimationLayer => AnimationLayer.type == VRCAvatarDescriptor.AnimLayerType.FX);
-				return (AnimatorController)TargetAnimatorController.animatorController;
-			}
-			return null;
-		}
 
 		/// <summary>FX 레이어에서 모구모구 애니메이션을 찾아서 리스트로 반환 합니다.</summary>
 		/// <returns>모구모구 애니메이션 클립 어레이</returns>
