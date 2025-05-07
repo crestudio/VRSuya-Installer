@@ -41,8 +41,7 @@ namespace com.vrsuya.installer {
 		/// <summary>외부의 세팅 요청을 처리하는 메인 메소드 입니다.</summary>
 		internal static void RequestSetting() {
 			if (InstallProductMogumogu) {
-				string SearchWord = "Cheek";
-				if (AvatarType == Avatar.Sio) SearchWord = "Hoppe";
+				string SearchWord = (AvatarType != Avatar.Sio) ? "Cheek" : "Hoppe";
 				VRSuyaMogumoguGameObject = Array.Find(VRSuyaGameObjects, gameObject => gameObject.name.Contains("VRSuya_Mogumogu_PhysBone"));
 				AvatarCheekBoneTransforms = Array.FindAll(AvatarAnimator.GetBoneTransform(HumanBodyBones.Head).GetComponentsInChildren<Transform>(true), transform => transform.name.Contains(SearchWord));
 				if (!Array.Exists(dictAlreadyHaveCheekBoneAvatar, AlreadyHaveCheekAvatar => AvatarType == AlreadyHaveCheekAvatar)) {
