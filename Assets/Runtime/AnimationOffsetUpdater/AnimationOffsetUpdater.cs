@@ -37,8 +37,9 @@ namespace com.vrsuya.animationoffsetupdater {
 		public enum AvatarAuthor {
 			General,
 			ChocolateRice,
+			JINGO,
 			Komado,
-			JINGO
+			Plusone
 		}
 
 		void OnEnable() {
@@ -96,11 +97,14 @@ namespace com.vrsuya.animationoffsetupdater {
 				case AvatarAuthor.ChocolateRice:
 					TargetCheekBoneNames = new string[] { "Hoppe.L", "Hoppe.R" };
 					break;
+				case AvatarAuthor.JINGO:
+					TargetCheekBoneNames = new string[] { "Cheek_root_L", "Cheek_root_R" };
+					break;
 				case AvatarAuthor.Komado:
 					TargetCheekBoneNames = new string[] { "Cheek_Root_L", "Cheek_Root_R" };
 					break;
-				case AvatarAuthor.JINGO:
-					TargetCheekBoneNames = new string[] { "Cheek_root_L", "Cheek_root_R" };
+				case AvatarAuthor.Plusone:
+					TargetCheekBoneNames = new string[] { "Cheek.L", "Cheek.R" };
 					break;
 				default:
 					TargetCheekBoneNames = new string[] { "Cheek1_L", "Cheek1_R" };

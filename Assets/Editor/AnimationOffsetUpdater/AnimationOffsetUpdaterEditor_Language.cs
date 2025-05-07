@@ -126,8 +126,9 @@ namespace com.vrsuya.animationoffsetupdater {
 		private static readonly Dictionary<AnimationOffsetUpdater.AvatarAuthor, string[]> dictAvatarAuthorNames = new Dictionary<AnimationOffsetUpdater.AvatarAuthor, string[]>() {
 			{ AnimationOffsetUpdater.AvatarAuthor.General, new string[] { "General", "일반", "一般" } },
 			{ AnimationOffsetUpdater.AvatarAuthor.ChocolateRice, new string[] { "Chocolate rice", "초콜렛 라이스", "チョコレートライス" } },
+			{ AnimationOffsetUpdater.AvatarAuthor.JINGO, new string[] { "JINGO", "진권", "ジンゴ" } },
 			{ AnimationOffsetUpdater.AvatarAuthor.Komado, new string[] { "Komado", "코마도", "こまど" } },
-			{ AnimationOffsetUpdater.AvatarAuthor.JINGO, new string[] { "JINGO", "진권", "ジンゴ" } }
+			{ AnimationOffsetUpdater.AvatarAuthor.Plusone, new string[] { "Plusone", "플러스원", "ぷらすわん" } },
 		};
 	}
 }
