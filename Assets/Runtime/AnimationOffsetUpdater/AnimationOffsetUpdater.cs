@@ -42,13 +42,14 @@ namespace com.vrsuya.animationoffsetupdater {
 			Plusone
 		}
 
-		void OnEnable() {
+		private void OnEnable() {
             if (!AvatarGameObject) AvatarGameObject = this.gameObject;
 			if (AvatarGameObject) {
 				VRSuya.Core.Avatar AvatarInstance = new VRSuya.Core.Avatar();
 				AnimatorController AvatarFXLayer = AvatarInstance.GetAnimatorController(AvatarGameObject, VRCAvatarDescriptor.AnimLayerType.FX);
 				AvatarAnimationClips = GetVRSuyaMogumoguAnimations(AvatarFXLayer);
 			}
+			return;
 		}
 
 		/// <summary>아바타와 애니메이션으로부터 볼 본의 원점을 구합니다</summary>
@@ -147,12 +148,12 @@ namespace com.vrsuya.animationoffsetupdater {
 		/// <summary>FX 레이어에서 모구모구 애니메이션을 찾아서 리스트로 반환 합니다.</summary>
 		/// <returns>모구모구 애니메이션 클립 어레이</returns>
 		private AnimationClip[] GetVRSuyaMogumoguAnimations(AnimatorController TargetAnimatorController) {
-			AnimationClip[] newAnimationClips = new AnimationClip[4];
+			AnimationClip[] NewMogumoguAnimationClips = new AnimationClip[4];
 			if (TargetAnimatorController) {
-				newAnimationClips = TargetAnimatorController.animationClips.Where(TargetAnimationClip => TargetAnimationClip.name.Contains("Mogumogu")).ToArray();
-				Array.Sort(newAnimationClips, (TargetAnimationClip1, TargetAnimationClip2) => TargetAnimationClip1.name.CompareTo(TargetAnimationClip2.name));
+				NewMogumoguAnimationClips = TargetAnimatorController.animationClips.Where(Item => Item.name.Contains("Mogumogu")).ToArray();
+				Array.Sort(NewMogumoguAnimationClips, (Item1, Item2) => Item1.name.CompareTo(Item2.name));
 			}
-			return newAnimationClips;
+			return NewMogumoguAnimationClips;
 		}
 
 		/// <summary>아바타의 볼 트랜스폼의 위치를 가져옵니다.</summary>
@@ -166,11 +167,11 @@ namespace com.vrsuya.animationoffsetupdater {
 
 		/// <summary>아바타와 애니메이션에서 볼의 원점 기준을 가져옵니다</summary>
 		private void GetOriginPositions() {
-			AnimationClip PoseAnimationClip = Array.Find(AvatarAnimationClips, TargetAnimationClip => TargetAnimationClip.length == 0);
+			AnimationClip PoseAnimationClip = Array.Find(AvatarAnimationClips, Item => Item.length == 0);
             if (PoseAnimationClip) {
-				foreach (EditorCurveBinding Binding in AnimationUtility.GetCurveBindings(PoseAnimationClip)) {
-					if (Array.Exists(TargetCheekBoneNames, BoneName => Binding.path.Contains(BoneName))) {
-						AnimationOriginPosition = GetAnimationOriginTransform(Binding.path);
+				foreach (EditorCurveBinding TargetBinding in AnimationUtility.GetCurveBindings(PoseAnimationClip)) {
+					if (Array.Exists(TargetCheekBoneNames, BoneName => TargetBinding.path.Contains(BoneName))) {
+						AnimationOriginPosition = GetAnimationOriginTransform(TargetBinding.path);
 						break;
 					}
 				}
@@ -182,121 +183,122 @@ namespace com.vrsuya.animationoffsetupdater {
 		/// <summary>포즈 애니메이션에서 볼 원점의 위치를 가져옵니다.</summary>
 		/// <returns>포즈 애니메이션 볼 원점 Position</returns>
 		private Vector3 GetAnimationOriginTransform(string TargetAnimationPath) {
-            AnimationClip PoseAnimationClip = Array.Find(AvatarAnimationClips, AnimationClip => AnimationClip.length == 0);
-			Vector3 newOriginTransform = new Vector3(0.0f, 0.0f, 0.0f);
+            AnimationClip PoseAnimationClip = Array.Find(AvatarAnimationClips, Item => Item.length == 0);
+			Vector3 NewOriginPosition = new Vector3(0.0f, 0.0f, 0.0f);
             if (PoseAnimationClip) {
-				foreach (EditorCurveBinding Binding in AnimationUtility.GetCurveBindings(PoseAnimationClip)) {
-					if (Binding.path.Contains(TargetAnimationPath)) {
-						Keyframe[] Keyframes = AnimationUtility.GetEditorCurve(PoseAnimationClip, Binding).keys;
-						switch (Binding.propertyName) {
+				foreach (EditorCurveBinding TargetBinding in AnimationUtility.GetCurveBindings(PoseAnimationClip)) {
+					if (TargetBinding.path.Contains(TargetAnimationPath)) {
+						Keyframe[] ExistKeyframes = AnimationUtility.GetEditorCurve(PoseAnimationClip, TargetBinding).keys;
+						switch (TargetBinding.propertyName) {
 							case "m_LocalPosition.x":
-								newOriginTransform = new Vector3(Keyframes[0].value, newOriginTransform.y, newOriginTransform.z);
+								NewOriginPosition = new Vector3(ExistKeyframes[0].value, NewOriginPosition.y, NewOriginPosition.z);
 								break;
 							case "m_LocalPosition.y":
-								newOriginTransform = new Vector3(newOriginTransform.x, Keyframes[0].value, newOriginTransform.z);
+								NewOriginPosition = new Vector3(NewOriginPosition.x, ExistKeyframes[0].value, NewOriginPosition.z);
 								break;
 							case "m_LocalPosition.z":
-								newOriginTransform = new Vector3(newOriginTransform.x, newOriginTransform.y, Keyframes[0].value);
+								NewOriginPosition = new Vector3(NewOriginPosition.x, NewOriginPosition.y, ExistKeyframes[0].value);
 								break;
 						}
 					}
 				}
 			}
-            return newOriginTransform;
+            return NewOriginPosition;
         }
 
 		/// <summary>아바타에서 볼 원점의 위치를 가져옵니다.</summary>
 		/// <returns>아바타 볼 원점 Position</returns>
 		private Vector3 GetAvatarOriginTransform(string TargetAnimationPath) {
             Transform TargetCheekTransform = Array.Find(AvatarCheekBoneTransforms, CheekTransform => TargetAnimationPath.Contains(CheekTransform.name));
-			Vector3 newOriginTransform = new Vector3(0.0f, 0.0f, 0.0f);
-            if (TargetCheekTransform) newOriginTransform = TargetCheekTransform.localPosition;
-            return newOriginTransform;
+			Vector3 NewOriginPosition = new Vector3(0.0f, 0.0f, 0.0f);
+            if (TargetCheekTransform) NewOriginPosition = TargetCheekTransform.localPosition;
+            return NewOriginPosition;
         }
 
 		/// <summary>포즈 애니메이션 클립들을 Array 맨 뒤로 이동합니다</summary>
 		private AnimationClip[] ReorderAnimationClips() {
-            AnimationClip[] newAnimationClips = new AnimationClip[AvatarAnimationClips.Length];
-            int newStartIndex = 0;
-            int newEndIndex = AvatarAnimationClips.Length - 1;
-			foreach (AnimationClip AnimationClip in AvatarAnimationClips) {
-                if (AnimationClip.length != 0) {
-                    newAnimationClips[newStartIndex] = AnimationClip;
-                    newStartIndex++;
+            AnimationClip[] NewAnimationClips = new AnimationClip[AvatarAnimationClips.Length];
+            int StartIndex = 0;
+            int EndIndex = AvatarAnimationClips.Length - 1;
+			foreach (AnimationClip TargetAnimationClip in AvatarAnimationClips) {
+                if (TargetAnimationClip.length != 0) {
+                    NewAnimationClips[StartIndex] = TargetAnimationClip;
+                    StartIndex++;
                 } else {
-                    newAnimationClips[newEndIndex] = AnimationClip;
-                    newEndIndex--;
+                    NewAnimationClips[EndIndex] = TargetAnimationClip;
+                    EndIndex--;
 
 				}
             }
-            return newAnimationClips;
+            return NewAnimationClips;
         }
 
 		/// <summary>애니메이션 클립들을 업데이트 합니다</summary>
 		private void UpdateAnimationKeyframes() {
-            foreach (AnimationClip CurrentAnimationClip in AvatarAnimationClips) {
-                foreach (EditorCurveBinding Binding in AnimationUtility.GetCurveBindings(CurrentAnimationClip)) {
-                    if (Array.Exists(TargetCheekBoneNames, BoneName => Binding.path.Contains(BoneName))) {
-                        Keyframe[] ExistKeyframes = AnimationUtility.GetEditorCurve(CurrentAnimationClip, Binding).keys;
-                        if (CurrentAnimationClip.length > 0) {
-							Keyframe[] newKeyframes = new Keyframe[ExistKeyframes.Length];
-							AnimationOriginPosition = GetAnimationOriginTransform(Binding.path);
-                            AvatarOriginPosition = GetAvatarOriginTransform(Binding.path);
-                            switch (Binding.propertyName) {
+            foreach (AnimationClip TargetAnimationClip in AvatarAnimationClips) {
+                foreach (EditorCurveBinding TargetBinding in AnimationUtility.GetCurveBindings(TargetAnimationClip)) {
+                    if (Array.Exists(TargetCheekBoneNames, BoneName => TargetBinding.path.Contains(BoneName))) {
+                        Keyframe[] ExistKeyframes = AnimationUtility.GetEditorCurve(TargetAnimationClip, TargetBinding).keys;
+                        if (TargetAnimationClip.length > 0) {
+							Keyframe[] NewKeyframes = new Keyframe[ExistKeyframes.Length];
+							AnimationOriginPosition = GetAnimationOriginTransform(TargetBinding.path);
+                            AvatarOriginPosition = GetAvatarOriginTransform(TargetBinding.path);
+                            switch (TargetBinding.propertyName) {
                                 case "m_LocalPosition.x":
                                     for (int Frame = 0; Frame < ExistKeyframes.Length; Frame++) {
-                                        float newValue = AvatarOriginPosition.x + ((ExistKeyframes[Frame].value - AnimationOriginPosition.x) * AnimationStrength.x);
-                                        newKeyframes[Frame] = new Keyframe(ExistKeyframes[Frame].time, newValue);
-                                        Debug.Log("[AnimationOffsetUpdater] Changed " + Frame + " Keyframe X value from " + ExistKeyframes[Frame].value + " to " + newValue);
-                                    }
+                                        float NewValue = AvatarOriginPosition.x + ((ExistKeyframes[Frame].value - AnimationOriginPosition.x) * AnimationStrength.x);
+                                        NewKeyframes[Frame] = new Keyframe(ExistKeyframes[Frame].time, NewValue);
+										Debug.Log($"[VRSuya] {Frame} Position X : {ExistKeyframes[Frame].value} → {NewValue}");
+									}
                                     break;
                                 case "m_LocalPosition.y":
                                     for (int Frame = 0; Frame < ExistKeyframes.Length; Frame++) {
-                                        float newValue = AvatarOriginPosition.y + ((ExistKeyframes[Frame].value - AnimationOriginPosition.y) * AnimationStrength.y);
-                                        newKeyframes[Frame] = new Keyframe(ExistKeyframes[Frame].time, newValue);
-                                        Debug.Log("[AnimationOffsetUpdater] Changed " + Frame + " Keyframe Y value from " + ExistKeyframes[Frame].value + " to " + newValue);
-                                    }
+                                        float NewValue = AvatarOriginPosition.y + ((ExistKeyframes[Frame].value - AnimationOriginPosition.y) * AnimationStrength.y);
+                                        NewKeyframes[Frame] = new Keyframe(ExistKeyframes[Frame].time, NewValue);
+										Debug.Log($"[VRSuya] {Frame} Position Y : {ExistKeyframes[Frame].value} → {NewValue}");
+									}
                                     break;
                                 case "m_LocalPosition.z":
                                     for (int Frame = 0; Frame < ExistKeyframes.Length; Frame++) {
-                                        float newValue = AvatarOriginPosition.z + ((ExistKeyframes[Frame].value - AnimationOriginPosition.z) * AnimationStrength.z);
-                                        newKeyframes[Frame] = new Keyframe(ExistKeyframes[Frame].time, newValue);
-                                        Debug.Log("[AnimationOffsetUpdater] Changed " + Frame + " Keyframe Z value from " + ExistKeyframes[Frame].value + " to " + newValue);
+                                        float NewValue = AvatarOriginPosition.z + ((ExistKeyframes[Frame].value - AnimationOriginPosition.z) * AnimationStrength.z);
+                                        NewKeyframes[Frame] = new Keyframe(ExistKeyframes[Frame].time, NewValue);
+                                        Debug.Log($"[VRSuya] {Frame} Position Z : {ExistKeyframes[Frame].value} → {NewValue}");
                                     }
                                     break;
                             }
-							CurrentAnimationClip.SetCurve(Binding.path, typeof(Transform), Binding.propertyName, new AnimationCurve(newKeyframes));
+							TargetAnimationClip.SetCurve(TargetBinding.path, typeof(Transform), TargetBinding.propertyName, new AnimationCurve(NewKeyframes));
 						} else {
-							Keyframe[] newKeyframes = new Keyframe[ExistKeyframes.Length];
-							AvatarOriginPosition = GetAvatarOriginTransform(Binding.path);
-                            switch (Binding.propertyName) {
+							Keyframe[] NewKeyframes = new Keyframe[ExistKeyframes.Length];
+							AvatarOriginPosition = GetAvatarOriginTransform(TargetBinding.path);
+                            switch (TargetBinding.propertyName) {
                                 case "m_LocalPosition.x":
-                                    for (int AnimationOffset = 0; AnimationOffset < ExistKeyframes.Length; AnimationOffset++) {
-                                        float newKeyframeValue = AvatarOriginPosition.x;
-                                        newKeyframes[AnimationOffset] = new Keyframe(ExistKeyframes[AnimationOffset].time, newKeyframeValue);
-                                        Debug.Log("[AnimationOffsetUpdater] Changed " + AnimationOffset + " Keyframe X value from " + ExistKeyframes[AnimationOffset].value + " to " + newKeyframeValue);
-                                    }
+                                    for (int Frame = 0; Frame < ExistKeyframes.Length; Frame++) {
+                                        float NewValue = AvatarOriginPosition.x;
+                                        NewKeyframes[Frame] = new Keyframe(ExistKeyframes[Frame].time, NewValue);
+										Debug.Log($"[VRSuya] {Frame} Position X : {ExistKeyframes[Frame].value} → {NewValue}");
+									}
                                     break;
                                 case "m_LocalPosition.y":
-                                    for (int AnimationOffset = 0; AnimationOffset < ExistKeyframes.Length; AnimationOffset++) {
-                                        float newKeyframeValue = AvatarOriginPosition.y;
-                                        newKeyframes[AnimationOffset] = new Keyframe(ExistKeyframes[AnimationOffset].time, newKeyframeValue);
-                                        Debug.Log("[AnimationOffsetUpdater] Changed " + AnimationOffset + " Keyframe Y value from " + ExistKeyframes[AnimationOffset].value + " to " + newKeyframeValue);
-                                    }
+                                    for (int Frame = 0; Frame < ExistKeyframes.Length; Frame++) {
+                                        float NewValue = AvatarOriginPosition.y;
+                                        NewKeyframes[Frame] = new Keyframe(ExistKeyframes[Frame].time, NewValue);
+										Debug.Log($"[VRSuya] {Frame} Position Y : {ExistKeyframes[Frame].value} → {NewValue}");
+									}
                                     break;
                                 case "m_LocalPosition.z":
-                                    for (int AnimationOffset = 0; AnimationOffset < ExistKeyframes.Length; AnimationOffset++) {
-                                        float newKeyframeValue = AvatarOriginPosition.z;
-                                        newKeyframes[AnimationOffset] = new Keyframe(ExistKeyframes[AnimationOffset].time, newKeyframeValue);
-                                        Debug.Log("[AnimationOffsetUpdater] Changed " + AnimationOffset + " Keyframe Z value from " + ExistKeyframes[AnimationOffset].value + " to " + newKeyframeValue);
-                                    }
+                                    for (int Frame = 0; Frame < ExistKeyframes.Length; Frame++) {
+                                        float NewValue = AvatarOriginPosition.z;
+                                        NewKeyframes[Frame] = new Keyframe(ExistKeyframes[Frame].time, NewValue);
+										Debug.Log($"[VRSuya] {Frame} Position Z : {ExistKeyframes[Frame].value} → {NewValue}");
+									}
                                     break;
                             }
-							CurrentAnimationClip.SetCurve(Binding.path, typeof(Transform), Binding.propertyName, new AnimationCurve(newKeyframes));
+							TargetAnimationClip.SetCurve(TargetBinding.path, typeof(Transform), TargetBinding.propertyName, new AnimationCurve(NewKeyframes));
 						}
                     }
                 }
             }
+			return;
         }
     }
 }
