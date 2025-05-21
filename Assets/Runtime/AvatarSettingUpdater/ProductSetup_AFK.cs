@@ -41,7 +41,8 @@ namespace com.vrsuya.installer {
 				if (VRSuyaAFKGameObject) {
 					UpdateParentConstraints();
 					UpdatePrefabName();
-					if (AvatarType == Avatar.Kipfel ||
+					if (AvatarType == Avatar.Aldina ||
+						AvatarType == Avatar.Kipfel ||
 						AvatarType == Avatar.Milfy ||
 						AvatarType == Avatar.Sio ||
 						AvatarType == Avatar.Sugar ||
@@ -106,23 +107,20 @@ namespace com.vrsuya.installer {
 		private static void DisableExistAFKAnimatorLayer() {
 			AnimatorController VRCFXLayer = (AnimatorController)Array.Find(AvatarVRCAvatarLayers, VRCAnimator => VRCAnimator.type == VRCAvatarDescriptor.AnimLayerType.FX).animatorController;
 			if (VRCFXLayer) {
-				if (Array.Exists(VRCFXLayer.layers, ExistLayer => ExistLayer.name == "AFK")) {
+				if (Array.Exists(VRCFXLayer.layers, ExistLayer => ExistLayer.name.Contains("AFK"))) {
 					if (VRCFXLayer.layers.Where(ExistLayer => ExistLayer.defaultWeight != 0.0f).ToArray().Length > 0) {
 						AnimatorControllerLayer[] newAnimationLayers = new AnimatorControllerLayer[VRCFXLayer.layers.Length];
 						for (int Index = 0; Index < newAnimationLayers.Length; Index++) {
-							AnimatorControllerLayer newAnimationLayer = new AnimatorControllerLayer();
-							newAnimationLayer.avatarMask = VRCFXLayer.layers[Index].avatarMask;
-							newAnimationLayer.blendingMode = VRCFXLayer.layers[Index].blendingMode;
-							newAnimationLayer.iKPass = VRCFXLayer.layers[Index].iKPass;
-							newAnimationLayer.name = VRCFXLayer.layers[Index].name;
-							newAnimationLayer.stateMachine = VRCFXLayer.layers[Index].stateMachine;
-							newAnimationLayer.syncedLayerAffectsTiming = VRCFXLayer.layers[Index].syncedLayerAffectsTiming;
-							newAnimationLayer.syncedLayerIndex = VRCFXLayer.layers[Index].syncedLayerIndex;
-							if (VRCFXLayer.layers[Index].name == "AFK") {
-								newAnimationLayer.defaultWeight = 0.0f;
-							} else {
-								newAnimationLayer.defaultWeight = VRCFXLayer.layers[Index].defaultWeight;
-							}
+							AnimatorControllerLayer newAnimationLayer = new AnimatorControllerLayer() {
+								avatarMask = VRCFXLayer.layers[Index].avatarMask,
+								blendingMode = VRCFXLayer.layers[Index].blendingMode,
+								defaultWeight = (VRCFXLayer.layers[Index].name.Contains("AFK")) ? 0.0f : VRCFXLayer.layers[Index].defaultWeight,
+								iKPass = VRCFXLayer.layers[Index].iKPass,
+								name = VRCFXLayer.layers[Index].name,
+								stateMachine = VRCFXLayer.layers[Index].stateMachine,
+								syncedLayerAffectsTiming = VRCFXLayer.layers[Index].syncedLayerAffectsTiming,
+								syncedLayerIndex = VRCFXLayer.layers[Index].syncedLayerIndex
+							};
 							newAnimationLayers[Index] = newAnimationLayer;
 						}
 						Undo.RecordObject(VRCFXLayer, "Disabled Animator Controller AFK Layer");
