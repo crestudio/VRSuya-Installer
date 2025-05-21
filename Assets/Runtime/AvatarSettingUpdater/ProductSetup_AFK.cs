@@ -23,6 +23,11 @@ namespace com.vrsuya.installer {
 		private static VRSuyaProduct AFK;
 		private static GameObject VRSuyaAFKGameObject;
 
+		private readonly static Avatar[] AFKAvatars = new Avatar[] { 
+			Avatar.Aldina, Avatar.Kipfel, Avatar.Leefa, Avatar.Lunalitt, Avatar.Milfy,
+			Avatar.Minase, Avatar.Shinano, Avatar.Sio, Avatar.Sugar
+		};
+
 		/// <summary>제품 정보를 AssetManager에게 요청하여 업데이트 한 후, 설치된 에셋 목록에 추가합니다.</summary>
 		internal static void RegisterProduct() {
 			InstalledProductAFK = false;
@@ -41,15 +46,7 @@ namespace com.vrsuya.installer {
 				if (VRSuyaAFKGameObject) {
 					UpdateParentConstraints();
 					UpdatePrefabName();
-					if (AvatarType == Avatar.Aldina ||
-						AvatarType == Avatar.Kipfel ||
-						AvatarType == Avatar.Leefa ||
-						AvatarType == Avatar.Lunalitt ||
-						AvatarType == Avatar.Milfy ||
-						AvatarType == Avatar.Minase ||
-						AvatarType == Avatar.Shinano ||
-						AvatarType == Avatar.Sio ||
-						AvatarType == Avatar.Sugar) DisableExistAFKAnimatorLayer();
+					if (AFKAvatars.Contains(AvatarType)) DisableExistAFKAnimatorLayer();
 				}
 			}
 			return;
