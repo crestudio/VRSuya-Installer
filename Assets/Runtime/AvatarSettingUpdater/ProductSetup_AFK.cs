@@ -43,10 +43,13 @@ namespace com.vrsuya.installer {
 					UpdatePrefabName();
 					if (AvatarType == Avatar.Aldina ||
 						AvatarType == Avatar.Kipfel ||
+						AvatarType == Avatar.Leefa ||
+						AvatarType == Avatar.Lunalitt ||
 						AvatarType == Avatar.Milfy ||
+						AvatarType == Avatar.Minase ||
+						AvatarType == Avatar.Shinano ||
 						AvatarType == Avatar.Sio ||
-						AvatarType == Avatar.Sugar ||
-						AvatarType == Avatar.Shinano) DisableExistAFKAnimatorLayer();
+						AvatarType == Avatar.Sugar) DisableExistAFKAnimatorLayer();
 				}
 			}
 			return;
@@ -107,27 +110,30 @@ namespace com.vrsuya.installer {
 		private static void DisableExistAFKAnimatorLayer() {
 			AnimatorController VRCFXLayer = (AnimatorController)Array.Find(AvatarVRCAvatarLayers, VRCAnimator => VRCAnimator.type == VRCAvatarDescriptor.AnimLayerType.FX).animatorController;
 			if (VRCFXLayer) {
-				if (Array.Exists(VRCFXLayer.layers, ExistLayer => ExistLayer.name.Contains("AFK"))) {
-					if (VRCFXLayer.layers.Where(ExistLayer => ExistLayer.defaultWeight != 0.0f).ToArray().Length > 0) {
-						AnimatorControllerLayer[] newAnimationLayers = new AnimatorControllerLayer[VRCFXLayer.layers.Length];
-						for (int Index = 0; Index < newAnimationLayers.Length; Index++) {
-							AnimatorControllerLayer newAnimationLayer = new AnimatorControllerLayer() {
-								avatarMask = VRCFXLayer.layers[Index].avatarMask,
-								blendingMode = VRCFXLayer.layers[Index].blendingMode,
-								defaultWeight = (VRCFXLayer.layers[Index].name.Contains("AFK")) ? 0.0f : VRCFXLayer.layers[Index].defaultWeight,
-								iKPass = VRCFXLayer.layers[Index].iKPass,
-								name = VRCFXLayer.layers[Index].name,
-								stateMachine = VRCFXLayer.layers[Index].stateMachine,
-								syncedLayerAffectsTiming = VRCFXLayer.layers[Index].syncedLayerAffectsTiming,
-								syncedLayerIndex = VRCFXLayer.layers[Index].syncedLayerIndex
-							};
-							newAnimationLayers[Index] = newAnimationLayer;
-						}
-						Undo.RecordObject(VRCFXLayer, "Disabled Animator Controller AFK Layer");
-						VRCFXLayer.layers = newAnimationLayers;
-						EditorUtility.SetDirty(VRCFXLayer);
-						Undo.CollapseUndoOperations(UndoGroupIndex);
+				float[] AFKLayerWeights = VRCFXLayer.layers
+					.Where(Item => Item.name.Contains("AFK"))
+					.Where(Item => Item.name != "TypeAFK")
+					.Select(Item => Item.defaultWeight)
+					.ToArray();
+				if (AFKLayerWeights.Any(Item => Item > 0.0f)) {
+					AnimatorControllerLayer[] NewAnimationLayers = new AnimatorControllerLayer[VRCFXLayer.layers.Length];
+					for (int Index = 0; Index < NewAnimationLayers.Length; Index++) {
+						AnimatorControllerLayer NewAnimationLayer = new AnimatorControllerLayer() {
+							avatarMask = VRCFXLayer.layers[Index].avatarMask,
+							blendingMode = VRCFXLayer.layers[Index].blendingMode,
+							defaultWeight = (VRCFXLayer.layers[Index].name.Contains("AFK") && VRCFXLayer.layers[Index].name != "TypeAFK") ? 0.0f : VRCFXLayer.layers[Index].defaultWeight,
+							iKPass = VRCFXLayer.layers[Index].iKPass,
+							name = VRCFXLayer.layers[Index].name,
+							stateMachine = VRCFXLayer.layers[Index].stateMachine,
+							syncedLayerAffectsTiming = VRCFXLayer.layers[Index].syncedLayerAffectsTiming,
+							syncedLayerIndex = VRCFXLayer.layers[Index].syncedLayerIndex
+						};
+						NewAnimationLayers[Index] = NewAnimationLayer;
 					}
+					Undo.RecordObject(VRCFXLayer, "Disabled Animator Controller AFK Layer");
+					VRCFXLayer.layers = NewAnimationLayers;
+					EditorUtility.SetDirty(VRCFXLayer);
+					Undo.CollapseUndoOperations(UndoGroupIndex);
 				}
 			}
 			return;
