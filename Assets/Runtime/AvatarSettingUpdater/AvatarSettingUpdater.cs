@@ -273,7 +273,7 @@ namespace com.vrsuya.installer {
 						UnitySetup.GetAvatarMeshRenderers();
 						UnitySetup.UpdateAvatarData();
 
-						Debug.Log("[VRSuya] Update Completed");
+						Debug.Log($"[VRSuya] Update Completed");
 						DestroyImmediate(this);
 					}
 				}
@@ -467,19 +467,19 @@ namespace com.vrsuya.installer {
 			string[] Menus = RequestProduct.MenuGUID.Select(Item => GUIDToAssetName(Item, true)).ToArray();
 			string[] Parameters = RequestProduct.ParameterGUID.Select(Item => GUIDToAssetName(Item, true)).ToArray();
 			string[] Prefabs = RequestProduct.PrefabGUID.Select(Item => GUIDToAssetName(Item, true)).ToArray();
-			Debug.Log(RequestProductName + " Product Name : " + RequestProduct.ProductName.ToString());
-			Debug.Log(RequestProductName + " Locomotion Animator : " + GUIDToAssetName(RequestProduct.LocomotionAnimatorGUID, true));
-			Debug.Log(RequestProductName + " Action Animator : " + GUIDToAssetName(RequestProduct.ActionAnimatorGUID, true));
-			Debug.Log(RequestProductName + " Required Animator Layers : " + string.Join(", ", AnimatorLayers));
-			Debug.Log(RequestProductName + " Required Animator Parameters : " + string.Join(", ", AnimatorParameters));
-			Debug.Log(RequestProductName + " Required VRC Menus : " + string.Join(", ", VRCMenus));
-			Debug.Log(RequestProductName + " Required VRC MemoryCount : " + RequestProduct.RequiredVRCMemoryCount);
-			Debug.Log(RequestProductName + " Required VRC Parameters : " + string.Join(", ", RequiredParameters));
-			Debug.Log(RequestProductName + " Support Avatar : " + string.Join(", ", SupportAvatars));
-			Debug.Log(RequestProductName + " AnimationController Files : " + string.Join(", ", AnimationControllers));
-			Debug.Log(RequestProductName + " Menu Files : " + string.Join(", ", Menus));
-			Debug.Log(RequestProductName + " Parameter Files : " + string.Join(", ", Parameters));
-			Debug.Log(RequestProductName + " Prefab Files : " + string.Join(", ", Prefabs));
+			Debug.Log($"{RequestProductName} Product Name : {RequestProduct.ProductName.ToString()}\n" +
+				$"{RequestProductName} Locomotion Animator : {GUIDToAssetName(RequestProduct.LocomotionAnimatorGUID, true)}\n" +
+				$"{RequestProductName} Action Animator : {GUIDToAssetName(RequestProduct.ActionAnimatorGUID, true)}\n" +
+				$"{RequestProductName} Required Animator Layers : {string.Join(", ", AnimatorLayers)}\n" +
+				$"{RequestProductName} Required Animator Parameters : {string.Join(", ", AnimatorParameters)}\n" +
+				$"{RequestProductName} Required VRC Menus : {string.Join(", ", VRCMenus)}\n" +
+				$"{RequestProductName} Required VRC MemoryCount : {RequestProduct.RequiredVRCMemoryCount}\n" +
+				$"{RequestProductName} Required VRC Parameters : {string.Join(", ", RequiredParameters)}\n" +
+				$"{RequestProductName} Support Avatar : {string.Join(", ", SupportAvatars)}\n" +
+				$"{RequestProductName} AnimationController Files : {string.Join(", ", AnimationControllers)}\n" +
+				$"{RequestProductName} Menu Files : {string.Join(", ", Menus)}\n" +
+				$"{RequestProductName} Parameter Files : {string.Join(", ", Parameters)}\n" +
+				$"{RequestProductName} Prefab Files : {string.Join(", ", Prefabs)}");
 		}
 
 		/// <summary>요청한 GUID를 파일 이름으로 반환합니다. 2번째 인자는 확장명 포함 여부를 결정합니다.</summary>

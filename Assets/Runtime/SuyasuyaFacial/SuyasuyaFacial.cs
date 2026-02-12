@@ -84,7 +84,7 @@ namespace com.vrsuya.suyasuyafacial {
 			if (VerifyVariable()) {
 				UpdateSuyasuyaAnimationClips();
 				StatusCode = "COMPLETED";
-				Debug.Log("[VRSuya] Update Animation Clips Completed");
+				Debug.Log($"[VRSuya] Update Animation Clips Completed");
             }
         }
 

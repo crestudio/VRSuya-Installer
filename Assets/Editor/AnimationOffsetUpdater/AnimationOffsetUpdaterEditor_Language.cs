@@ -89,7 +89,7 @@ namespace com.vrsuya.animationoffsetupdater {
 			{ "String_UpdateAnimation", "애니메이션 업데이트" },
 
 			// 성공 코드
-			{ "COMPLETED_GETPOSITION", "볼 위치 데이터를 가져왔습니다." },
+			{ "COMPLETED_GETPOSITION", "볼 위치 데이터를 가져왔습니다" },
 			{ "COMPLETED_UPDATE", "애니메이션 클립의 오프셋을 업데이트 하였습니다" },
 
 			// 에러 코드
