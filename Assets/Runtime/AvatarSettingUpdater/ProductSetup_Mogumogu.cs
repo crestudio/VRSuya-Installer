@@ -20,13 +20,13 @@ namespace com.vrsuya.installer {
 	[AddComponentMenu("")]
 	public class ProductSetup_Mogumogu : ProductSetup {
 
-		private static VRSuyaProduct Mogumogu;
-		private static GameObject VRSuyaMogumoguGameObject;
-		private static Transform[] AvatarCheekBoneTransforms;
+		static VRSuyaProduct Mogumogu;
+		static GameObject VRSuyaMogumoguGameObject;
+		static Transform[] AvatarCheekBoneTransforms;
 
-		private static readonly Avatar[] dictAlreadyHaveCheekBoneAvatar = new Avatar[] { Avatar.Airi, Avatar.Milfy, Avatar.Sio };
-		private static readonly string[] dictSELESTIAMogumoguLayerName = new string[] { "Cheek_L_Stretch", "Cheek_R_Stretch" };
-		private static readonly string[] dictChocolatHairPhysBoneName = new string[] { "Hair_side_L", "Hair_side_R" };
+		static readonly Avatar[] dictAlreadyHaveCheekBoneAvatar = new Avatar[] { Avatar.Airi, Avatar.Milfy, Avatar.Sio };
+		static readonly string[] dictSELESTIAMogumoguLayerName = new string[] { "Cheek_L_Stretch", "Cheek_R_Stretch" };
+		static readonly string[] dictChocolatHairPhysBoneName = new string[] { "Hair_side_L", "Hair_side_R" };
 
 		/// <summary>제품 정보를 AssetManager에게 요청하여 업데이트 한 후, 설치된 에셋 목록에 추가합니다.</summary>
 		internal static void RegisterProduct() {
@@ -64,7 +64,7 @@ namespace com.vrsuya.installer {
 		}
 
 		/// <summary>아바타에 Physbone Prefab이 있는지 검사하고 없으면 설치하는 메소드 입니다.</summary>
-		private static void SetupPhysbonePrefab() {
+		static void SetupPhysbonePrefab() {
 			string[] ChildAvatarGameObjectNames = new string[0];
 			foreach (Transform ChildTransform in AvatarGameObject.transform) {
 				ChildAvatarGameObjectNames = ChildAvatarGameObjectNames.Concat(new string[] { ChildTransform.name }).ToArray();
@@ -88,7 +88,7 @@ namespace com.vrsuya.installer {
 		}
 
 		/// <summary>아바타에 Particle Prefab이 있는지 검사하고 없으면 설치하는 메소드 입니다.</summary>
-		private static void SetupParticlePrefab() {
+		static void SetupParticlePrefab() {
 			string[] HeadChildAvatarGameObjectNames = new string[0];
 			foreach (Transform ChildTransform in AvatarAnimator.GetBoneTransform(HumanBodyBones.Head)) {
 				HeadChildAvatarGameObjectNames = HeadChildAvatarGameObjectNames.Concat(new string[] { ChildTransform.name }).ToArray();
@@ -111,7 +111,7 @@ namespace com.vrsuya.installer {
 		}
 
 		/// <summary>볼 PhysBone 컴포넌트와 아바타의 볼 본과 연결합니다.</summary>
-		private static void UpdatePhysBoneSetting() {
+		static void UpdatePhysBoneSetting() {
 			VRCPhysBone[] VRSuyaMogumoguPhysBones = VRSuyaMogumoguGameObject.GetComponentsInChildren<VRCPhysBone>(true);
 			if (VRSuyaMogumoguPhysBones != null) {
 				Transform Cheek_L = null;
@@ -153,7 +153,7 @@ namespace com.vrsuya.installer {
 		}
 
 		/// <summary>기존 아바타에 존재하는 PhysBone 컴포넌트를 비활성화 합니다.</summary>
-		private static void DisableExistPhysBone() {
+		static void DisableExistPhysBone() {
 			if (AvatarCheekBoneTransforms.Length > 0) {
 				foreach (Transform TargetTransform in AvatarCheekBoneTransforms) {
 					if (TargetTransform.GetComponent<VRCPhysBone>()) {
@@ -168,7 +168,7 @@ namespace com.vrsuya.installer {
 		}
 
 		/// <summary>기존 아바타에 존재하는 PhysBone 컴포넌트에서 Animated 속성을 활성화 합니다.</summary>
-		private static void EnablePhysBoneAnimated() {
+		static void EnablePhysBoneAnimated() {
 			if (AvatarCheekBoneTransforms.Length > 0) {
 				foreach (Transform TargetTransform in AvatarCheekBoneTransforms) {
 					if (TargetTransform.GetComponent<VRCPhysBone>()) {
@@ -185,7 +185,7 @@ namespace com.vrsuya.installer {
 		}
 
 		/// <summary>기존 아바타에 존재하는 헤어 PhysBone 컴포넌트에서 Animated 속성을 활성화 합니다.</summary>
-		private static void EnableHairPhysBoneAnimated() {
+		static void EnableHairPhysBoneAnimated() {
 			VRCPhysBone[] AvatarPhysBoneComponents = AvatarGameObject.GetComponentsInChildren<VRCPhysBone>();
 			VRCPhysBone[] SideHairPhysBoneComponents = Array
 				.FindAll(AvatarPhysBoneComponents, PhysBone => Array
@@ -204,7 +204,7 @@ namespace com.vrsuya.installer {
 		}
 
 		/// <summary>셀레스티아의 피직스본 애니메이터 레이어를 비활성화 합니다.</summary>
-		private static void DisableExistMoumoguAnimatorLayer() {
+		static void DisableExistMoumoguAnimatorLayer() {
 			AnimatorController VRCFXLayer = (AnimatorController)Array.Find(AvatarVRCAvatarLayers, VRCAnimator => VRCAnimator.type == VRCAvatarDescriptor.AnimLayerType.FX).animatorController;
 			if (VRCFXLayer) {
 				if (Array.Exists(VRCFXLayer.layers, ExistLayer => Array.Exists(dictSELESTIAMogumoguLayerName, TargetName => ExistLayer.name == TargetName))) {

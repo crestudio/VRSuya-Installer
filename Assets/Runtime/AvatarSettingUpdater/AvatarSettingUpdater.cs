@@ -182,7 +182,7 @@ namespace com.vrsuya.installer {
 		}
 
 		/// <summary>에디터 변수 -> 정적 변수 동기화합니다.</summary>
-		private void SetStaticVariable() {
+		void SetStaticVariable() {
             AvatarGameObject = AvatarGameObjectEditor;
 			if (AvatarTypeNameEditor != null) AvatarType = (Avatar)Enum.Parse(typeof(Avatar), AvatarTypeNameEditor);
 			AvatarAnchorOverride = AvatarAnchorOverrideEditor;
@@ -205,7 +205,7 @@ namespace com.vrsuya.installer {
         }
 
 		/// <summary>정적 변수 -> 에디터 변수 동기화합니다.</summary>
-		private void SetEditorVariable() {
+		void SetEditorVariable() {
 			AvatarGameObjectEditor = AvatarGameObject;
 			AvatarAnchorOverrideEditor = AvatarAnchorOverride;
 			InstalledProductAFKEditor = InstalledProductAFK;
@@ -224,7 +224,7 @@ namespace com.vrsuya.installer {
 		}
 
 		/// <summary>언어 설정에 따른 String를 선택합니다</summary>
-		private void SetLanguageString(int LanguageIndex) {
+		void SetLanguageString(int LanguageIndex) {
 			switch (LanguageIndex) {
 				case 0:
 					TargetLanguage = "_EN";
@@ -299,7 +299,7 @@ namespace com.vrsuya.installer {
 		}
 
 		/// <summary>정적 변수를 초기화 합니다.</summary>
-		private void ClearVariable() {
+		void ClearVariable() {
 			AvatarType = Avatar.General;
 			AvatarAnimator = null;
             AvatarSkinnedMeshRenderers = new SkinnedMeshRenderer[0];
@@ -331,7 +331,7 @@ namespace com.vrsuya.installer {
 
 		/// <summary>아바타의 현재 상태를 검사하여 설치가 가능한지 확인합니다.</summary>
 		/// <returns>설치 가능 여부</returns>
-		private bool VerifyVariable() {
+		bool VerifyVariable() {
             if (!AvatarGameObject) {
 				StatusCode = "NO_AVATAR";
 				return false;
@@ -357,7 +357,7 @@ namespace com.vrsuya.installer {
         }
 
 		/// <summary>설치된 제품과 세팅 요청한 제품을 검사하여, 세팅 요청 목록에 넣습니다.</summary>
-		private void AddRequestSetupVRSuyaProduct() {
+		void AddRequestSetupVRSuyaProduct() {
 			RequestSetupVRSuyaProductList = new VRSuyaProduct[0];
 			if (InstalledProductAFK && InstallProductAFK) {
 				VRSuyaProduct RequestProduct = Array.Find(InstalledVRSuyaProducts, Product => Product.ProductName == ProductName.AFK);
@@ -401,7 +401,7 @@ namespace com.vrsuya.installer {
 
 		/// <summary>세팅해야 할 메뉴와 파라메터를 검사하여 세팅 가능한지 확인합니다.</summary>
 		/// <returns>설치 가능 여부</returns>
-		private bool VerifyVRCSDK() {
+		bool VerifyVRCSDK() {
 			if (!AvatarVRCMenu) {
 				StatusCode = "NO_VRCSDK_MENU";
 				return false;

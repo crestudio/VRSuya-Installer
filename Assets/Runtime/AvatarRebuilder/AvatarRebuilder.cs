@@ -92,7 +92,7 @@ namespace com.vrsuya.avatarrebuilder {
 		}
 
 		/// <summary>에디터 변수 -> 정적 변수 동기화합니다.</summary>
-		private void SetStaticVariable() {
+		void SetStaticVariable() {
 			NewAvatarGameObject = NewAvatarGameObjectEditor;
 			OldAvatarGameObject = OldAvatarGameObjectEditor;
 			if (Enum.IsDefined(typeof(Avatar), AvatarTypeIndexEditor)) TargetAvatar = (Avatar)AvatarTypeIndexEditor;
@@ -105,7 +105,7 @@ namespace com.vrsuya.avatarrebuilder {
 		}
 
 		/// <summary>정적 변수 -> 에디터 변수 동기화합니다.</summary>
-		private void SetEditorVariable() {
+		void SetEditorVariable() {
 			NewAvatarGameObjectEditor = NewAvatarGameObject;
 			OldAvatarGameObjectEditor = OldAvatarGameObject;
 			NewAvatarSkinnedMeshRenderersEditor = NewAvatarSkinnedMeshRenderers;
@@ -152,7 +152,7 @@ namespace com.vrsuya.avatarrebuilder {
         }
 
 		/// <summary>정적 변수를 초기화 합니다.</summary>
-		private static void ClearVariable() {
+		static void ClearVariable() {
 			NewAvatarSkinnedMeshRenderers = new SkinnedMeshRenderer[0];
 			NewAvatarPatched = false;
 			StatusString = "";
@@ -161,7 +161,7 @@ namespace com.vrsuya.avatarrebuilder {
 
 		/// <summary>아바타의 현재 상태를 검사하여 설치가 가능한지 확인합니다.</summary>
 		/// <returns>설치 가능 여부</returns>
-		private static bool VerifyVariable() {
+		static bool VerifyVariable() {
 			if (!NewAvatarGameObject) {
 				StatusString = "NO_AVATAR";
 				return false;

@@ -34,7 +34,7 @@ namespace com.vrsuya.suyasuyafacial {
 		}
 
 		// 영어 사전 데이터
-		private static Dictionary<string, string> String_English = new Dictionary<string, string>() {
+		static Dictionary<string, string> String_English = new Dictionary<string, string>() {
 			{ "String_Language", "Language" },
 			{ "String_Debug", "Debug" },
 			{ "String_Avatar", "Avatar Type" },
@@ -56,7 +56,7 @@ namespace com.vrsuya.suyasuyafacial {
 		};
 
 		// 한국어 사전 데이터
-		private static Dictionary<string, string> String_Korean = new Dictionary<string, string>() {
+		static Dictionary<string, string> String_Korean = new Dictionary<string, string>() {
 			{ "String_Language", "언어" },
 			{ "String_Debug", "디버그" },
 			{ "String_TargetAvatar", "대상 아바타" },
@@ -77,7 +77,7 @@ namespace com.vrsuya.suyasuyafacial {
 		};
 
 		// 일본어 사전 데이터
-		private static Dictionary<string, string> String_Japanese = new Dictionary<string, string>() {
+		static Dictionary<string, string> String_Japanese = new Dictionary<string, string>() {
 			{ "String_Language", "言語" },
 			{ "String_Debug", "デバッグ" },
 			{ "String_TargetAvatar", "対象アバター" },

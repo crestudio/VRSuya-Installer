@@ -97,7 +97,7 @@ namespace com.vrsuya.suyasuyafacial {
 
 		/// <summary>요청한 StatusCode를 요청한 언어로 번역하여 현재 데이터 결과를 반영한 String으로 반환합니다.</summary>
 		/// <returns>완전한 StatusCode의 String</returns>
-		private string ReturnStatusString(string StatusCode) {
+		string ReturnStatusString(string StatusCode) {
 			string ReturnString = LanguageHelper.GetContextString(StatusCode);
 			if (SerializedCountUpdatedCurve.intValue > 0) {
 				ReturnString = string.Format(ReturnString, SerializedCountUpdatedCurve.intValue);

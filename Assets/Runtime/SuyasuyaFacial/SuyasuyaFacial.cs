@@ -112,7 +112,7 @@ namespace com.vrsuya.suyasuyafacial {
 
 		/// <summary>아바타의 현재 상태를 검사하여 패치가 가능한지 확인합니다.</summary>
 		/// <returns>설치 가능 여부</returns>
-		private bool VerifyVariable() {
+		bool VerifyVariable() {
 			if (AvatarHeadSkinnedMeshRenderer) {
 				return true;
 			} else {
@@ -133,7 +133,7 @@ namespace com.vrsuya.suyasuyafacial {
 
 		/// <summary>아바타의 Head 스킨드 메쉬 렌더러를 찾습니다.</summary>
 		/// <returns>아바타의 Head 스킨드 메쉬 렌더러</returns>
-		private SkinnedMeshRenderer GetAvatarHeadSkinnedMeshRenderer(GameObject TargetGameObject) {
+		SkinnedMeshRenderer GetAvatarHeadSkinnedMeshRenderer(GameObject TargetGameObject) {
 			AvatarGameObject.TryGetComponent(typeof(VRCAvatarDescriptor), out Component AvatarDescriptor);
 			if (AvatarDescriptor) {
 				return AvatarDescriptor.GetComponent<VRCAvatarDescriptor>().VisemeSkinnedMesh;
@@ -143,7 +143,7 @@ namespace com.vrsuya.suyasuyafacial {
 
 		/// <summary>아바타의 FX 레이어 애니메이터 컨트롤러를 찾습니다.</summary>
 		/// <returns>아바타의 FX 레이어 애니메이터 컨트롤러</returns>
-		private AnimatorController GetAvatarFXAnimatorController(GameObject TargetGameObject) {
+		AnimatorController GetAvatarFXAnimatorController(GameObject TargetGameObject) {
 			AvatarGameObject.TryGetComponent(typeof(VRCAvatarDescriptor), out Component AvatarDescriptor);
 			if (AvatarDescriptor) {
 				VRCAvatarDescriptor.CustomAnimLayer TargetAnimatorController = Array.Find(AvatarDescriptor.GetComponent<VRCAvatarDescriptor>().baseAnimationLayers, AnimationLayer => AnimationLayer.type == VRCAvatarDescriptor.AnimLayerType.FX);
@@ -154,7 +154,7 @@ namespace com.vrsuya.suyasuyafacial {
 
 		/// <summary>아바타에서 적용된 Blendshape 리스트를 반환합니다.</summary>
 		/// <returns>활성화 아바타 BlendShape 어레이</returns>
-		private FaceBlendShape[] GetAvatarBlendShapeStatus(SkinnedMeshRenderer TargetSkinnedMeshRenderer) {
+		FaceBlendShape[] GetAvatarBlendShapeStatus(SkinnedMeshRenderer TargetSkinnedMeshRenderer) {
 			FaceBlendShape[] newFaceBlendShapeList = new FaceBlendShape[0];
 			if (TargetSkinnedMeshRenderer.sharedMesh.blendShapeCount > 0) {
 				for (int Index = 0; Index < TargetSkinnedMeshRenderer.sharedMesh.blendShapeCount; Index++) {
@@ -174,7 +174,7 @@ namespace com.vrsuya.suyasuyafacial {
 
 		/// <summary>애니메이션에서 적용된 Blendshape 리스트를 반환합니다.</summary>
 		/// <returns>활성화 FX 레이어 BlendShape 어레이</returns>
-		private AnimationBlendShape[] GetAnimationBlendShapeStatus(AnimatorController TargetAnimatorController) {
+		AnimationBlendShape[] GetAnimationBlendShapeStatus(AnimatorController TargetAnimatorController) {
 			AnimationBlendShape[] newAnimationBlendShapeList = new AnimationBlendShape[0];
 			string TargetPath = "Body";
 			if (AvatarHeadSkinnedMeshRenderer) TargetPath = AvatarHeadSkinnedMeshRenderer.name;
@@ -207,7 +207,7 @@ namespace com.vrsuya.suyasuyafacial {
 		}
 
 		/// <summary>블렌드쉐이프 리스트에서 중복된 값을 제외합니다.</summary>
-		private void CleanupBlendShapeList() {
+		void CleanupBlendShapeList() {
 			if (TargetAnimationClips.Length > 0) {
 				string TargetPath = "Body";
 				if (AvatarHeadSkinnedMeshRenderer) TargetPath = AvatarHeadSkinnedMeshRenderer.name;
@@ -228,7 +228,7 @@ namespace com.vrsuya.suyasuyafacial {
 
 		/// <summary>에셋에서 Suyasuya 애니메이션을 찾아서 리스트로 반환 합니다.</summary>
 		/// <returns>Suyasuya 애니메이션 클립 어레이</returns>
-		private AnimationClip[] GetVRSuyaSuyasuyaAnimations() {
+		AnimationClip[] GetVRSuyaSuyasuyaAnimations() {
 			Dictionary<string,string> dictSuyasuyaAnimationClips = new Dictionary<string, string> {
 				{ "3e14bdc27b543fc4d9c16398be0a9d9c", "VRSuya_Suyasuya_Animation_50_Sleeping_Animation" },
 				{ "b6c63881d1b4cc740a95793be2b0ff7f", "VRSuya_Suyasuya_Animation_50_Sleeping_NoAnimation" },
@@ -250,7 +250,7 @@ namespace com.vrsuya.suyasuyafacial {
 		}
 
 		/// <summary>애니메이션 클립에서 0 값의 Blendshape 애니메이션 키를 추가합니다.</summary>
-		private void UpdateSuyasuyaAnimationClips() {
+		void UpdateSuyasuyaAnimationClips() {
 			CountUpdatedCurve = 0;
 			foreach (AnimationClip CurrentAnimationClip in TargetAnimationClips) {
 				string[] AddBlendshapeList = GetAddBlendshapeList(CurrentAnimationClip);
@@ -278,7 +278,7 @@ namespace com.vrsuya.suyasuyafacial {
 
 		/// <summary>애니메이션 클립에서 존재하는 Blendshape 리스트를 반환 합니다.</summary>
 		/// <returns>애니메이션 클립에 존재하는 Blendshape 리스트</returns>
-		private List<(string Path, string BlendShapeName)> GetExistAnimationBlendshapes(AnimationClip TargetAnimationClip, bool HasValue) {
+		List<(string Path, string BlendShapeName)> GetExistAnimationBlendshapes(AnimationClip TargetAnimationClip, bool HasValue) {
 			List<(string Path, string BlendShapeName)> newExistBlendshapes = new List<(string, string)> { };
 			foreach (EditorCurveBinding Binding in AnimationUtility.GetCurveBindings(TargetAnimationClip)) {
 				if (Binding.type == typeof(SkinnedMeshRenderer)) {
@@ -301,7 +301,7 @@ namespace com.vrsuya.suyasuyafacial {
 
 		/// <summary>애니메이션 클립과 비교하여 실제로 삽입해야 되는 Blendshape 어레이를 반환합니다.</summary>
 		/// <returns>중복 되지 않는 Blendshape 어레이</returns>
-		private string[] GetAddBlendshapeList(AnimationClip TargetAnimationClip) {
+		string[] GetAddBlendshapeList(AnimationClip TargetAnimationClip) {
 			string[] TargetAnimationBlendshapeList = GetExistAnimationBlendshapes(TargetAnimationClip, false)
 				.Where((AnimationBlendShape) => AnimationBlendShape.Path == AvatarHeadSkinnedMeshRenderer.name)
 				.Select((AnimationBlendShape) => AnimationBlendShape.BlendShapeName)
@@ -323,7 +323,7 @@ namespace com.vrsuya.suyasuyafacial {
 
 		/// <summary>요청한 GUID를 파일 이름으로 반환합니다. 2번째 인자는 확장명 포함 여부를 결정합니다.</summary>
 		/// <returns>파일 이름</returns>
-		private string GUIDToAssetName(string GUID, bool OnlyFileName) {
+		string GUIDToAssetName(string GUID, bool OnlyFileName) {
 			string FileName = "";
 			FileName = AssetDatabase.GUIDToAssetPath(GUID).Split('/')[AssetDatabase.GUIDToAssetPath(GUID).Split('/').Length - 1];
 			if (OnlyFileName) FileName = FileName.Split('.')[0];

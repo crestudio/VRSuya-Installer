@@ -16,8 +16,8 @@ namespace com.vrsuya.installer {
 	[AddComponentMenu("")]
 	public class ProductSetup_SoundPad : ProductSetup {
 
-		private static VRSuyaProduct SoundPad;
-		private static GameObject VRSuyaSoundPadGameObject;
+		static VRSuyaProduct SoundPad;
+		static GameObject VRSuyaSoundPadGameObject;
 
 		/// <summary>제품 정보를 AssetManager에게 요청하여 업데이트 한 후, 설치된 에셋 목록에 추가합니다.</summary>
 		internal static void RegisterProduct() {
@@ -40,7 +40,7 @@ namespace com.vrsuya.installer {
 		}
 
 		/// <summary>아바타에 Prefab이 있는지 검사하고 없으면 설치하는 메소드 입니다.</summary>
-		private static void SetupPrefab() {
+		static void SetupPrefab() {
 			string[] ChildAvatarGameObjectNames = new string[0];
 			foreach (Transform ChildTransform in AvatarGameObject.transform) {
 				ChildAvatarGameObjectNames = ChildAvatarGameObjectNames.Concat(new string[] { ChildTransform.name }).ToArray();
@@ -65,7 +65,7 @@ namespace com.vrsuya.installer {
 		}
 
 		/// <summary>Prefab의 Transform을 변경합니다.</summary>
-		private static void RepositionPrefab(GameObject TargetGameObject) {
+		static void RepositionPrefab(GameObject TargetGameObject) {
 			Transform AvatarLeftHand = AvatarAnimator.GetBoneTransform(HumanBodyBones.LeftHand);
 			Vector3 newPrefabPosition = AvatarLeftHand.position + new Vector3(-0.1f, -0.05f, 0.025f);
 			TargetGameObject.transform.position = newPrefabPosition;

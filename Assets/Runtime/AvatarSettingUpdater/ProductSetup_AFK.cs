@@ -20,10 +20,10 @@ namespace com.vrsuya.installer {
 	[AddComponentMenu("")]
 	public class ProductSetup_AFK : ProductSetup {
 
-		private static VRSuyaProduct AFK;
-		private static GameObject VRSuyaAFKGameObject;
+		static VRSuyaProduct AFK;
+		static GameObject VRSuyaAFKGameObject;
 
-		private readonly static Avatar[] AFKAvatars = new Avatar[] { 
+		readonly static Avatar[] AFKAvatars = new Avatar[] { 
 			Avatar.Aldina, Avatar.Kipfel, Avatar.Leefa, Avatar.Lunalitt, Avatar.Milfy,
 			Avatar.Minase, Avatar.Shinano, Avatar.Sio, Avatar.Sugar
 		};
@@ -53,7 +53,7 @@ namespace com.vrsuya.installer {
 		}
 
 		/// <summary>아바타에 Prefab이 있는지 검사하고 없으면 설치하는 메소드 입니다.</summary>
-		private static void SetupPrefab() {
+		static void SetupPrefab() {
 			string[] ChildAvatarGameObjectNames = new string[0];
 			foreach (Transform ChildTransform in AvatarGameObject.transform) {
 				ChildAvatarGameObjectNames = ChildAvatarGameObjectNames.Concat(new string[] { ChildTransform.name }).ToArray();
@@ -78,7 +78,7 @@ namespace com.vrsuya.installer {
 		}
 
 		/// <summary>Parent Constraint 컴포넌트와 아바타의 손을 연결합니다.</summary>
-		private static void UpdateParentConstraints() {
+		static void UpdateParentConstraints() {
 			GameObject VRSuyaAFKAnchorGameObject = Array.Find(VRSuyaAFKGameObject.GetComponentsInChildren<Transform>(true), transform => transform.gameObject.name == "Anchor").gameObject;
 			if (VRSuyaAFKAnchorGameObject) {
 				ParentConstraint AnchorParentConstraint = VRSuyaAFKAnchorGameObject.GetComponent<ParentConstraint>();
@@ -94,7 +94,7 @@ namespace com.vrsuya.installer {
 		}
 
 		/// <summary>Prefab의 이름을 애니메이션 Path 규격에 맞춰 변경합니다.</summary>
-		private static void UpdatePrefabName() {
+		static void UpdatePrefabName() {
 			if (VRSuyaAFKGameObject.name != "VRSuya_AFK_Prefab") {
 				Undo.RecordObject(VRSuyaAFKGameObject, "Changed GameObject Name");
 				VRSuyaAFKGameObject.name = "VRSuya_AFK_Prefab";
@@ -104,7 +104,7 @@ namespace com.vrsuya.installer {
 		}
 
 		/// <summary>AFK 이름의 애니메이터 레이어를 비활성화 합니다.</summary>
-		private static void DisableExistAFKAnimatorLayer() {
+		static void DisableExistAFKAnimatorLayer() {
 			AnimatorController VRCFXLayer = (AnimatorController)Array.Find(AvatarVRCAvatarLayers, VRCAnimator => VRCAnimator.type == VRCAvatarDescriptor.AnimLayerType.FX).animatorController;
 			if (VRCFXLayer) {
 				float[] AFKLayerWeights = VRCFXLayer.layers

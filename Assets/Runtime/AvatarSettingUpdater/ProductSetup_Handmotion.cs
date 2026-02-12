@@ -14,7 +14,7 @@ namespace com.vrsuya.installer {
 	[AddComponentMenu("")]
 	public class ProductSetup_Handmotion : ProductSetup {
 
-		private static VRSuyaProduct Handmotion;
+		static VRSuyaProduct Handmotion;
 
 		/// <summary>제품 정보를 AssetManager에게 요청하여 업데이트 한 후, 설치된 에셋 목록에 추가합니다.</summary>
 		internal static void RegisterProduct() {

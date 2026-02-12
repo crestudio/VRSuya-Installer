@@ -21,7 +21,7 @@ namespace com.vrsuya.installer {
 	[AddComponentMenu("")]
 	public class AssetManager : ProductSetup {
 
-		private static readonly Dictionary<ProductName, string> dictProductGUID = new Dictionary<ProductName, string>() {
+		static readonly Dictionary<ProductName, string> dictProductGUID = new Dictionary<ProductName, string>() {
 			{ ProductName.AFK, "cddaae54ebed24fd4ba3b6ed60c355ea" },
 			{ ProductName.Mogumogu, "29f78992daf6d7548bec811c4ff3cfd6" },
 			{ ProductName.Wotagei, "201253d8e16814cbfa1ddbdea4d2f030" },
@@ -34,7 +34,7 @@ namespace com.vrsuya.installer {
 			// 검색용 VRSuya 아이템 업데이트 위치
 		};
 
-		private static readonly Dictionary<ProductName, string> dictProductPath = new Dictionary<ProductName, string>() {
+		static readonly Dictionary<ProductName, string> dictProductPath = new Dictionary<ProductName, string>() {
 			{ ProductName.AFK, "Assets/VRSuya/AFK" },
 			{ ProductName.Mogumogu, "Assets/VRSuya/Mogumogu" },
 			{ ProductName.Wotagei, "Assets/VRSuya/Wotagei" },
@@ -47,7 +47,7 @@ namespace com.vrsuya.installer {
 			// 검색용 VRSuya 아이템 업데이트 위치
 		};
 
-		private static readonly Dictionary<ProductName, string> dictPresentMenuFileName = new Dictionary<ProductName, string>() {
+		static readonly Dictionary<ProductName, string> dictPresentMenuFileName = new Dictionary<ProductName, string>() {
 			{ ProductName.AFK, "VRSuya_AFK_Menu{0}.asset" },
 			{ ProductName.Mogumogu, "VRSuya_Mogumogu_Menu{0}.asset" },
 			{ ProductName.Wotagei, "VRSuya_Wotagei_Menu{0}.asset" },
@@ -59,7 +59,7 @@ namespace com.vrsuya.installer {
 			// 검색용 VRSuya 아이템 업데이트 위치
 		};
 
-		private static Dictionary<VRCAssetType, string> dictVRCSDKAssetGUID = new Dictionary<VRCAssetType, string>() {
+		static Dictionary<VRCAssetType, string> dictVRCSDKAssetGUID = new Dictionary<VRCAssetType, string>() {
 			{ VRCAssetType.VRSuya, "00679ffab5ad14d42afccca44034c525" },
 			{ VRCAssetType.Template, "00679ffab5ad14d42afccca44034c525" },
 			{ VRCAssetType.Export, "13684ec2ba89160419ef0d32a11968cd" },
@@ -71,7 +71,7 @@ namespace com.vrsuya.installer {
 			{ VRCAssetType.Parameter, "dd63989bd535d7842bf14e5edda08e6f" }
 		};
 
-		private static Dictionary<VRCAssetType, string> dictVRCSDKAssetFilePath = new Dictionary<VRCAssetType, string>() {
+		static Dictionary<VRCAssetType, string> dictVRCSDKAssetFilePath = new Dictionary<VRCAssetType, string>() {
 			{ VRCAssetType.VRSuya, "Assets/VRSuya" },
 			{ VRCAssetType.Template, "Packages/com.vrsuya.avatarsettingupdater/Controller" },
 			{ VRCAssetType.Export, "Assets/VRSuya/Export" },
@@ -83,18 +83,18 @@ namespace com.vrsuya.installer {
 			{ VRCAssetType.Parameter, "VRSuya_Default_Parameter.asset" }
 		};
 
-		private static readonly Dictionary<string, string> dictMasterActionLayer = new Dictionary<string, string>() {
+		static readonly Dictionary<string, string> dictMasterActionLayer = new Dictionary<string, string>() {
 			{ "GUID", "0cea068b6a31b5c4f98bfeba0f8bc11d" },
 			{ "AssetFileName", "VRSuya_Wotagei_ActionLayer_AFK.controller" }
 		};
 
-		private static readonly string[] dictAnimatorControllerName = new string[] { "LocomotionLayer", "GestureLayer", "ActionLayer", "FXLayer" };
+		static readonly string[] dictAnimatorControllerName = new string[] { "LocomotionLayer", "GestureLayer", "ActionLayer", "FXLayer" };
 
-		private static readonly string[] dictIgnoreLayerName = new string[] { "Base Layer", "AllParts", "Left Hand", "Right Hand", "Locomotion" };
+		static readonly string[] dictIgnoreLayerName = new string[] { "Base Layer", "AllParts", "Left Hand", "Right Hand", "Locomotion" };
 
-		private static readonly string[] dictIgnorePrefabName = new string[] { "Cyalume", "LightStick", "Guide", "Sphere", "Transparent", "Particle", "Modular" };
+		static readonly string[] dictIgnorePrefabName = new string[] { "Cyalume", "LightStick", "Guide", "Sphere", "Transparent", "Particle", "Modular" };
 
-		private static readonly string dictDefaultFilename = "Default";
+		static readonly string dictDefaultFilename = "Default";
 
 		/// <summary>요청한 타입의 VRSuya 제품의 상세 내용을 업데이트하여 반환합니다.</summary>
 		/// <returns>내용이 업데이트 된 VRSuyaProduct 오브젝트</returns>
@@ -133,7 +133,7 @@ namespace com.vrsuya.installer {
 
 		/// <summary>파일 목록에서 요청한 아바타 타입의 애니메이터 레이어 GUID 목록을 반환합니다.</summary>
 		/// <returns>해당 아바타의 애니메이터 컨트롤러 배열</returns>
-		private static Dictionary<VRCAvatarDescriptor.AnimLayerType, string> GetRequestAvatarTypeAnimatorControllerGUID(string SearchPath, Avatar AvatarType) {
+		static Dictionary<VRCAvatarDescriptor.AnimLayerType, string> GetRequestAvatarTypeAnimatorControllerGUID(string SearchPath, Avatar AvatarType) {
 			Dictionary<VRCAvatarDescriptor.AnimLayerType, string> AnimatorGUID = new Dictionary<VRCAvatarDescriptor.AnimLayerType, string>();
 			foreach (string TargetVRCAnimatorType in dictAnimatorControllerName) {
 				string TargetAvatarType = "";
@@ -164,7 +164,7 @@ namespace com.vrsuya.installer {
 
 		/// <summary>파일 목록에서 요청한 아바타 타입의 애니메이터 레이어 목록을 반환합니다.</summary>
 		/// <returns>Unity 애니메이터 레이어 배열</returns>
-		private static Dictionary<VRCAvatarDescriptor.AnimLayerType, AnimatorControllerLayer[]> ResolveAnimationControllerLayer(Dictionary<VRCAvatarDescriptor.AnimLayerType, string> AnimatorGUID) {
+		static Dictionary<VRCAvatarDescriptor.AnimLayerType, AnimatorControllerLayer[]> ResolveAnimationControllerLayer(Dictionary<VRCAvatarDescriptor.AnimLayerType, string> AnimatorGUID) {
 			Dictionary<VRCAvatarDescriptor.AnimLayerType, AnimatorControllerLayer[]> AnimatorLayerInAssets = new Dictionary<VRCAvatarDescriptor.AnimLayerType, AnimatorControllerLayer[]>();
 			foreach (KeyValuePair<VRCAvatarDescriptor.AnimLayerType, string> AnimatorLayer in AnimatorGUID) {
 				AnimatorController TargetController = AssetDatabase.LoadAssetAtPath<AnimatorController>(AssetDatabase.GUIDToAssetPath(AnimatorLayer.Value));
@@ -183,7 +183,7 @@ namespace com.vrsuya.installer {
 
 		/// <summary>파일 목록에서 요청한 아바타 타입의 애니메이터 파라메터 목록을 반환합니다.</summary>
 		/// <returns>Unity 애니메이터 파라메터 배열</returns>
-		private static Dictionary<VRCAvatarDescriptor.AnimLayerType, AnimatorControllerParameter[]> ResolveAnimationControllerParameter(Dictionary<VRCAvatarDescriptor.AnimLayerType, string> AnimatorGUID) {
+		static Dictionary<VRCAvatarDescriptor.AnimLayerType, AnimatorControllerParameter[]> ResolveAnimationControllerParameter(Dictionary<VRCAvatarDescriptor.AnimLayerType, string> AnimatorGUID) {
 			Dictionary<VRCAvatarDescriptor.AnimLayerType, AnimatorControllerParameter[]> AnimatorParameterInAssets = new Dictionary<VRCAvatarDescriptor.AnimLayerType, AnimatorControllerParameter[]>();
 			foreach (KeyValuePair<VRCAvatarDescriptor.AnimLayerType, string> AnimatorLayer in AnimatorGUID) {
 				AnimatorController TargetController = AssetDatabase.LoadAssetAtPath<AnimatorController>(AssetDatabase.GUIDToAssetPath(AnimatorLayer.Value));
@@ -200,7 +200,7 @@ namespace com.vrsuya.installer {
 
 		/// <summary>요청한 파일 목록에서 메뉴 목록을 반환합니다.</summary>
 		/// <returns>VRC 메뉴 리스트</returns>
-		private static List<VRCExpressionsMenu.Control> ResolveMenu(string[] AssetsGUID, ProductName TypeProduct) {
+		static List<VRCExpressionsMenu.Control> ResolveMenu(string[] AssetsGUID, ProductName TypeProduct) {
 			List<VRCExpressionsMenu.Control> MenusInAssets = new List<VRCExpressionsMenu.Control>();
 			foreach (string AssetGUID in AssetsGUID) {
 				if (GUIDToAssetName(AssetGUID, false).Contains(string.Format(dictPresentMenuFileName[TypeProduct], TargetLanguage))) {
@@ -216,7 +216,7 @@ namespace com.vrsuya.installer {
 
 		/// <summary>요청한 파일 목록에서 파라메터 목록을 반환합니다.</summary>
 		/// <returns>VRC 파라메터 배열</returns>
-		private static VRCExpressionParameters.Parameter[] ResolveParameter(string[] AssetsGUID) {
+		static VRCExpressionParameters.Parameter[] ResolveParameter(string[] AssetsGUID) {
 			VRCExpressionParameters.Parameter[] ParametersInAssets = new VRCExpressionParameters.Parameter[0];
 			foreach (string AssetGUID in AssetsGUID) {
 				VRCExpressionParameters ParameterFile = AssetDatabase.LoadAssetAtPath<VRCExpressionParameters>(AssetDatabase.GUIDToAssetPath(AssetGUID));
@@ -227,7 +227,7 @@ namespace com.vrsuya.installer {
 
 		/// <summary>요청한 파일 목록에서 등록하는데 필요한 파라메터 총 메모리를 반환합니다.</summary>
 		/// <returns>필요한 총 파라메터 메모리 정수형</returns>
-		private static int ResolveParameterCost(string[] AssetsGUID) {
+		static int ResolveParameterCost(string[] AssetsGUID) {
 			int RequiredParameterCost = 0;
 			foreach (string AssetGUID in AssetsGUID) {
 				VRCExpressionParameters ParameterFile = AssetDatabase.LoadAssetAtPath<VRCExpressionParameters>(AssetDatabase.GUIDToAssetPath(AssetGUID));
@@ -238,7 +238,7 @@ namespace com.vrsuya.installer {
 
 		/// <summary>요청한 파일 목록에서 지정된 이름 뒤에 위치한 아바타 이름을 분석하여 Avatar 형태로 반환합니다.</summary>
 		/// <returns>Avatar Enum 배열</returns>
-		private static Avatar[] FindAllAvatarNames(ProductName TypeProduct, string[] AssetsGUID) {
+		static Avatar[] FindAllAvatarNames(ProductName TypeProduct, string[] AssetsGUID) {
 			Avatar[] AvatarNames = new Avatar[0];
 			string SearchWord = TypeProduct.ToString() + "_";
 			switch (TypeProduct) {
@@ -334,7 +334,7 @@ namespace com.vrsuya.installer {
 
 		/// <summary>요청한 애니메이터 컨트롤러 파트를 점검하고 에셋을 생성 시도 및 아바타에 설정합니다.</summary>
 		/// <returns>요청한 애니메이터 컨트롤러 에셋 생성 성공 여부</returns>
-		private static bool CheckTargetAnimatorControllerAsset(VRCAvatarDescriptor.AnimLayerType TargetType) {
+		static bool CheckTargetAnimatorControllerAsset(VRCAvatarDescriptor.AnimLayerType TargetType) {
 			VRCAssetType TargetAssetType;
 			bool Result = true;
 			switch (TargetType) {
@@ -392,7 +392,7 @@ namespace com.vrsuya.installer {
 		}
 
 		/// <summary>요청한 타입의 애니메이터 컨트롤러를 아바타에 사전 할당을 합니다.</summary>
-		private static void PreallocateAnimatorController(VRCAvatarDescriptor.AnimLayerType TargetType) {
+		static void PreallocateAnimatorController(VRCAvatarDescriptor.AnimLayerType TargetType) {
 			string AssetGUID = "";
 			switch (TargetType) {
 				case VRCAvatarDescriptor.AnimLayerType.Base:
@@ -448,7 +448,7 @@ namespace com.vrsuya.installer {
 
 		/// <summary>요청한 에셋을 Export 폴더에 아바타 이름으로 복사합니다.</summary>
 		/// <returns>복사된 에셋의 GUID</returns>
-		private static string CreateVRCAsset(VRCAssetType TargetType) {
+		static string CreateVRCAsset(VRCAssetType TargetType) {
 			string SourceAssetPath = AssetDatabase.GUIDToAssetPath(dictVRCSDKAssetGUID[TargetType]);
 			if (string.IsNullOrEmpty(SourceAssetPath)) SourceAssetPath = dictVRCSDKAssetFilePath[TargetType];
 			string DestinationAssetPath = AssetDatabase.GUIDToAssetPath(dictVRCSDKAssetGUID[VRCAssetType.Export]);
@@ -487,7 +487,7 @@ namespace com.vrsuya.installer {
 
 		/// <summary>AFK + Wotagei ActionLayer 파일이 존재하는지 확인 후 올바른 GUID를 반환합니다.</summary>
 		/// <returns>AFK + Wotagei ActionLayer 파일의 GUID</returns>
-		private static string GetMasterActionAnimatorController() {
+		static string GetMasterActionAnimatorController() {
 			string AssetGUID = dictMasterActionLayer["GUID"];
 			string AssetPath = AssetDatabase.GUIDToAssetPath(AssetGUID);
 			if (string.IsNullOrEmpty(AssetPath)) {

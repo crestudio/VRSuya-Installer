@@ -137,7 +137,7 @@ namespace com.vrsuya.installer {
 		}
 
 		/// <summary>정적 변수를 초기화 합니다.</summary>
-		private static void ClearVariable() {
+		static void ClearVariable() {
 			VRSuyaLocomotionLayers = new AnimatorControllerLayer[0];
 			VRSuyaGestureLayers = new AnimatorControllerLayer[0];
 			VRSuyaActionLayers = new AnimatorControllerLayer[0];
@@ -165,7 +165,7 @@ namespace com.vrsuya.installer {
 		}
 
 		/// <summary>아바타의 각 VRC 애니메이터에 세팅해야 하는 값을 보냅니다.</summary>
-		private static void UpdateUnityAnimator() {
+		static void UpdateUnityAnimator() {
 			AnimatorController VRCLocomotionLayer = null;
 			AnimatorController VRCGestureLayer = null;
 			AnimatorController VRCActionLayer = null;
@@ -190,7 +190,7 @@ namespace com.vrsuya.installer {
 		}
 
 		/// <summary>세팅해야 하는 애니메이터 컨트롤러에 파라메터와 레이어가 존재하는지 확인 후 추가합니다.</summary>
-		private static void UpdateTargetAnimatorController(AnimatorController TargetController, AnimatorControllerLayer[] TargetLayers, AnimatorControllerParameter[] TargetParameters) {
+		static void UpdateTargetAnimatorController(AnimatorController TargetController, AnimatorControllerLayer[] TargetLayers, AnimatorControllerParameter[] TargetParameters) {
 			foreach (AnimatorControllerParameter NewParameter in TargetParameters) {
 				if (!Array.Exists(TargetController.parameters, ExistParameter => NewParameter.name == ExistParameter.name)) {
 					Undo.RecordObject(TargetController, "Added Unity Animator Controller Parameter");
@@ -228,7 +228,7 @@ namespace com.vrsuya.installer {
 		}
 
 		/// <summary>세팅해야 하는 파라메터 큐를 아바타 파라메터에 존재하는지 확인 후 추가합니다.</summary>
-		private static void UpdateAvatarParameters() {
+		static void UpdateAvatarParameters() {
             foreach (VRCExpressionParameters.Parameter NewParameter in VRSuyaParameters) {
                 if (!Array.Exists(AvatarVRCParameter.parameters, ExistParameter => ExistParameter.name == NewParameter.name)) {
 					Undo.RecordObject(AvatarVRCParameter, "Added VRC Parameter");
@@ -241,7 +241,7 @@ namespace com.vrsuya.installer {
         }
 
 		/// <summary>세팅해야 하는 메뉴 큐를 아바타 메뉴에 존재하는지 확인 후 추가합니다.</summary>
-		private static void UpdateAvatarMenus() {
+		static void UpdateAvatarMenus() {
             foreach (VRCExpressionsMenu.Control NewMenu in VRSuyaMenus) {
                 if (!AvatarVRCMenu.controls.Exists(ExistMenu => ExistMenu.subMenu == NewMenu.subMenu)) {
 					Undo.RecordObject(AvatarVRCMenu, "Added VRC Menu");

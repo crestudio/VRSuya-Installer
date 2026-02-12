@@ -20,10 +20,10 @@ namespace com.vrsuya.installer {
 	[AddComponentMenu("")]
 	public class ProductSetup_Feet : ProductSetup {
 
-		private static VRSuyaProduct Feet;
-		private static GameObject VRSuyaHopedskyDFeetGameObject;
-		private static Transform[] FeetTransforms;
-		private static readonly Dictionary<string, string> dictToeName = new Dictionary<string, string>() {
+		static VRSuyaProduct Feet;
+		static GameObject VRSuyaHopedskyDFeetGameObject;
+		static Transform[] FeetTransforms;
+		static readonly Dictionary<string, string> dictToeName = new Dictionary<string, string>() {
 			{ "ThumbToe1_L", "ThumbToe1_L" },
 			{ "ThumbToe1_R", "ThumbToe1_R" },
 			{ "IndexToe1_L", "IndexToe1_L" },
@@ -36,7 +36,7 @@ namespace com.vrsuya.installer {
 			{ "LittleToe1_R", "LittleToe1_R" }
 		};
 
-		private static readonly Dictionary<string, string> dictAiriToeName = new Dictionary<string, string>() {
+		static readonly Dictionary<string, string> dictAiriToeName = new Dictionary<string, string>() {
 			{ "ThumbToe1_L", "Toe_Thumb_Proximal_L" },
 			{ "ThumbToe1_R", "Toe_Thumb_Proximal_R" },
 			{ "IndexToe1_L", "Toe_Index_Proximal_L" },
@@ -76,7 +76,7 @@ namespace com.vrsuya.installer {
 		}
 
 		/// <summary>아바타에 Prefab이 있는지 검사하고 없으면 설치하는 메소드 입니다.</summary>
-		private static void SetupPrefab() {
+		static void SetupPrefab() {
 			string[] ChildAvatarGameObjectNames = new string[0];
 			foreach (Transform ChildTransform in AvatarGameObject.transform) {
 				ChildAvatarGameObjectNames = ChildAvatarGameObjectNames.Concat(new string[] { ChildTransform.name }).ToArray();
@@ -100,7 +100,7 @@ namespace com.vrsuya.installer {
 		}
 
 		/// <summary>발 하위의 모든 Transform을 Array에 추가합니다.</summary>
-		private static void GetFeetTransforms() {
+		static void GetFeetTransforms() {
 			FeetTransforms = new Transform[0];
 			FeetTransforms = FeetTransforms.Concat(AvatarAnimator.GetBoneTransform(HumanBodyBones.LeftFoot).GetComponentsInChildren<Transform>(true)).ToArray();
 			FeetTransforms = FeetTransforms.Concat(AvatarAnimator.GetBoneTransform(HumanBodyBones.RightFoot).GetComponentsInChildren<Transform>(true)).ToArray();
@@ -108,7 +108,7 @@ namespace com.vrsuya.installer {
 		}
 
 		/// <summary>Parent Constraint 컴포넌트와 아바타를 연결합니다.</summary>
-		private static void UpdateParentConstraints() {
+		static void UpdateParentConstraints() {
 			if (VRSuyaHopedskyDFeetGameObject) {
 				ParentConstraint[] AnchorParentConstraints = VRSuyaHopedskyDFeetGameObject.GetComponentsInChildren<ParentConstraint>(true);
 				if (AnchorParentConstraints != null) {
@@ -139,7 +139,7 @@ namespace com.vrsuya.installer {
 		}
 
 		/// <summary>하위 Constraint 컴포넌트와 아바타를 연결합니다.</summary>
-		private static void UpdateOtherConstraints() {
+		static void UpdateOtherConstraints() {
 			if (VRSuyaHopedskyDFeetGameObject) {
 				PositionConstraint[] PositionConstraints = VRSuyaHopedskyDFeetGameObject.GetComponentsInChildren<PositionConstraint>(true);
 				RotationConstraint[] RotationConstraints = VRSuyaHopedskyDFeetGameObject.GetComponentsInChildren<RotationConstraint>(true);
@@ -167,7 +167,7 @@ namespace com.vrsuya.installer {
 		}
 
 		/// <summary>발가락 PhysBone 컴포넌트와 아바타의 발가락을 연결합니다.</summary>
-		private static void UpdatePhysBones() {
+		static void UpdatePhysBones() {
 			GameObject FeetPhysBoneGameObject = Array.Find(VRSuyaHopedskyDFeetGameObject.GetComponentsInChildren<Transform>(true), transform => transform.gameObject.name == "PhysBone").gameObject;
 			foreach (Transform TargetTransform in FeetPhysBoneGameObject.GetComponentsInChildren<Transform>(true)) {
 				Dictionary<string, string> TargetToeName = dictToeName;
@@ -189,7 +189,7 @@ namespace com.vrsuya.installer {
 		}
 
 		/// <summary>Prefab의 이름을 애니메이션 Path 규격에 맞춰 변경합니다.</summary>
-		private static void UpdatePrefabName() {
+		static void UpdatePrefabName() {
 			if (VRSuyaHopedskyDFeetGameObject.name != "VRSuya_HopeskyD_Feet") {
 				Undo.RecordObject(VRSuyaHopedskyDFeetGameObject, "Changed GameObject Name");
 				VRSuyaHopedskyDFeetGameObject.name = "VRSuya_HopeskyD_Feet";

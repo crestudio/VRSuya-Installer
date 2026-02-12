@@ -56,7 +56,7 @@ namespace com.vrsuya.installer {
 		public static bool FoldAdvanced = false;
 		public static int StatusNeedMoreSpaceMenu;
 		public static int StatusNeedMoreSpaceParameter;
-		private static readonly string[] StringFormatCode = new string[] { "NO_MORE_MENU", "NO_MORE_PARAMETER" };
+		static readonly string[] StringFormatCode = new string[] { "NO_MORE_MENU", "NO_MORE_PARAMETER" };
 
 		void OnEnable() {
             SerializedAvatarGameObject = serializedObject.FindProperty("AvatarGameObjectEditor");
@@ -178,14 +178,14 @@ namespace com.vrsuya.installer {
 
 		/// <summary>요청한 VRSuya 제품의 아바타 파일이 설치 되어있는지 검사합니다.</summary>
 		/// <returns>에셋 설치 여부</returns>
-		private static bool ReturnInstalled(AvatarSettingUpdater.ProductName RequestProductName, SerializedProperty ProductProperty) {
+		static bool ReturnInstalled(AvatarSettingUpdater.ProductName RequestProductName, SerializedProperty ProductProperty) {
 			if (ProductProperty.boolValue && AvatarSettingUpdater.ReturnAvatarInstalled(RequestProductName, SelectedAvatarName)) return true;
 			return false;
 		}
 
 		/// <summary>요청한 StatusCode를 요청한 언어로 번역하여 현재 데이터 결과를 반영한 String으로 반환합니다.</summary>
 		/// <returns>완전한 StatusCode의 String</returns>
-		private string ReturnStatusString(string StatusCode) {
+		string ReturnStatusString(string StatusCode) {
 			string ReturnString = LanguageHelper.GetContextString(StatusCode);
 			if (Array.Exists(StringFormatCode, Code => StatusCode == Code)) {
 				switch (StatusCode) {

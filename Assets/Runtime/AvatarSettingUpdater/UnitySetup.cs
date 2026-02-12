@@ -16,7 +16,7 @@ namespace com.vrsuya.installer {
 	[AddComponentMenu("")]
 	public class UnitySetup : AvatarSettingUpdater{
 
-		private static readonly string[] dictHeadGameObjectName = { "Body", "Head", "Face" };
+		static readonly string[] dictHeadGameObjectName = { "Body", "Head", "Face" };
 
 		/// <summary>외부에서 요청한 아바타 정보를 업데이트를 처리하는 메소드 입니다.</summary>
 		internal static void UpdateAvatarStatus() {
@@ -52,7 +52,7 @@ namespace com.vrsuya.installer {
 
 		/// <summary>아바타의 대표 AnchorOverride 포인트를 획득하는 메소드 입니다.</summary>
 		/// <returns>기준이 되는 AnchorOverride 트랜스폼</returns>
-		private static Transform GetAvatarAnchorOverride() {
+		static Transform GetAvatarAnchorOverride() {
             foreach (SkinnedMeshRenderer TargetSkinnedMeshRenderer in AvatarSkinnedMeshRenderers) {
                 if (Array.Exists(dictHeadGameObjectName, HeadName => TargetSkinnedMeshRenderer.gameObject.name == HeadName) == true) {
                     if (TargetSkinnedMeshRenderer.probeAnchor) {
@@ -74,7 +74,7 @@ namespace com.vrsuya.installer {
 		/* 실제 아바타 데이터 업데이트 */
 
 		/// <summary>아바타의 렌더러 세팅을 Two-sided 그림자로 설정 합니다.</summary>
-		private static void UpdateTwosidedShadow() {
+		static void UpdateTwosidedShadow() {
 			foreach (SkinnedMeshRenderer TargetSkinnedMeshRenderer in AvatarSkinnedMeshRenderers) {
 				if (TargetSkinnedMeshRenderer.shadowCastingMode != ShadowCastingMode.TwoSided) {
 					Undo.RecordObject(TargetSkinnedMeshRenderer, "Changed Two-Sided Shadow Option");
@@ -93,7 +93,7 @@ namespace com.vrsuya.installer {
 		}
 
 		/// <summary>아바타의 AnchorOverride 세팅을 설정 합니다.</summary>
-		private static void UpdateAnchorOverride() {
+		static void UpdateAnchorOverride() {
 			foreach (SkinnedMeshRenderer TargetSkinnedMeshRenderer in AvatarSkinnedMeshRenderers) {
 				if (TargetSkinnedMeshRenderer.probeAnchor != AvatarAnchorOverride) {
 					Undo.RecordObject(TargetSkinnedMeshRenderer, "Changed Anchor Override");
@@ -112,7 +112,7 @@ namespace com.vrsuya.installer {
 		}
 
 		/// <summary>아바타의 Bounds 세팅을 설정 합니다.</summary>
-		private static void UpdateBounds() {
+		static void UpdateBounds() {
 			Bounds newBounds = new Bounds {
 				center = new Vector3(0.0f, 0.0f, 0.0f),
 				extents = new Vector3(1.0f, 1.0f, 1.0f),

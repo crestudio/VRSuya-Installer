@@ -53,7 +53,7 @@ namespace com.vrsuya.animationoffsetupdater {
 		}
 
 		// 영어 사전 데이터
-		private static Dictionary<string, string> String_English = new Dictionary<string, string>() {
+		static Dictionary<string, string> String_English = new Dictionary<string, string>() {
 			{ "String_Language", "Language" },
 			{ "String_Debug", "Debug" },
 			{ "String_TargetAvatar", "Target Avatar" },
@@ -76,7 +76,7 @@ namespace com.vrsuya.animationoffsetupdater {
 		};
 
 		// 한국어 사전 데이터
-		private static Dictionary<string, string> String_Korean = new Dictionary<string, string>() {
+		static Dictionary<string, string> String_Korean = new Dictionary<string, string>() {
 			{ "String_Language", "언어" },
 			{ "String_Debug", "디버그" },
 			{ "String_TargetAvatar", "대상 아바타" },
@@ -99,7 +99,7 @@ namespace com.vrsuya.animationoffsetupdater {
 		};
 
 		// 일본어 사전 데이터
-		private static Dictionary<string, string> String_Japanese = new Dictionary<string, string>() {
+		static Dictionary<string, string> String_Japanese = new Dictionary<string, string>() {
 			{ "String_Language", "言語" },
 			{ "String_Debug", "デバッグ" },
 			{ "String_TargetAvatar", "対象アバター" },
@@ -123,7 +123,7 @@ namespace com.vrsuya.animationoffsetupdater {
 
 		/// <summary>요청한 아바타 제작자 이름들을 설정된 언어에 맞춰 변환합니다.</summary>
 		/// <returns>요청한 아바타 제작자 이름들의 현재 설정된 언어 버전</returns>
-		private static readonly Dictionary<AnimationOffsetUpdater.AvatarAuthor, string[]> dictAvatarAuthorNames = new Dictionary<AnimationOffsetUpdater.AvatarAuthor, string[]>() {
+		static readonly Dictionary<AnimationOffsetUpdater.AvatarAuthor, string[]> dictAvatarAuthorNames = new Dictionary<AnimationOffsetUpdater.AvatarAuthor, string[]>() {
 			{ AnimationOffsetUpdater.AvatarAuthor.General, new string[] { "General", "일반", "一般" } },
 			{ AnimationOffsetUpdater.AvatarAuthor.ChocolateRice, new string[] { "Chocolate rice", "초콜렛 라이스", "チョコレートライス" } },
 			{ AnimationOffsetUpdater.AvatarAuthor.JINGO, new string[] { "JINGO", "진권", "ジンゴ" } },

@@ -51,7 +51,7 @@ namespace com.vrsuya.avatarrebuilder {
 		}
 
 		// 영어 사전 데이터
-		private static readonly Dictionary<string, string> String_English = new Dictionary<string, string>() {
+		static readonly Dictionary<string, string> String_English = new Dictionary<string, string>() {
 			// UI 데이터
 			{ "String_Language", "Language" },
 			{ "String_Debug", "Debug" },
@@ -81,7 +81,7 @@ namespace com.vrsuya.avatarrebuilder {
 		};
 
 		// 한국어 사전 데이터
-		private static readonly Dictionary<string, string> String_Korean = new Dictionary<string, string>() {
+		static readonly Dictionary<string, string> String_Korean = new Dictionary<string, string>() {
 			// UI 데이터
 			{ "String_Language", "언어" },
 			{ "String_Debug", "디버그" },
@@ -111,7 +111,7 @@ namespace com.vrsuya.avatarrebuilder {
 		};
 
 		// 일본어 사전 데이터
-		private static readonly Dictionary<string, string> String_Japanese = new Dictionary<string, string>() {
+		static readonly Dictionary<string, string> String_Japanese = new Dictionary<string, string>() {
 			// UI 데이터
 			{ "String_Language", "言語" },
 			{ "String_Debug", "デバッグ" },
@@ -142,7 +142,7 @@ namespace com.vrsuya.avatarrebuilder {
 
 		/// <summary>요청한 아바타 이름들을 설정된 언어에 맞춰 변환합니다.</summary>
 		/// <returns>요청한 아바타 이름들의 현재 설정된 언어 버전</returns>
-		private static readonly Dictionary<AvatarRebuilder.Avatar, string[]> dictAvatarNames = new Dictionary<AvatarRebuilder.Avatar, string[]>() {
+		static readonly Dictionary<AvatarRebuilder.Avatar, string[]> dictAvatarNames = new Dictionary<AvatarRebuilder.Avatar, string[]>() {
 			{ AvatarRebuilder.Avatar.General, new string[] { "General", "일반", "一般" } },
 			{ AvatarRebuilder.Avatar.Airi, new string[] { "Airi", "아이리", "愛莉" } },
 			{ AvatarRebuilder.Avatar.Aldina, new string[] { "Aldina", "알디나", "アルディナ" } },

@@ -56,7 +56,7 @@ namespace com.vrsuya.installer {
 		}
 
 		// 영어 사전 데이터
-		private static Dictionary<string, string> String_English = new Dictionary<string, string>() {
+		static Dictionary<string, string> String_English = new Dictionary<string, string>() {
 			{ "String_Language", "Language" },
 			{ "String_Debug", "Debug" },
 			{ "String_Avatar", "Avatar Type" },
@@ -99,7 +99,7 @@ namespace com.vrsuya.installer {
 		};
 
 		// 한국어 사전 데이터
-		private static Dictionary<string, string> String_Korean = new Dictionary<string, string>() {
+		static Dictionary<string, string> String_Korean = new Dictionary<string, string>() {
 			{ "String_Language", "언어" },
 			{ "String_Debug", "디버그" },
 			{ "String_Avatar", "아바타 종류" },
@@ -142,7 +142,7 @@ namespace com.vrsuya.installer {
 		};
 
 		// 일본어 사전 데이터
-		private static Dictionary<string, string> String_Japanese = new Dictionary<string, string>() {
+		static Dictionary<string, string> String_Japanese = new Dictionary<string, string>() {
 			{ "String_Language", "言語" },
 			{ "String_Debug", "デバッグ" },
 			{ "String_Avatar", "アバタータイプ" },
@@ -186,7 +186,7 @@ namespace com.vrsuya.installer {
 
 		/// <summary>요청한 아바타 이름들을 설정된 언어에 맞춰 변환합니다.</summary>
 		/// <returns>요청한 아바타 이름들의 현재 설정된 언어 버전</returns>
-		private static readonly Dictionary<AvatarSettingUpdater.Avatar, string[]> dictAvatarNames = new Dictionary<AvatarSettingUpdater.Avatar, string[]>() {
+		static readonly Dictionary<AvatarSettingUpdater.Avatar, string[]> dictAvatarNames = new Dictionary<AvatarSettingUpdater.Avatar, string[]>() {
 			{ AvatarSettingUpdater.Avatar.General, new string[] { "General", "일반", "一般" } },
 			{ AvatarSettingUpdater.Avatar.None, new string[] { "None", "없음", "無い" } },
 			{ AvatarSettingUpdater.Avatar.Airi, new string[] { "Airi", "아이리", "愛莉" } },
