@@ -26,7 +26,7 @@ namespace com.vrsuya.avatarrebuilder {
 		public bool ToggleRestoreArmatureTransformEditor = true;
 		public bool ToggleResetRestPoseEditor = false;
 		public bool ToggleReorderGameObjectEditor = true;
-		public string StatusStringEditor = "";
+		public string StatusStringEditor = string.Empty;
 
 		// 정적 변수
 		protected static GameObject NewAvatarGameObject;
@@ -151,7 +151,7 @@ namespace com.vrsuya.avatarrebuilder {
 		static void ClearVariable() {
 			NewAvatarSkinnedMeshRenderers = new SkinnedMeshRenderer[0];
 			NewAvatarPatched = false;
-			StatusString = "";
+			StatusString = string.Empty;
         }
 
 		/// <summary>아바타의 현재 상태를 검사하여 설치가 가능한지 확인합니다.</summary>

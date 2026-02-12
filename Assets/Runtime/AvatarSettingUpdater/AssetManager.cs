@@ -136,7 +136,7 @@ namespace com.vrsuya.installer {
 		static Dictionary<VRCAvatarDescriptor.AnimLayerType, string> GetRequestAvatarTypeAnimatorControllerGUID(string SearchPath, Avatar AvatarType) {
 			Dictionary<VRCAvatarDescriptor.AnimLayerType, string> AnimatorGUID = new Dictionary<VRCAvatarDescriptor.AnimLayerType, string>();
 			foreach (string TargetVRCAnimatorType in dictAnimatorControllerName) {
-				string TargetAvatarType = "";
+				string TargetAvatarType = string.Empty;
 				if (AvatarType != Avatar.General) TargetAvatarType = AvatarType.ToString();
 				string[] TargetVRCAnimatorGUID = AssetDatabase.FindAssets(TargetVRCAnimatorType + " t:AnimatorController " + TargetAvatarType, new[] { SearchPath });
 				if (TargetVRCAnimatorGUID.Length == 0) TargetVRCAnimatorGUID = AssetDatabase.FindAssets(TargetVRCAnimatorType + " t:AnimatorController", new[] { SearchPath });
@@ -393,7 +393,7 @@ namespace com.vrsuya.installer {
 
 		/// <summary>요청한 타입의 애니메이터 컨트롤러를 아바타에 사전 할당을 합니다.</summary>
 		static void PreallocateAnimatorController(VRCAvatarDescriptor.AnimLayerType TargetType) {
-			string AssetGUID = "";
+			string AssetGUID = string.Empty;
 			switch (TargetType) {
 				case VRCAvatarDescriptor.AnimLayerType.Base:
 					if (InstalledProductNyoronyoro && InstallProductNyoronyoro) {
@@ -452,7 +452,7 @@ namespace com.vrsuya.installer {
 			if (string.IsNullOrEmpty(SourceAssetPath)) SourceAssetPath = dictVRCSDKAssetFilePath[TargetType];
 			string DestinationAssetPath = AssetDatabase.GUIDToAssetPath(dictVRCSDKAssetGUID[VRCAssetType.Export]);
 			if (string.IsNullOrEmpty(DestinationAssetPath)) DestinationAssetPath = dictVRCSDKAssetFilePath[VRCAssetType.Export];
-			string CopiedAssetGUID = "";
+			string CopiedAssetGUID = string.Empty;
 
 			if (!string.IsNullOrEmpty(AssetDatabase.AssetPathToGUID(SourceAssetPath))) {
 				string OriginalFileName = SourceAssetPath.Split('/')[SourceAssetPath.Split('/').Length - 1];
@@ -496,7 +496,7 @@ namespace com.vrsuya.installer {
 				if (ResultGUID != null) {
 					AssetGUID = ResultGUID[0];
 				} else {
-					AssetGUID = "";
+					AssetGUID = string.Empty;
 				}
 			}
 			return AssetGUID;

@@ -57,7 +57,7 @@ namespace com.vrsuya.installer {
 
 		public int StatusNeedMoreSpaceMenuEditor = 0;
 		public int StatusNeedMoreSpaceParameterEditor = 0;
-		public string StatusCodeEditor = "";
+		public string StatusCodeEditor = string.Empty;
 
 		// 아바타 관련 변수
 		protected static GameObject AvatarGameObject;
@@ -172,7 +172,7 @@ namespace com.vrsuya.installer {
 		protected static VRSuyaProduct[] RequestSetupVRSuyaProductList;
 
 		// 상태 반환
-		protected static string StatusCode = "";
+		protected static string StatusCode = string.Empty;
 		protected static int UndoGroupIndex;
 
         // 컴포넌트 최초 로드시 동작
@@ -317,7 +317,7 @@ namespace com.vrsuya.installer {
 			InstalledVRSuyaProducts = new VRSuyaProduct[0];
 			InstalledVRSuyaProductAvatars = new Avatar[0];
 			RequestSetupVRSuyaProductList = new VRSuyaProduct[0];
-			StatusCode = "";
+			StatusCode = string.Empty;
 			StatusNeedMoreSpaceMenuEditor = 0;
 			StatusNeedMoreSpaceParameterEditor = 0;
         }
@@ -485,7 +485,7 @@ namespace com.vrsuya.installer {
 		/// <summary>요청한 GUID를 파일 이름으로 반환합니다. 2번째 인자는 확장명 포함 여부를 결정합니다.</summary>
 		/// <returns>파일 이름</returns>
 		internal static string GUIDToAssetName(string GUID, bool OnlyFileName) {
-			string FileName = "";
+			string FileName = string.Empty;
 			FileName = AssetDatabase.GUIDToAssetPath(GUID).Split('/')[AssetDatabase.GUIDToAssetPath(GUID).Split('/').Length - 1];
 			if (OnlyFileName) FileName = FileName.Split('.')[0];
 			return FileName;

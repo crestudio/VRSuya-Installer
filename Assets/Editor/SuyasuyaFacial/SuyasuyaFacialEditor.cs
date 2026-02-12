@@ -48,7 +48,7 @@ namespace com.vrsuya.suyasuyafacial {
 				(target as SuyasuyaFacial).ReloadVariable();
 				Repaint();
 			}
-			EditorGUILayout.LabelField("", GUI.skin.horizontalSlider);
+			EditorGUILayout.LabelField(string.Empty, GUI.skin.horizontalSlider);
 			EditorGUI.indentLevel++;
 			if (SerializedTargetBlendShapes.arraySize > 0) {
 				FoldAvatar = EditorGUILayout.Foldout(FoldAvatar, LanguageHelper.GetContextString("String_TargetBlendShape"));
@@ -84,7 +84,7 @@ namespace com.vrsuya.suyasuyafacial {
 				EditorGUILayout.HelpBox(LanguageHelper.GetContextString("NO_ANIMSHAPEKEY"), MessageType.Info);
 			}
 			EditorGUI.indentLevel--;
-			EditorGUILayout.LabelField("", GUI.skin.horizontalSlider);
+			EditorGUILayout.LabelField(string.Empty, GUI.skin.horizontalSlider);
 			if (!string.IsNullOrEmpty(SerializedStatusCode.stringValue)) {
 				EditorGUILayout.HelpBox(ReturnStatusString(SerializedStatusCode.stringValue), MessageType.Warning);
             }

@@ -55,7 +55,7 @@ namespace com.vrsuya.suyasuyafacial {
 		public AnimationBlendShape[] TargetAnimationBlendShapes = new AnimationBlendShape[0];
 		
 		// 상태 반환
-		public string StatusCode = "";
+		public string StatusCode = string.Empty;
 		public int CountUpdatedCurve = 0;
 		public int UndoGroupIndex;
 
@@ -320,7 +320,7 @@ namespace com.vrsuya.suyasuyafacial {
 		/// <summary>요청한 GUID를 파일 이름으로 반환합니다. 2번째 인자는 확장명 포함 여부를 결정합니다.</summary>
 		/// <returns>파일 이름</returns>
 		string GUIDToAssetName(string GUID, bool OnlyFileName) {
-			string FileName = "";
+			string FileName = string.Empty;
 			FileName = AssetDatabase.GUIDToAssetPath(GUID).Split('/')[AssetDatabase.GUIDToAssetPath(GUID).Split('/').Length - 1];
 			if (OnlyFileName) FileName = FileName.Split('.')[0];
 			return FileName;

@@ -23,7 +23,7 @@ namespace com.vrsuya.animationoffsetupdater {
 		public readonly string[] LanguageType = new[] { "English", "한국어", "日本語" };
 		public static int AvatarAuthorType = 0;
 		public static string[] AvatarAuthorNames = new string[0];
-		public static string SelectedAvatarAuthor = "";
+		public static string SelectedAvatarAuthor = string.Empty;
 
         void OnEnable() {
             SerializedAvatarGameObject = serializedObject.FindProperty("AvatarGameObject");
@@ -58,7 +58,7 @@ namespace com.vrsuya.animationoffsetupdater {
                 EditorGUILayout.HelpBox(LanguageHelper.GetContextString(SerializedStatusCode.stringValue), MessageType.Warning);
             }
             serializedObject.ApplyModifiedProperties();
-			EditorGUILayout.LabelField("", GUI.skin.horizontalSlider);
+			EditorGUILayout.LabelField(string.Empty, GUI.skin.horizontalSlider);
 			if (GUILayout.Button(LanguageHelper.GetContextString("String_UpdateAnimation"))) {
                 (target as AnimationOffsetUpdater).UpdateAnimationOffset();
             }

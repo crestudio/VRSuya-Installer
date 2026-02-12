@@ -52,7 +52,7 @@ namespace com.vrsuya.installer {
         public readonly string[] LanguageType = new[] { "English", "한국어", "日本語" };
 		public static int AvatarType = 0;
 		public static string[] AvatarNames = new string[0];
-		public static string SelectedAvatarName = "";
+		public static string SelectedAvatarName = string.Empty;
 		public static bool FoldAdvanced = false;
 		public static int StatusNeedMoreSpaceMenu;
 		public static int StatusNeedMoreSpaceParameter;
@@ -161,7 +161,7 @@ namespace com.vrsuya.installer {
 				EditorGUILayout.HelpBox(ReturnStatusString(SerializedStatusCode.stringValue), MessageType.Warning);
             }
 			serializedObject.ApplyModifiedProperties();
-			EditorGUILayout.LabelField("", GUI.skin.horizontalSlider);
+			EditorGUILayout.LabelField(string.Empty, GUI.skin.horizontalSlider);
 			if (GUILayout.Button(LanguageHelper.GetContextString("String_UpdateAvatarData") + " (" + SelectedAvatarName + ")")) {
                 (target as AvatarSettingUpdater).UpdateAvatarSetting(LanguageIndex);
 				Repaint();
