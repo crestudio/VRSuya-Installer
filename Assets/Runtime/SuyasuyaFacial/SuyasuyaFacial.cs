@@ -86,7 +86,6 @@ namespace com.vrsuya.suyasuyafacial {
 				StatusCode = "COMPLETED";
 				Debug.Log("[VRSuya] Update Animation Clips Completed");
             }
-			return;
         }
 
 		/// <summary>변수를 초기화하고 다시 불러옵니다.</summary>
@@ -107,7 +106,6 @@ namespace com.vrsuya.suyasuyafacial {
 			}
 			if (TargetAnimationClips.Length == 0) TargetAnimationClips = GetVRSuyaSuyasuyaAnimations();
 			CleanupBlendShapeList();
-			return;
 		}
 
 		/// <summary>아바타의 현재 상태를 검사하여 패치가 가능한지 확인합니다.</summary>
@@ -223,7 +221,6 @@ namespace com.vrsuya.suyasuyafacial {
 					if (TargetAnimationBlendShapes.Length > 0) TargetAnimationBlendShapes = Array.FindAll(TargetAnimationBlendShapes, TargetAnimationBlendShape => !ExistAnimationBlendShapes.Contains(TargetAnimationBlendShape.BlendShapeName));
 				}
 			}
-			return;
 		}
 
 		/// <summary>에셋에서 Suyasuya 애니메이션을 찾아서 리스트로 반환 합니다.</summary>
@@ -273,7 +270,6 @@ namespace com.vrsuya.suyasuyafacial {
 				}
 			}
 			Debug.Log($"[VRSuya] {CountUpdatedCurve} blendshapes have been added to the animation clip");
-			return;
 		}
 
 		/// <summary>애니메이션 클립에서 존재하는 Blendshape 리스트를 반환 합니다.</summary>

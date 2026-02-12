@@ -26,7 +26,6 @@ namespace com.vrsuya.installer {
 			ModelWalking = AssetManager.UpdateProductInformation(ProductName.ModelWalking);
 			InstalledVRSuyaProducts = InstalledVRSuyaProducts.Concat(new VRSuyaProduct[] { ModelWalking }).ToArray();
 			if (ModelWalking.SupportAvatarList.Length > 0) InstalledProductModelWalking = true;
-			return;
 		}
 
 		/// <summary>외부의 세팅 요청을 처리하는 메인 메소드 입니다.</summary>
@@ -35,7 +34,6 @@ namespace com.vrsuya.installer {
 				VRSuyaModelWalkingGameObject = Array.Find(VRSuyaGameObjects, gameObject => gameObject.name.Contains("VRSuya_ModelWalking"));
 				if (!VRSuyaModelWalkingGameObject) SetupPrefab();
 			}
-			return;
 		}
 
 		/// <summary>아바타에 Prefab이 있는지 검사하고 없으면 설치하는 메소드 입니다.</summary>
@@ -60,7 +58,6 @@ namespace com.vrsuya.installer {
 			}
 			GetVRSuyaGameObjects();
 			VRSuyaModelWalkingGameObject = Array.Find(VRSuyaGameObjects, gameObject => gameObject.name.Contains("VRSuya_ModelWalking"));
-			return;
 		}
 	}
 }

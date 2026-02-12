@@ -443,7 +443,6 @@ namespace com.vrsuya.installer {
 				}
 				Undo.CollapseUndoOperations(UndoGroupIndex);
 			}
-			return;
 		}
 
 		/// <summary>요청한 에셋을 Export 폴더에 아바타 이름으로 복사합니다.</summary>

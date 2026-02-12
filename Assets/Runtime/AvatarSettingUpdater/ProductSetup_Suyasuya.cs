@@ -23,7 +23,6 @@ namespace com.vrsuya.installer {
 			Suyasuya = AssetManager.UpdateProductInformation(ProductName.Suyasuya);
 			InstalledVRSuyaProducts = InstalledVRSuyaProducts.Concat(new VRSuyaProduct[] { Suyasuya }).ToArray();
 			if (Suyasuya.SupportAvatarList.Length > 0) InstalledProductSuyasuya = true;
-			return;
 		}
 	}
 }

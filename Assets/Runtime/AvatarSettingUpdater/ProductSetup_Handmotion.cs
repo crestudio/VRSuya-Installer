@@ -23,7 +23,6 @@ namespace com.vrsuya.installer {
 			Handmotion = AssetManager.UpdateProductInformation(ProductName.Handmotion);
 			InstalledVRSuyaProducts = InstalledVRSuyaProducts.Concat(new VRSuyaProduct[] { Handmotion }).ToArray();
 			if (Handmotion.SupportAvatarList.Length > 0) InstalledProductHandmotion = true;
-			return;
 		}
 	}
 }

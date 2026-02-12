@@ -29,7 +29,6 @@ namespace com.vrsuya.avatarrebuilder {
 			} else if (!IsSameFBX() && NewAvatarPatched) {
 				ReplaceOldAvatarAnimatorAvatar();
 			}
-			return;
 		}
 
         /// <summary>새 아바타 GameObject가 Scene에 존재하는지 여부를 알려줍니다.</summary>
@@ -39,7 +38,6 @@ namespace com.vrsuya.avatarrebuilder {
                 ApplyNewAvatarFBXModel();
                 PlaceGameObejctInScene();
             }
-            return;
         }
 
         /// <summary>기존 아바타를 복제하여 백업본을 생성합니다.</summary>
@@ -55,7 +53,6 @@ namespace com.vrsuya.avatarrebuilder {
             EditorUtility.SetDirty(DuplicatedAvatar);
 			Selection.activeGameObject = OldAvatarGameObject;
 			Undo.CollapseUndoOperations(UndoGroupIndex);
-			return;
 		}
 
         /// <summary>기존 아바타와 신규 아바타가 같은 FBX 파일을 사용하는지 알려줍니다.</summary>
@@ -173,7 +170,6 @@ namespace com.vrsuya.avatarrebuilder {
 				if (!TargetMaterial) continue;
 				NewModelImporter.AddRemap(new AssetImporter.SourceAssetIdentifier(TargetMaterial), TargetMaterial);
 			}
-			return;
 		}
 
 		/// <summary>새 아바타 GameObject를 Scene에 배치를 합니다.</summary>
@@ -183,14 +179,12 @@ namespace com.vrsuya.avatarrebuilder {
 			Undo.RegisterCreatedObjectUndo(NewInstance, "Added New GameObject");
 			Undo.CollapseUndoOperations(UndoGroupIndex);
 			NewAvatarGameObject = NewInstance;
-			return;
 		}
 
         /// <summary>새로 복제된 기존 아바타의 Animator의 Avatar를 신규 아바타의 Avatar로 변경합니다.</summary>
         static void ReplaceOldAvatarAnimatorAvatar() {
 			OldAvatarAnimator.avatar = NewAvatarAnimator.avatar;
             EditorUtility.SetDirty(OldAvatarAnimator);
-            return;
 		}
 
     }

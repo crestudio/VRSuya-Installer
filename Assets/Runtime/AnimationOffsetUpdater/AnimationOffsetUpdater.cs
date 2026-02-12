@@ -49,7 +49,6 @@ namespace com.vrsuya.animationoffsetupdater {
 				AnimatorController AvatarFXLayer = AvatarInstance.GetAnimatorController(AvatarGameObject, VRCAvatarDescriptor.AnimLayerType.FX);
 				AvatarAnimationClips = GetVRSuyaMogumoguAnimations(AvatarFXLayer);
 			}
-			return;
 		}
 
 		/// <summary>아바타와 애니메이션으로부터 볼 본의 원점을 구합니다</summary>
@@ -67,7 +66,6 @@ namespace com.vrsuya.animationoffsetupdater {
 					StatusCode = "NO_CHEEKBONE";
 				}
             }
-            return;
         }
 
 		/// <summary>
@@ -92,7 +90,6 @@ namespace com.vrsuya.animationoffsetupdater {
 					StatusCode = "NO_CHEEKBONE";
 				}
             }
-            return;
         }
 
 		/// <summary>찾아야 하는 볼 본의 이름를 조회해서 반환합니다.</summary>
@@ -141,7 +138,6 @@ namespace com.vrsuya.animationoffsetupdater {
 			AnimationOriginPosition = new Vector3(0.0f, 0.0f, 0.0f);
 			AvatarOriginPosition = new Vector3(0.0f, 0.0f, 0.0f);
 			StatusCode = null;
-            return;
         }
 
 
@@ -177,7 +173,6 @@ namespace com.vrsuya.animationoffsetupdater {
 				}
 			}
 			AvatarOriginPosition = AvatarCheekBoneTransforms[0].localPosition;
-			return;
         }
 
 		/// <summary>포즈 애니메이션에서 볼 원점의 위치를 가져옵니다.</summary>
@@ -298,7 +293,6 @@ namespace com.vrsuya.animationoffsetupdater {
                     }
                 }
             }
-			return;
         }
     }
 }

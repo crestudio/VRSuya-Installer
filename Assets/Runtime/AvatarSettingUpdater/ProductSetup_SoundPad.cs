@@ -26,7 +26,6 @@ namespace com.vrsuya.installer {
 			SoundPad = AssetManager.UpdateProductInformation(ProductName.SoundPad);
 			InstalledVRSuyaProducts = InstalledVRSuyaProducts.Concat(new VRSuyaProduct[] { SoundPad }).ToArray();
 			if (SoundPad.SupportAvatarList.Length > 0) InstalledProductSoundPad = true;
-			return;
 		}
 
 		/// <summary>외부의 세팅 요청을 처리하는 메인 메소드 입니다.</summary>
@@ -36,7 +35,6 @@ namespace com.vrsuya.installer {
 				if (!VRSuyaSoundPadGameObject) SetupPrefab();
 				if (VRSuyaSoundPadGameObject) RepositionPrefab(VRSuyaSoundPadGameObject);
 			}
-			return;
 		}
 
 		/// <summary>아바타에 Prefab이 있는지 검사하고 없으면 설치하는 메소드 입니다.</summary>
@@ -61,7 +59,6 @@ namespace com.vrsuya.installer {
 			}
 			GetVRSuyaGameObjects();
 			VRSuyaSoundPadGameObject = Array.Find(VRSuyaGameObjects, gameObject => gameObject.name.Contains("VRSuya_SoundPad"));
-			return;
 		}
 
 		/// <summary>Prefab의 Transform을 변경합니다.</summary>

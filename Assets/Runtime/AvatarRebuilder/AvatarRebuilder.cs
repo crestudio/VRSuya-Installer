@@ -101,7 +101,6 @@ namespace com.vrsuya.avatarrebuilder {
             ToggleRestoreArmatureTransform = ToggleRestoreArmatureTransformEditor;
 			ToggleResetRestPose = ToggleResetRestPoseEditor;
 			ToggleReorderGameObject = ToggleReorderGameObjectEditor;
-			return;
 		}
 
 		/// <summary>정적 변수 -> 에디터 변수 동기화합니다.</summary>
@@ -111,7 +110,6 @@ namespace com.vrsuya.avatarrebuilder {
 			NewAvatarSkinnedMeshRenderersEditor = NewAvatarSkinnedMeshRenderers;
 			AvatarRootBoneEditor = AvatarRootBone;
 			StatusStringEditor = StatusString;
-			return;
 		}
 
 		/// <summary>패치 대상 SkinnedMeshRenderer 목록을 가져옵니다</summary>
@@ -123,7 +121,6 @@ namespace com.vrsuya.avatarrebuilder {
 				StatusString = "UPDATED_RENDERER";
 			}
             SetEditorVariable();
-			return;
         }
 
 		/// <summary>
@@ -148,7 +145,6 @@ namespace com.vrsuya.avatarrebuilder {
 			}
 			SetEditorVariable();
 			ActiveAvatarRebuilder = false;
-			return;
         }
 
 		/// <summary>정적 변수를 초기화 합니다.</summary>
@@ -156,7 +152,6 @@ namespace com.vrsuya.avatarrebuilder {
 			NewAvatarSkinnedMeshRenderers = new SkinnedMeshRenderer[0];
 			NewAvatarPatched = false;
 			StatusString = "";
-			return;
         }
 
 		/// <summary>아바타의 현재 상태를 검사하여 설치가 가능한지 확인합니다.</summary>

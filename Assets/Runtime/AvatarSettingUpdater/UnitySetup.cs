@@ -23,7 +23,6 @@ namespace com.vrsuya.installer {
 			GetAvatarSkinnedMeshRenderers();
 			GetAvatarMeshRenderers();
 			GetAvatarAnchorOverride();
-			return;
 		}
 
 		/// <summary>외부의 세팅 요청을 처리하는 메인 메소드 입니다.</summary>
@@ -31,7 +30,6 @@ namespace com.vrsuya.installer {
 			if (ChangeTwosidedShadow) UpdateTwosidedShadow();
 			if (ChangeAnchorOverride) UpdateAnchorOverride();
 			if (ChangeBounds) UpdateBounds();
-			return;
 		}
 
 		/* Unity 관련 아바타 변수 업데이트 */
@@ -89,7 +87,6 @@ namespace com.vrsuya.installer {
 					Undo.CollapseUndoOperations(UndoGroupIndex);
 				}
 			}
-			return;
 		}
 
 		/// <summary>아바타의 AnchorOverride 세팅을 설정 합니다.</summary>
@@ -108,7 +105,6 @@ namespace com.vrsuya.installer {
 					Undo.CollapseUndoOperations(UndoGroupIndex);
 				}
 			}
-			return;
 		}
 
 		/// <summary>아바타의 Bounds 세팅을 설정 합니다.</summary>
