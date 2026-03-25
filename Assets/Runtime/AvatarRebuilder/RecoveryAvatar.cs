@@ -202,7 +202,7 @@ namespace com.vrsuya.avatarrebuilder {
 
 		/// <summary>GameObject Prefab을 일반 GameObject로 변경합니다.</summary>
 		static void UnpackPrefab() {
-			for (int Try = 0; Try < 5; Try++) {
+			while (PrefabUtility.IsPartOfAnyPrefab(NewAvatarGameObject)) {
 				if (PrefabUtility.GetPrefabAssetType(NewAvatarGameObject) == PrefabAssetType.NotAPrefab) {
 					break;
 				} else {
@@ -212,7 +212,7 @@ namespace com.vrsuya.avatarrebuilder {
                     Undo.CollapseUndoOperations(UndoGroupIndex);
                 }
 			}
-			for (int Try = 0; Try < 5; Try++) {
+			while (PrefabUtility.IsPartOfAnyPrefab(OldAvatarGameObject)) {
 				if (PrefabUtility.GetPrefabAssetType(OldAvatarGameObject) == PrefabAssetType.NotAPrefab) {
 					break;
 				} else {
