@@ -24,7 +24,7 @@ namespace com.vrsuya.installer {
 		static GameObject VRSuyaAFKGameObject;
 
 		readonly static Avatar[] AFKAvatars = new Avatar[] { 
-			Avatar.Aldina, Avatar.Kipfel, Avatar.Leefa, Avatar.Lunalitt, Avatar.Milfy,
+			Avatar.Aldina, Avatar.Chise, Avatar.Kipfel, Avatar.Leefa, Avatar.Lunalitt, Avatar.Milfy,
 			Avatar.Minase, Avatar.Shinano, Avatar.Sio, Avatar.Sugar
 		};
 
