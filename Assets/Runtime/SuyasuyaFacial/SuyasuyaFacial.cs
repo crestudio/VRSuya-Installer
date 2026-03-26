@@ -57,7 +57,7 @@ namespace com.vrsuya.suyasuyafacial {
 		// 상태 반환
 		public string StatusCode = string.Empty;
 		public int CountUpdatedCurve = 0;
-		public int UndoGroupIndex;
+		int UndoGroupIndex;
 
 		// 컴포넌트 최초 로드시 동작
 		void OnEnable() {
