@@ -94,7 +94,7 @@ namespace com.vrsuya.installer {
 
 		static readonly string[] dictIgnorePrefabName = new string[] { "Cyalume", "LightStick", "Guide", "Sphere", "Transparent", "Particle", "Modular" };
 
-		static readonly string dictDefaultFilename = "Default";
+		const string dictDefaultFilename = "Default";
 
 		/// <summary>요청한 타입의 VRSuya 제품의 상세 내용을 업데이트하여 반환합니다.</summary>
 		/// <returns>내용이 업데이트 된 VRSuyaProduct 오브젝트</returns>
