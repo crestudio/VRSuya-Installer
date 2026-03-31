@@ -61,6 +61,7 @@ namespace VRSuya.Modular.Editor {
 
 		public override void OnInspectorGUI() {
 			LanguageIndex = EditorGUILayout.Popup(GetTranslatedString("String_Language"), LanguageIndex, LanguageOption);
+			EditorGUILayout.Space();
 			EditorGUILayout.HelpBox(GetTranslatedString("String_RemoveAFKLayer"), MessageType.Info);
 		}
 	}

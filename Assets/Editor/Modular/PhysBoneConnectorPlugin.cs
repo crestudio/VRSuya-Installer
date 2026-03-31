@@ -142,6 +142,7 @@ namespace VRSuya.Modular.Editor {
 		public override void OnInspectorGUI() {
 			serializedObject.Update();
 			LanguageIndex = EditorGUILayout.Popup(GetTranslatedString("String_Language"), LanguageIndex, LanguageOption);
+			EditorGUILayout.Space(EditorGUIUtility.singleLineHeight);
 			EditorGUILayout.PropertyField(SerializedTargetType, new GUIContent(GetTranslatedString("String_PhysBoneType")));
 			EditorGUILayout.Space();
 			PhysBoneType TargetType = (PhysBoneType)SerializedTargetType.enumValueIndex;
