@@ -30,7 +30,7 @@ namespace VRSuya.Modular.Editor {
 		public override string DisplayName => "VRSuya Remove Animator Layer";
 
 		protected override void Configure() {
-			InPhase(BuildPhase.Transforming).Run(RemoveAnimatorLayerPass.Instance);
+			InPhase(BuildPhase.Optimizing).Run(RemoveAnimatorLayerPass.Instance);
 		}
 	}
 
