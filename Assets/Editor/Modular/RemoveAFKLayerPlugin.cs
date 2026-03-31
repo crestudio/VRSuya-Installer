@@ -36,8 +36,6 @@ namespace VRSuya.Modular.Editor {
 		public override string DisplayName => "Remove AFK Layer";
 
 		protected override void Execute(BuildContext TargetBuildContext) {
-			RemoveAFKLayer TargetComponent = TargetBuildContext.AvatarRootObject.GetComponentInChildren<RemoveAFKLayer>();
-			if (!TargetComponent) return;
 			VRCAvatarDescriptor TargetAvatarDescriptor = TargetBuildContext.VRChatAvatarDescriptor();
 			if (!TargetAvatarDescriptor) return;
 			Avatar AvatarInstance = new Avatar();
@@ -49,7 +47,10 @@ namespace VRSuya.Modular.Editor {
 					TargetFXLayer.RemoveLayer(Index);
 				}
 			}
-			Object.DestroyImmediate(TargetComponent);
+			RemoveAFKLayer[] RemoveAFKLayerComponents = TargetBuildContext.AvatarRootObject.GetComponentsInChildren<RemoveAFKLayer>();
+			foreach (RemoveAFKLayer TargetComponent in RemoveAFKLayerComponents) {
+				Object.DestroyImmediate(TargetComponent);
+			}
 		}
 	}
 
