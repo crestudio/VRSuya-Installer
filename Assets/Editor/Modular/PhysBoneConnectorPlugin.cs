@@ -33,70 +33,71 @@ namespace VRSuya.Modular.Editor {
 
 		public override string DisplayName => "PhysBone Connector";
 
-		static readonly string[] Cheek_L_Names = new string[] { "Cheek.L", "Cheek1_L", "Cheek_Root_L", "Cheek_root_L" };
-		static readonly string[] Cheek_R_Names = new string[] { "Cheek.R", "Cheek1_R", "Cheek_Root_R", "Cheek_root_R" };
-
 		protected override void Execute(BuildContext TargetBuildContext) {
-			TargetBuildContext.AvatarRootObject.TryGetComponent(out Animator TargetAnimator);
-			if (!TargetAnimator) return;
 			PhysBoneConnector[] PhysBoneConnectors = TargetBuildContext.AvatarRootObject.GetComponentsInChildren<PhysBoneConnector>();
-			foreach (PhysBoneConnector TargetComponent in PhysBoneConnectors) {
-				if (!TargetComponent) continue;
-				if (TargetComponent.TargetType == PhysBoneType.Cheek) {
-					Transform[] HeadTransforms = TargetAnimator.GetBoneTransform(HumanBodyBones.Head).GetComponentsInChildren<Transform>(true);
-					Transform Cheek_L_Transform = HeadTransforms.FirstOrDefault(Item => Cheek_L_Names.Contains(Item.name));
-					Transform Cheek_R_Transform = HeadTransforms.FirstOrDefault(Item => Cheek_R_Names.Contains(Item.name));
-					if (Cheek_L_Transform && TargetComponent.TargetCheek_L) {
-						TargetComponent.TargetCheek_L.rootTransform = Cheek_L_Transform;
+			if (PhysBoneConnectors.Length > 0) {
+				TargetBuildContext.AvatarRootObject.TryGetComponent(out Animator TargetAnimator);
+				if (!TargetAnimator) return;
+				foreach (PhysBoneConnector TargetComponent in PhysBoneConnectors) {
+					if (!TargetComponent) continue;
+					if (TargetComponent.TargetType == PhysBoneType.Cheek) {
+						string[] Cheek_L_Names = new string[] { "Cheek.L", "Cheek1_L", "Cheek_Root_L", "Cheek_root_L" };
+						string[] Cheek_R_Names = new string[] { "Cheek.R", "Cheek1_R", "Cheek_Root_R", "Cheek_root_R" };
+						Transform[] HeadTransforms = TargetAnimator.GetBoneTransform(HumanBodyBones.Head).GetComponentsInChildren<Transform>(true);
+						Transform Cheek_L_Transform = HeadTransforms.FirstOrDefault(Item => Cheek_L_Names.Contains(Item.name));
+						Transform Cheek_R_Transform = HeadTransforms.FirstOrDefault(Item => Cheek_R_Names.Contains(Item.name));
+						if (Cheek_L_Transform && TargetComponent.TargetCheek_L) {
+							TargetComponent.TargetCheek_L.rootTransform = Cheek_L_Transform;
+						}
+						if (Cheek_R_Transform && TargetComponent.TargetCheek_R) {
+							TargetComponent.TargetCheek_R.rootTransform = Cheek_R_Transform;
+						}
+					} else {
+						Transform[] Toe_L_Transform = TargetAnimator.GetBoneTransform(HumanBodyBones.LeftToes).GetComponentsInChildren<Transform>(true);
+						Transform[] Toe_R_Transform = TargetAnimator.GetBoneTransform(HumanBodyBones.RightToes).GetComponentsInChildren<Transform>(true);
+						Transform ThumbToe1_L_Transform = Toe_L_Transform.FirstOrDefault(Item => Item.name == "ThumbToe1_L" || Item.name == "Toe_Thumb_Proximal_L");
+						Transform ThumbToe1_R_Transform = Toe_R_Transform.FirstOrDefault(Item => Item.name == "ThumbToe1_R" || Item.name == "Toe_Thumb_Proximal_R");
+						Transform IndexToe1_L_Transform = Toe_L_Transform.FirstOrDefault(Item => Item.name == "IndexToe1_L" || Item.name == "Toe_Index_Proximal_L");
+						Transform IndexToe1_R_Transform = Toe_R_Transform.FirstOrDefault(Item => Item.name == "IndexToe1_R" || Item.name == "Toe_Index_Proximal_R");
+						Transform MiddleToe1_L_Transform = Toe_L_Transform.FirstOrDefault(Item => Item.name == "MiddleToe1_L" || Item.name == "Toe_Middle_Proximal_L");
+						Transform MiddleToe1_R_Transform = Toe_R_Transform.FirstOrDefault(Item => Item.name == "MiddleToe1_R" || Item.name == "Toe_Middle_Proximal_R");
+						Transform RingToe1_L_Transform = Toe_L_Transform.FirstOrDefault(Item => Item.name == "RingToe1_L" || Item.name == "Toe_Ring_Proximal_L");
+						Transform RingToe1_R_Transform = Toe_R_Transform.FirstOrDefault(Item => Item.name == "RingToe1_R" || Item.name == "Toe_Ring_Proximal_R");
+						Transform LittleToe1_L_Transform = Toe_L_Transform.FirstOrDefault(Item => Item.name == "LittleToe1_L" || Item.name == "Toe_Little_Proximal_L");
+						Transform LittleToe1_R_Transform = Toe_R_Transform.FirstOrDefault(Item => Item.name == "LittleToe1_R" || Item.name == "Toe_Little_Proximal_R");
+						if (ThumbToe1_L_Transform && TargetComponent.TargetThumbToe1_L) {
+							TargetComponent.TargetThumbToe1_L.rootTransform = ThumbToe1_L_Transform;
+						}
+						if (ThumbToe1_R_Transform && TargetComponent.TargetThumbToe1_R) {
+							TargetComponent.TargetThumbToe1_R.rootTransform = ThumbToe1_R_Transform;
+						}
+						if (IndexToe1_L_Transform && TargetComponent.TargetIndexToe1_L) {
+							TargetComponent.TargetIndexToe1_L.rootTransform = IndexToe1_L_Transform;
+						}
+						if (IndexToe1_R_Transform && TargetComponent.TargetIndexToe1_R) {
+							TargetComponent.TargetIndexToe1_R.rootTransform = IndexToe1_R_Transform;
+						}
+						if (MiddleToe1_L_Transform && TargetComponent.TargetMiddleToe1_L) {
+							TargetComponent.TargetMiddleToe1_L.rootTransform = MiddleToe1_L_Transform;
+						}
+						if (MiddleToe1_R_Transform && TargetComponent.TargetMiddleToe1_R) {
+							TargetComponent.TargetMiddleToe1_R.rootTransform = MiddleToe1_R_Transform;
+						}
+						if (RingToe1_L_Transform && TargetComponent.TargetRingToe1_L) {
+							TargetComponent.TargetRingToe1_L.rootTransform = RingToe1_L_Transform;
+						}
+						if (RingToe1_R_Transform && TargetComponent.TargetRingToe1_R) {
+							TargetComponent.TargetRingToe1_R.rootTransform = RingToe1_R_Transform;
+						}
+						if (LittleToe1_L_Transform && TargetComponent.TargetLittleToe1_L) {
+							TargetComponent.TargetLittleToe1_L.rootTransform = LittleToe1_L_Transform;
+						}
+						if (LittleToe1_R_Transform && TargetComponent.TargetLittleToe1_R) {
+							TargetComponent.TargetLittleToe1_R.rootTransform = LittleToe1_R_Transform;
+						}
 					}
-					if (Cheek_R_Transform && TargetComponent.TargetCheek_R) {
-						TargetComponent.TargetCheek_R.rootTransform = Cheek_R_Transform;
-					}
-				} else {
-					Transform[] Toe_L_Transform = TargetAnimator.GetBoneTransform(HumanBodyBones.LeftToes).GetComponentsInChildren<Transform>(true);
-					Transform[] Toe_R_Transform = TargetAnimator.GetBoneTransform(HumanBodyBones.RightToes).GetComponentsInChildren<Transform>(true);
-					Transform ThumbToe1_L_Transform = Toe_L_Transform.FirstOrDefault(Item => Item.name == "ThumbToe1_L" || Item.name == "Toe_Thumb_Proximal_L");
-					Transform ThumbToe1_R_Transform = Toe_R_Transform.FirstOrDefault(Item => Item.name == "ThumbToe1_R" || Item.name == "Toe_Thumb_Proximal_R");
-					Transform IndexToe1_L_Transform = Toe_L_Transform.FirstOrDefault(Item => Item.name == "IndexToe1_L" || Item.name == "Toe_Index_Proximal_L");
-					Transform IndexToe1_R_Transform = Toe_R_Transform.FirstOrDefault(Item => Item.name == "IndexToe1_R" || Item.name == "Toe_Index_Proximal_R");
-					Transform MiddleToe1_L_Transform = Toe_L_Transform.FirstOrDefault(Item => Item.name == "MiddleToe1_L" || Item.name == "Toe_Middle_Proximal_L");
-					Transform MiddleToe1_R_Transform = Toe_R_Transform.FirstOrDefault(Item => Item.name == "MiddleToe1_R" || Item.name == "Toe_Middle_Proximal_R");
-					Transform RingToe1_L_Transform = Toe_L_Transform.FirstOrDefault(Item => Item.name == "RingToe1_L" || Item.name == "Toe_Ring_Proximal_L");
-					Transform RingToe1_R_Transform = Toe_R_Transform.FirstOrDefault(Item => Item.name == "RingToe1_R" || Item.name == "Toe_Ring_Proximal_R");
-					Transform LittleToe1_L_Transform = Toe_L_Transform.FirstOrDefault(Item => Item.name == "LittleToe1_L" || Item.name == "Toe_Little_Proximal_L");
-					Transform LittleToe1_R_Transform = Toe_R_Transform.FirstOrDefault(Item => Item.name == "LittleToe1_R" || Item.name == "Toe_Little_Proximal_R");
-					if (ThumbToe1_L_Transform && TargetComponent.TargetThumbToe1_L) {
-						TargetComponent.TargetThumbToe1_L.rootTransform = ThumbToe1_L_Transform;
-					}
-					if (ThumbToe1_R_Transform && TargetComponent.TargetThumbToe1_R) {
-						TargetComponent.TargetThumbToe1_R.rootTransform = ThumbToe1_R_Transform;
-					}
-					if (IndexToe1_L_Transform && TargetComponent.TargetIndexToe1_L) {
-						TargetComponent.TargetIndexToe1_L.rootTransform = IndexToe1_L_Transform;
-					}
-					if (IndexToe1_R_Transform && TargetComponent.TargetIndexToe1_R) {
-						TargetComponent.TargetIndexToe1_R.rootTransform = IndexToe1_R_Transform;
-					}
-					if (MiddleToe1_L_Transform && TargetComponent.TargetMiddleToe1_L) {
-						TargetComponent.TargetMiddleToe1_L.rootTransform = MiddleToe1_L_Transform;
-					}
-					if (MiddleToe1_R_Transform && TargetComponent.TargetMiddleToe1_R) {
-						TargetComponent.TargetMiddleToe1_R.rootTransform = MiddleToe1_R_Transform;
-					}
-					if (RingToe1_L_Transform && TargetComponent.TargetRingToe1_L) {
-						TargetComponent.TargetRingToe1_L.rootTransform = RingToe1_L_Transform;
-					}
-					if (RingToe1_R_Transform && TargetComponent.TargetRingToe1_R) {
-						TargetComponent.TargetRingToe1_R.rootTransform = RingToe1_R_Transform;
-					}
-					if (LittleToe1_L_Transform && TargetComponent.TargetLittleToe1_L) {
-						TargetComponent.TargetLittleToe1_L.rootTransform = LittleToe1_L_Transform;
-					}
-					if (LittleToe1_R_Transform && TargetComponent.TargetLittleToe1_R) {
-						TargetComponent.TargetLittleToe1_R.rootTransform = LittleToe1_R_Transform;
-					}
+					Object.DestroyImmediate(TargetComponent);
 				}
-				Object.DestroyImmediate(TargetComponent);
 			}
 		}
 	}
