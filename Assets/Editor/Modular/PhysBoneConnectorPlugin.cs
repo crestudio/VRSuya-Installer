@@ -34,7 +34,7 @@ namespace VRSuya.Modular.Editor {
 		public override string DisplayName => "PhysBone Connector";
 
 		protected override void Execute(BuildContext TargetBuildContext) {
-			PhysBoneConnector[] PhysBoneConnectors = TargetBuildContext.AvatarRootObject.GetComponentsInChildren<PhysBoneConnector>();
+			PhysBoneConnector[] PhysBoneConnectors = TargetBuildContext.AvatarRootObject.GetComponentsInChildren<PhysBoneConnector>(true);
 			if (PhysBoneConnectors.Length > 0) {
 				TargetBuildContext.AvatarRootObject.TryGetComponent(out Animator TargetAnimator);
 				if (TargetAnimator) {

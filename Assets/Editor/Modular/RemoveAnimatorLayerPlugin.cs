@@ -39,7 +39,7 @@ namespace VRSuya.Modular.Editor {
 		public override string DisplayName => "Remove Animator Layer";
 
 		protected override void Execute(BuildContext TargetBuildContext) {
-			RemoveAnimatorLayer[] RemoveAnimatorLayerComponents = TargetBuildContext.AvatarRootObject.GetComponentsInChildren<RemoveAnimatorLayer>();
+			RemoveAnimatorLayer[] RemoveAnimatorLayerComponents = TargetBuildContext.AvatarRootObject.GetComponentsInChildren<RemoveAnimatorLayer>(true);
 			if (RemoveAnimatorLayerComponents.Length > 0) {
 				VRCAvatarDescriptor TargetAvatarDescriptor = TargetBuildContext.VRChatAvatarDescriptor();
 				if (TargetAvatarDescriptor) {
