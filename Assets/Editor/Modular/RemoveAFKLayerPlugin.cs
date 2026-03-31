@@ -9,6 +9,8 @@ using static VRC.SDK3.Avatars.Components.VRCAvatarDescriptor;
 using nadena.dev.ndmf;
 using nadena.dev.ndmf.vrchat;
 
+using static VRSuya.Core.Translator;
+
 using Avatar = VRSuya.Core.Avatar;
 using Object = UnityEngine.Object;
 
@@ -58,9 +60,8 @@ namespace VRSuya.Modular.Editor {
 	public class RemoveAFKLayerEditor : UnityEditor.Editor {
 
 		public override void OnInspectorGUI() {
-			EditorGUILayout.HelpBox("아바타 업로드할 때 FX 레이어에서 기존 AFK 레이어를 제거합니다", MessageType.Info);
-			EditorGUILayout.HelpBox("アバターをアップロードする際、FXレイヤー内の既存のAFKレイヤーは削除されます。", MessageType.Info);
-			EditorGUILayout.HelpBox("When uploading the avatar, the existing AFK layer in the FX layer will be removed.", MessageType.Info);
+			LanguageIndex = EditorGUILayout.Popup(GetTranslatedString("String_Language"), LanguageIndex, LanguageOption);
+			EditorGUILayout.HelpBox(GetTranslatedString("String_RemoveAFKLayer"), MessageType.Info);
 		}
 	}
 }

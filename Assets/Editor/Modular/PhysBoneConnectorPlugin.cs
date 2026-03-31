@@ -4,10 +4,9 @@ using System.Linq;
 using UnityEditor;
 using UnityEngine;
 
-using VRC.SDK3.Avatars.Components;
-
 using nadena.dev.ndmf;
-using nadena.dev.ndmf.vrchat;
+
+using static VRSuya.Core.Translator;
 
 using Object = UnityEngine.Object;
 
@@ -141,7 +140,8 @@ namespace VRSuya.Modular.Editor {
 
 		public override void OnInspectorGUI() {
 			serializedObject.Update();
-			EditorGUILayout.PropertyField(SerializedTargetType, new GUIContent("PhysBone Type"));
+			LanguageIndex = EditorGUILayout.Popup(GetTranslatedString("String_Language"), LanguageIndex, LanguageOption);
+			EditorGUILayout.PropertyField(SerializedTargetType, new GUIContent(GetTranslatedString("String_PhysBoneType")));
 			EditorGUILayout.Space();
 			PhysBoneType TargetType = (PhysBoneType)SerializedTargetType.enumValueIndex;
 			using (new EditorGUILayout.VerticalScope(EditorStyles.helpBox)) {
