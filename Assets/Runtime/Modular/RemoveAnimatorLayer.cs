@@ -7,9 +7,9 @@
 
 namespace VRSuya.Modular {
 
-	[AddComponentMenu("VRSuya/Modular/VRSuya Remove AFK Layer")]
+	[AddComponentMenu("VRSuya/Modular/VRSuya Remove Animator Layer")]
 	[HelpURL("https://vrsuya.booth.pm/")]
-	public class RemoveAFKLayer : MonoBehaviour {
-
+	public class RemoveAnimatorLayer : MonoBehaviour {
+		public string[] TargetLayerName;
 	}
 }
