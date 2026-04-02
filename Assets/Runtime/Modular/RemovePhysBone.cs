@@ -7,9 +7,9 @@
 
 namespace VRSuya.Modular {
 
-	[AddComponentMenu("VRSuya/Modular/VRSuya Disable PhysBone")]
+	[AddComponentMenu("VRSuya/Modular/VRSuya Remove PhysBone")]
 	[HelpURL("https://vrsuya.booth.pm/")]
-	public class DisablePhysBone : MonoBehaviour {
+	public class RemovePhysBone : MonoBehaviour {
 
 	}
 }
