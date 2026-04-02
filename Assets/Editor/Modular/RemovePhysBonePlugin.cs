@@ -25,7 +25,7 @@ namespace VRSuya.Modular.Editor {
     public class RemovePhysBonePlugin : Plugin<RemovePhysBonePlugin> {
 
 		public override string QualifiedName => "com.vrsuya.modular.removephysbone";
-		public override string DisplayName => "VRSuya Remove PhysBone";
+		public override string DisplayName => "VRSuya RemovePhysBone";
 
 		protected override void Configure() {
 			InPhase(BuildPhase.Optimizing).Run(RemovePhysBonePass.Instance);
@@ -34,7 +34,7 @@ namespace VRSuya.Modular.Editor {
 
 	public class RemovePhysBonePass : Pass<RemovePhysBonePass> {
 
-		public override string DisplayName => "Remove PhysBone";
+		public override string DisplayName => "RemovePhysBone";
 
 		protected override void Execute(BuildContext TargetBuildContext) {
 			RemovePhysBone[] RemovePhysBoneComponents = TargetBuildContext.AvatarRootObject.GetComponentsInChildren<RemovePhysBone>(true);

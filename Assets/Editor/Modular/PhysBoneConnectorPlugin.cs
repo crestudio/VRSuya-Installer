@@ -23,7 +23,7 @@ namespace VRSuya.Modular.Editor {
     public class PhysBoneConnectorPlugin : Plugin<PhysBoneConnectorPlugin> {
 
 		public override string QualifiedName => "com.vrsuya.modular.physboneconnector";
-		public override string DisplayName => "VRSuya PhysBone Connector";
+		public override string DisplayName => "VRSuya PhysBoneConnector";
 
 		protected override void Configure() {
 			InPhase(BuildPhase.Resolving).Run(PhysBoneConnectorPass.Instance);
@@ -32,7 +32,7 @@ namespace VRSuya.Modular.Editor {
 
 	public class PhysBoneConnectorPass : Pass<PhysBoneConnectorPass> {
 
-		public override string DisplayName => "PhysBone Connector";
+		public override string DisplayName => "PhysBoneConnector";
 
 		protected override void Execute(BuildContext TargetBuildContext) {
 			PhysBoneConnector[] PhysBoneConnectors = TargetBuildContext.AvatarRootObject.GetComponentsInChildren<PhysBoneConnector>(true);

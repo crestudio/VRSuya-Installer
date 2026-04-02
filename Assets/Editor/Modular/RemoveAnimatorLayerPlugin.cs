@@ -28,7 +28,7 @@ namespace VRSuya.Modular.Editor {
     public class RemoveAnimatorLayerPlugin : Plugin<RemoveAnimatorLayerPlugin> {
 
 		public override string QualifiedName => "com.vrsuya.modular.removeanimatorlayer";
-		public override string DisplayName => "VRSuya Remove Animator Layer";
+		public override string DisplayName => "VRSuya RemoveAnimatorLayer";
 
 		protected override void Configure() {
 			InPhase(BuildPhase.Optimizing).Run(RemoveAnimatorLayerPass.Instance);
@@ -37,7 +37,7 @@ namespace VRSuya.Modular.Editor {
 
 	public class RemoveAnimatorLayerPass : Pass<RemoveAnimatorLayerPass> {
 
-		public override string DisplayName => "Remove Animator Layer";
+		public override string DisplayName => "RemoveAnimatorLayer";
 
 		protected override void Execute(BuildContext TargetBuildContext) {
 			RemoveAnimatorLayer[] RemoveAnimatorLayerComponents = TargetBuildContext.AvatarRootObject.GetComponentsInChildren<RemoveAnimatorLayer>(true);

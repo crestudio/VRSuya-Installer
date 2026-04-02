@@ -25,7 +25,7 @@ namespace VRSuya.Modular.Editor {
     public class AnimatedPhysBonePlugin : Plugin<AnimatedPhysBonePlugin> {
 
 		public override string QualifiedName => "com.vrsuya.modular.animatedphysBone";
-		public override string DisplayName => "VRSuya Animated PhysBone";
+		public override string DisplayName => "VRSuya AnimatedPhysBone";
 
 		protected override void Configure() {
 			InPhase(BuildPhase.Optimizing).Run(AnimatedPhysBonePass.Instance);
@@ -34,7 +34,7 @@ namespace VRSuya.Modular.Editor {
 
 	public class AnimatedPhysBonePass : Pass<AnimatedPhysBonePass> {
 
-		public override string DisplayName => "Animated PhysBone";
+		public override string DisplayName => "AnimatedPhysBone";
 
 		protected override void Execute(BuildContext TargetBuildContext) {
 			AnimatedPhysBone[] AnimatedPhysBoneComponents = TargetBuildContext.AvatarRootObject.GetComponentsInChildren<AnimatedPhysBone>(true);
