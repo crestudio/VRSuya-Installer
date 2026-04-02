@@ -11,6 +11,7 @@ using Newtonsoft.Json.Linq;
 using VRSuya.Core;
 using static VRSuya.Core.Translator;
 
+using Avatar = VRSuya.Core.Avatar;
 using Animator = UnityEngine.Animator;
 
 /*
@@ -32,6 +33,7 @@ namespace VRSuya.Installer {
 		[MenuItem("Tools/VRSuya/Installer/AvatarPatcher", priority = 1000)]
 		static void CreateWindow() {
 			AvatarPatcher AppWindow = GetWindowWithRect<AvatarPatcher>(new Rect(0, 0, 400, 180), true, "VRSuya AvatarPatcher");
+			AppWindow.Initialize();
 		}
 
 		void OnGUI() {
@@ -64,6 +66,11 @@ namespace VRSuya.Installer {
 			GUI.backgroundColor = Color.white;
 			GUILayout.Space(BorderX);
 			EditorGUILayout.EndHorizontal();
+		}
+
+		void Initialize() {
+			Avatar AvatarInstance = new Avatar();
+			AvatarGameObject = AvatarInstance.GetAvatarGameObject();
 		}
 
 		public GameObject RequestPatchAvatar() {
