@@ -13,7 +13,7 @@ namespace VRSuya.Modular {
 		Cheek, Toe
 	}
 
-	[AddComponentMenu("VRSuya/Modular/VRSuya PhysBone Connector")]
+	[AddComponentMenu("VRSuya/Modular/VRSuya PhysBoneConnector")]
 	[HelpURL("https://vrsuya.booth.pm/")]
 	public class PhysBoneConnector : MonoBehaviour {
 		public PhysBoneType TargetType = PhysBoneType.Cheek;

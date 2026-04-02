@@ -16,7 +16,7 @@ using VRC.SDK3.Avatars.Components;
 namespace VRSuya.Installer {
 
     [ExecuteInEditMode]
-	[AddComponentMenu("VRSuya/VRSuya Animation Offset Updater")]
+	[AddComponentMenu("VRSuya/VRSuya AnimationOffsetUpdater")]
 	public class AnimationOffsetUpdater : MonoBehaviour {
 
         public GameObject AvatarGameObject = null;

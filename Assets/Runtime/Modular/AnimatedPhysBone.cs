@@ -7,7 +7,7 @@
 
 namespace VRSuya.Modular {
 
-	[AddComponentMenu("VRSuya/Modular/VRSuya Animated PhysBone")]
+	[AddComponentMenu("VRSuya/Modular/VRSuya AnimatedPhysBone")]
 	[HelpURL("https://vrsuya.booth.pm/")]
 	public class AnimatedPhysBone : MonoBehaviour {
 

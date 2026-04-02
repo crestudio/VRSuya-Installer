@@ -7,7 +7,7 @@
 
 namespace VRSuya.Modular {
 
-	[AddComponentMenu("VRSuya/Modular/VRSuya Remove Animator Layer")]
+	[AddComponentMenu("VRSuya/Modular/VRSuya RemoveAnimatorLayer")]
 	[HelpURL("https://vrsuya.booth.pm/")]
 	public class RemoveAnimatorLayer : MonoBehaviour {
 		public string[] TargetLayerName;

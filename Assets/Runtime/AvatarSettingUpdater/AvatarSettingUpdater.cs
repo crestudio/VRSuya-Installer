@@ -9,7 +9,7 @@ using UnityEngine;
 namespace VRSuya.Installer {
 
     [ExecuteInEditMode]
-	[AddComponentMenu("VRSuya/VRSuya Avatar Setting Updater")]
+	[AddComponentMenu("VRSuya/VRSuya AvatarSettingUpdater")]
 	public class AvatarSettingUpdater : MonoBehaviour {
 
 	}
