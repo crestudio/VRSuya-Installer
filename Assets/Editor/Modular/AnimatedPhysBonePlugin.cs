@@ -27,7 +27,7 @@ namespace VRSuya.Modular.Editor {
 		public override string DisplayName => "VRSuya Animated PhysBone";
 
 		protected override void Configure() {
-			InPhase(BuildPhase.Optimizing).Run(DisablePhysBonePass.Instance);
+			InPhase(BuildPhase.Optimizing).Run(AnimatedPhysBonePass.Instance);
 		}
 	}
 
