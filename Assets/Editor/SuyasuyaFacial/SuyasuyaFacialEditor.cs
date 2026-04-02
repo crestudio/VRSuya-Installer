@@ -1,6 +1,8 @@
 ﻿using UnityEngine;
 using UnityEditor;
 
+using static VRSuya.Core.Translator;
+
 /*
  * VRSuya Suyasuya Facial Editor
  * Contact : vrsuya@gmail.com // Twitter : https://twitter.com/VRSuya
@@ -20,8 +22,6 @@ namespace VRSuya.Installer {
 		SerializedProperty SerializedStatusCode;
 		SerializedProperty SerializedCountUpdatedCurve;
 
-		public static int LanguageIndex = 0;
-        public readonly string[] LanguageType = new[] { "English", "한국어", "日本語" };
 		public static bool FoldAvatar = false;
 		public static bool FoldAnimation = false;
 
@@ -38,20 +38,20 @@ namespace VRSuya.Installer {
 
         public override void OnInspectorGUI() {
             serializedObject.Update();
-			LanguageIndex = EditorGUILayout.Popup(LanguageHelper.GetContextString("String_Language"), LanguageIndex, LanguageType);
+			LanguageIndex = EditorGUILayout.Popup(GetTranslatedString("String_Language"), LanguageIndex, LanguageOption);
 			EditorGUILayout.Space(EditorGUIUtility.singleLineHeight);
-            EditorGUILayout.PropertyField(SerializedAvatarGameObject, new GUIContent(LanguageHelper.GetContextString("String_TargetAvatar")));
-			EditorGUILayout.PropertyField(SerializedAvatarHeadSkinnedMeshRenderer, new GUIContent(LanguageHelper.GetContextString("String_TargetMesh")));
-			EditorGUILayout.PropertyField(SerializedAvatarFXAnimatorController, new GUIContent(LanguageHelper.GetContextString("String_TargetFXLayer")));
-			EditorGUILayout.PropertyField(SerializedTargetAnimationClips, new GUIContent(LanguageHelper.GetContextString("String_TargetAnimations")));
-			if (GUILayout.Button(LanguageHelper.GetContextString("String_Reload"))) {
+            EditorGUILayout.PropertyField(SerializedAvatarGameObject, new GUIContent(GetTranslatedString("String_TargetAvatar")));
+			EditorGUILayout.PropertyField(SerializedAvatarHeadSkinnedMeshRenderer, new GUIContent(GetTranslatedString("String_TargetMesh")));
+			EditorGUILayout.PropertyField(SerializedAvatarFXAnimatorController, new GUIContent(GetTranslatedString("String_TargetFXLayer")));
+			EditorGUILayout.PropertyField(SerializedTargetAnimationClips, new GUIContent(GetTranslatedString("String_TargetAnimations")));
+			if (GUILayout.Button(GetTranslatedString("String_Reload"))) {
 				(target as SuyasuyaFacial).ReloadVariable();
 				Repaint();
 			}
 			EditorGUILayout.LabelField(string.Empty, GUI.skin.horizontalSlider);
 			EditorGUI.indentLevel++;
 			if (SerializedTargetBlendShapes.arraySize > 0) {
-				FoldAvatar = EditorGUILayout.Foldout(FoldAvatar, LanguageHelper.GetContextString("String_TargetBlendShape"));
+				FoldAvatar = EditorGUILayout.Foldout(FoldAvatar, GetTranslatedString("String_TargetBlendShape"));
 				if (FoldAvatar) {
 					for (int Index = 0; Index < SerializedTargetBlendShapes.arraySize; Index++) {
 						SerializedProperty BlendShapeProperty = SerializedTargetBlendShapes.GetArrayElementAtIndex(Index);
@@ -63,12 +63,12 @@ namespace VRSuya.Installer {
 					}
 				}
 			} else {
-				EditorGUILayout.LabelField(LanguageHelper.GetContextString("String_TargetBlendShape"));
-				EditorGUILayout.HelpBox(LanguageHelper.GetContextString("NO_SHAPEKEY"), MessageType.Info);
+				EditorGUILayout.LabelField(GetTranslatedString("String_TargetBlendShape"));
+				EditorGUILayout.HelpBox(GetTranslatedString("NO_SHAPEKEY"), MessageType.Info);
 			}
 			EditorGUILayout.Space(EditorGUIUtility.singleLineHeight);
 			if (SerializedTargetAnimationBlendShapes.arraySize > 0) {
-				FoldAnimation = EditorGUILayout.Foldout(FoldAnimation, LanguageHelper.GetContextString("String_TargetAnimationBlendShape"));
+				FoldAnimation = EditorGUILayout.Foldout(FoldAnimation, GetTranslatedString("String_TargetAnimationBlendShape"));
 				if (FoldAnimation) {
 					for (int Index = 0; Index < SerializedTargetAnimationBlendShapes.arraySize; Index++) {
 						SerializedProperty BlendShapeProperty = SerializedTargetAnimationBlendShapes.GetArrayElementAtIndex(Index);
@@ -80,8 +80,8 @@ namespace VRSuya.Installer {
 					}
 				}
 			} else {
-				EditorGUILayout.LabelField(LanguageHelper.GetContextString("String_TargetAnimationBlendShape"));
-				EditorGUILayout.HelpBox(LanguageHelper.GetContextString("NO_ANIMSHAPEKEY"), MessageType.Info);
+				EditorGUILayout.LabelField(GetTranslatedString("String_TargetAnimationBlendShape"));
+				EditorGUILayout.HelpBox(GetTranslatedString("NO_ANIMSHAPEKEY"), MessageType.Info);
 			}
 			EditorGUI.indentLevel--;
 			EditorGUILayout.LabelField(string.Empty, GUI.skin.horizontalSlider);
@@ -89,7 +89,7 @@ namespace VRSuya.Installer {
 				EditorGUILayout.HelpBox(ReturnStatusString(SerializedStatusCode.stringValue), MessageType.Warning);
             }
 			serializedObject.ApplyModifiedProperties();
-            if (GUILayout.Button(LanguageHelper.GetContextString("String_UpdateAnimations"))) {
+            if (GUILayout.Button(GetTranslatedString("String_UpdateAnimations"))) {
                 (target as SuyasuyaFacial).UpdateAnimationClips();
 				Repaint();
 			}
@@ -98,7 +98,7 @@ namespace VRSuya.Installer {
 		/// <summary>요청한 StatusCode를 요청한 언어로 번역하여 현재 데이터 결과를 반영한 String으로 반환합니다.</summary>
 		/// <returns>완전한 StatusCode의 String</returns>
 		string ReturnStatusString(string StatusCode) {
-			string ReturnString = LanguageHelper.GetContextString(StatusCode);
+			string ReturnString = GetTranslatedString(StatusCode);
 			if (SerializedCountUpdatedCurve.intValue > 0) {
 				ReturnString = string.Format(ReturnString, SerializedCountUpdatedCurve.intValue);
 			}

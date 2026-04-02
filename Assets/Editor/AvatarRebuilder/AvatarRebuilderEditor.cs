@@ -1,6 +1,8 @@
 ﻿using UnityEngine;
 using UnityEditor;
 
+using static VRSuya.Core.Translator;
+
 /*
  * VRSuya AvatarRebuilder
  * Contact : vrsuya@gmail.com // Twitter : https://twitter.com/VRSuya
@@ -23,8 +25,6 @@ namespace VRSuya.Installer {
 
 		SerializedProperty SerializedStatusString;
 
-		public static int LanguageIndex = 0;
-        public static readonly string[] LanguageType = new[] { "English", "한국어", "日本語" };
 		public static int AvatarType = 0;
 		public static string[] AvatarNames = new string[0];
         public static bool FoldAdvanced = false;
@@ -45,38 +45,38 @@ namespace VRSuya.Installer {
         public override void OnInspectorGUI() {
             serializedObject.Update();
             AvatarNames = LanguageHelper.ReturnAvatarName();
-            LanguageIndex = EditorGUILayout.Popup(LanguageHelper.GetContextString("String_Language"), LanguageIndex, LanguageType);
+            LanguageIndex = EditorGUILayout.Popup(GetTranslatedString("String_Language"), LanguageIndex, LanguageOption);
             EditorGUILayout.Space(EditorGUIUtility.singleLineHeight);
             GUI.enabled = false;
-            EditorGUILayout.PropertyField(SerializedOldAvatarGameObject, new GUIContent(LanguageHelper.GetContextString("String_OriginalAvatar")));
+            EditorGUILayout.PropertyField(SerializedOldAvatarGameObject, new GUIContent(GetTranslatedString("String_OriginalAvatar")));
             GUI.enabled = true;
-            EditorGUILayout.PropertyField(SerializedNewAvatarGameObject, new GUIContent(LanguageHelper.GetContextString("String_NewAvatar")));
-			AvatarType = EditorGUILayout.Popup(LanguageHelper.GetContextString("String_AvatarType"), AvatarType, AvatarNames);
+            EditorGUILayout.PropertyField(SerializedNewAvatarGameObject, new GUIContent(GetTranslatedString("String_NewAvatar")));
+			AvatarType = EditorGUILayout.Popup(GetTranslatedString("String_AvatarType"), AvatarType, AvatarNames);
             (target as AvatarRebuilder).AvatarTypeIndexEditor = AvatarType;
-			EditorGUILayout.HelpBox(LanguageHelper.GetContextString("String_General"), MessageType.Info);
-			FoldAdvanced = EditorGUILayout.Foldout(FoldAdvanced, LanguageHelper.GetContextString("String_Advanced"));
+			EditorGUILayout.HelpBox(GetTranslatedString("String_General"), MessageType.Info);
+			FoldAdvanced = EditorGUILayout.Foldout(FoldAdvanced, GetTranslatedString("String_Advanced"));
 			if (FoldAdvanced) {
 				EditorGUI.indentLevel++;
 				GUI.enabled = false;
-				EditorGUILayout.PropertyField(SerializedAvatarRootBone, new GUIContent(LanguageHelper.GetContextString("String_RootBone")));
+				EditorGUILayout.PropertyField(SerializedAvatarRootBone, new GUIContent(GetTranslatedString("String_RootBone")));
 				GUI.enabled = true;
-				EditorGUILayout.PropertyField(SerializedToggleRestoreArmatureTransform, new GUIContent(LanguageHelper.GetContextString("String_RestoreTransform")));
-				EditorGUILayout.PropertyField(SerializedToggleResetRestPose, new GUIContent(LanguageHelper.GetContextString("String_RestPose")));
-				EditorGUILayout.PropertyField(SerializedToggleReorderGameObject, new GUIContent(LanguageHelper.GetContextString("String_ReorderGameObject")));
+				EditorGUILayout.PropertyField(SerializedToggleRestoreArmatureTransform, new GUIContent(GetTranslatedString("String_RestoreTransform")));
+				EditorGUILayout.PropertyField(SerializedToggleResetRestPose, new GUIContent(GetTranslatedString("String_RestPose")));
+				EditorGUILayout.PropertyField(SerializedToggleReorderGameObject, new GUIContent(GetTranslatedString("String_ReorderGameObject")));
 				GUI.enabled = false;
-				EditorGUILayout.PropertyField(SerializedNewAvatarSkinnedMeshRenderers, new GUIContent(LanguageHelper.GetContextString("String_SkinnedMeshRendererList")));
+				EditorGUILayout.PropertyField(SerializedNewAvatarSkinnedMeshRenderers, new GUIContent(GetTranslatedString("String_SkinnedMeshRendererList")));
 				GUI.enabled = true;
-				if (GUILayout.Button(LanguageHelper.GetContextString("String_ImportSkinnedMeshRenderer"))) {
+				if (GUILayout.Button(GetTranslatedString("String_ImportSkinnedMeshRenderer"))) {
 					(target as AvatarRebuilder).UpdateSkinnedMeshRendererList();
 				}
 				EditorGUI.indentLevel--;
 			}
 			if (!string.IsNullOrEmpty(SerializedStatusString.stringValue)) {
-				EditorGUILayout.HelpBox(LanguageHelper.GetContextString(SerializedStatusString.stringValue), MessageType.Warning);
+				EditorGUILayout.HelpBox(GetTranslatedString(SerializedStatusString.stringValue), MessageType.Warning);
 			}
 			serializedObject.ApplyModifiedProperties();
-            EditorGUILayout.HelpBox(LanguageHelper.GetContextString("String_Warning"), MessageType.Warning);
-            if (GUILayout.Button(LanguageHelper.GetContextString("String_ReplaceAvatar"))) {
+            EditorGUILayout.HelpBox(GetTranslatedString("String_Warning"), MessageType.Warning);
+            if (GUILayout.Button(GetTranslatedString("String_ReplaceAvatar"))) {
                 (target as AvatarRebuilder).ReplaceSkinnedMeshRendererGameObjects();
             }
 		}
