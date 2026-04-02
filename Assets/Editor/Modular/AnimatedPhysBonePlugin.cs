@@ -1,4 +1,5 @@
-﻿using System;
+﻿#if MODULAR_AVATAR
+using System;
 using System.Linq;
 
 using UnityEditor;
@@ -74,3 +75,4 @@ namespace VRSuya.Modular.Editor {
 		}
 	}
 }
+#endif

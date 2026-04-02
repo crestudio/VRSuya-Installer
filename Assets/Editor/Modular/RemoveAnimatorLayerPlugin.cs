@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿#if MODULAR_AVATAR
+using System.Collections.Generic;
 
 using UnityEditor;
 using UnityEditor.Animations;
@@ -89,3 +90,4 @@ namespace VRSuya.Modular.Editor {
 		}
 	}
 }
+#endif
