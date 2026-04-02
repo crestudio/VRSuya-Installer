@@ -230,6 +230,7 @@ namespace com.vrsuya.installer {
 			{ AvatarSettingUpdater.Avatar.Mariel, new string[] { "Mariel", "마리엘", "まりえる" } },
 			{ AvatarSettingUpdater.Avatar.Marron, new string[] { "Marron", "마론", "マロン" } },
 			{ AvatarSettingUpdater.Avatar.Maya, new string[] { "Maya", "마야", "舞夜" } },
+			{ AvatarSettingUpdater.Avatar.MAYO, new string[] { "MAYO", "마요", "まよ" } },
 			{ AvatarSettingUpdater.Avatar.Merino, new string[] { "Merino", "메리노", "メリノ" } },
 			{ AvatarSettingUpdater.Avatar.Milfy, new string[] { "Milfy", "미르피", "ミルフィ" } },
 			{ AvatarSettingUpdater.Avatar.Milk, new string[] { "Milk(New)", "밀크(신)", "ミルク（新）" } },

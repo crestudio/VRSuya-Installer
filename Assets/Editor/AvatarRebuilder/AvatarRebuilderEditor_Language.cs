@@ -185,6 +185,7 @@ namespace com.vrsuya.avatarrebuilder {
 			{ AvatarRebuilder.Avatar.Mariel, new string[] { "Mariel", "마리엘", "まりえる" } },
 			{ AvatarRebuilder.Avatar.Marron, new string[] { "Marron", "마론", "マロン" } },
 			{ AvatarRebuilder.Avatar.Maya, new string[] { "Maya", "마야", "舞夜" } },
+			{ AvatarRebuilder.Avatar.MAYO, new string[] { "MAYO", "마요", "まよ" } },
 			{ AvatarRebuilder.Avatar.Merino, new string[] { "Merino", "메리노", "メリノ" } },
 			{ AvatarRebuilder.Avatar.Milfy, new string[] { "Milfy", "미르피", "ミルフィ" } },
 			{ AvatarRebuilder.Avatar.Milk, new string[] { "Milk(New)", "밀크(신)", "ミルク（新）" } },
