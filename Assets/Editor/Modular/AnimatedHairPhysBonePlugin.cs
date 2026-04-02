@@ -18,29 +18,29 @@ using Object = UnityEngine.Object;
  * Contact : vrsuya@gmail.com // Twitter : https://twitter.com/VRSuya
  */
 
-[assembly: ExportsPlugin(typeof(VRSuya.Modular.Editor.HairPhysBonePlugin))]
+[assembly: ExportsPlugin(typeof(VRSuya.Modular.Editor.AnimatedHairPhysBonePlugin))]
 
 namespace VRSuya.Modular.Editor {
 
-    public class HairPhysBonePlugin : Plugin<HairPhysBonePlugin> {
+    public class AnimatedHairPhysBonePlugin : Plugin<AnimatedHairPhysBonePlugin> {
 
-		public override string QualifiedName => "com.vrsuya.modular.hairphysbone";
-		public override string DisplayName => "VRSuya Hair PhysBone";
+		public override string QualifiedName => "com.vrsuya.modular.animatedhairphysbone";
+		public override string DisplayName => "VRSuya AnimatedHairPhysBone";
 
 		protected override void Configure() {
-			InPhase(BuildPhase.Optimizing).Run(HairPhysBonePass.Instance);
+			InPhase(BuildPhase.Optimizing).Run(AnimatedHairPhysBonePass.Instance);
 		}
 	}
 
-	public class HairPhysBonePass : Pass<HairPhysBonePass> {
+	public class AnimatedHairPhysBonePass : Pass<AnimatedHairPhysBonePass> {
 
-		public override string DisplayName => "Hair PhysBone";
+		public override string DisplayName => "AnimatedHairPhysBone";
 
 		protected override void Execute(BuildContext TargetBuildContext) {
-			HairPhysBone[] HairPhysBoneComponents = TargetBuildContext.AvatarRootObject.GetComponentsInChildren<HairPhysBone>(true);
-			if (HairPhysBoneComponents.Length > 0) {
+			AnimatedHairPhysBone[] AnimatedHairPhysBoneComponents = TargetBuildContext.AvatarRootObject.GetComponentsInChildren<AnimatedHairPhysBone>(true);
+			if (AnimatedHairPhysBoneComponents.Length > 0) {
 				List<string> TargetPhysBoneNames = new List<string>();
-				foreach (HairPhysBone TargetComponent in HairPhysBoneComponents) {
+				foreach (AnimatedHairPhysBone TargetComponent in AnimatedHairPhysBoneComponents) {
 					if (TargetComponent) {
 						foreach (string LayerName in TargetComponent.TargetPhysBoneName) {
 							if (!string.IsNullOrEmpty(LayerName) && !TargetPhysBoneNames.Contains(LayerName)) {
@@ -61,15 +61,15 @@ namespace VRSuya.Modular.Editor {
 						}
 					}
 				}
-				foreach (HairPhysBone TargetComponent in HairPhysBoneComponents) {
+				foreach (AnimatedHairPhysBone TargetComponent in AnimatedHairPhysBoneComponents) {
 					if (TargetComponent) Object.DestroyImmediate(TargetComponent);
 				}
 			}
 		}
 	}
 
-	[CustomEditor(typeof(HairPhysBone))]
-	public class HairPhysBoneEditor : UnityEditor.Editor {
+	[CustomEditor(typeof(AnimatedHairPhysBone))]
+	public class AnimatedHairPhysBoneEditor : UnityEditor.Editor {
 
 		SerializedProperty SerializedTargetPhysBoneName;
 
