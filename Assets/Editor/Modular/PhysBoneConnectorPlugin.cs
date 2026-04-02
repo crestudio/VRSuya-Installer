@@ -151,19 +151,19 @@ namespace VRSuya.Modular.Editor {
 			PhysBoneType TargetType = (PhysBoneType)SerializedTargetType.enumValueIndex;
 			using (new EditorGUILayout.VerticalScope(EditorStyles.helpBox)) {
 				if (TargetType == 0) {
-					EditorGUILayout.PropertyField(SerializedTargetCheek_L, new GUIContent("Left Cheek"));
-					EditorGUILayout.PropertyField(SerializedTargetCheek_R, new GUIContent("Right Cheek"));
+					EditorGUILayout.PropertyField(SerializedTargetCheek_L, new GUIContent(GetTranslatedString("String_LeftCheek")));
+					EditorGUILayout.PropertyField(SerializedTargetCheek_R, new GUIContent(GetTranslatedString("String_RightCheek")));
 				} else {
-					EditorGUILayout.PropertyField(SerializedTargetThumbToe1_L, new GUIContent("Left ThumbToe"));
-					EditorGUILayout.PropertyField(SerializedTargetThumbToe1_R, new GUIContent("Right ThumbToe"));
-					EditorGUILayout.PropertyField(SerializedTargetIndexToe1_L, new GUIContent("Left IndexToe"));
-					EditorGUILayout.PropertyField(SerializedTargetIndexToe1_R, new GUIContent("Right IndexToe"));
-					EditorGUILayout.PropertyField(SerializedTargetMiddleToe1_L, new GUIContent("Left MiddleToe"));
-					EditorGUILayout.PropertyField(SerializedTargetMiddleToe1_R, new GUIContent("Right MiddleToe"));
-					EditorGUILayout.PropertyField(SerializedTargetRingToe1_L, new GUIContent("Left RingToe"));
-					EditorGUILayout.PropertyField(SerializedTargetRingToe1_R, new GUIContent("Right RingToe"));
-					EditorGUILayout.PropertyField(SerializedTargetLittleToe1_L, new GUIContent("Left LittleToe"));
-					EditorGUILayout.PropertyField(SerializedTargetLittleToe1_R, new GUIContent("Right LittleToe"));
+					EditorGUILayout.PropertyField(SerializedTargetThumbToe1_L, new GUIContent(GetTranslatedString("String_LeftThumbToe")));
+					EditorGUILayout.PropertyField(SerializedTargetThumbToe1_R, new GUIContent(GetTranslatedString("String_RightThumbToe")));
+					EditorGUILayout.PropertyField(SerializedTargetIndexToe1_L, new GUIContent(GetTranslatedString("String_LeftIndexToe")));
+					EditorGUILayout.PropertyField(SerializedTargetIndexToe1_R, new GUIContent(GetTranslatedString("String_RightIndexToe")));
+					EditorGUILayout.PropertyField(SerializedTargetMiddleToe1_L, new GUIContent(GetTranslatedString("String_LeftMiddleToe")));
+					EditorGUILayout.PropertyField(SerializedTargetMiddleToe1_R, new GUIContent(GetTranslatedString("String_RightMiddleToe")));
+					EditorGUILayout.PropertyField(SerializedTargetRingToe1_L, new GUIContent(GetTranslatedString("String_LeftRingToe")));
+					EditorGUILayout.PropertyField(SerializedTargetRingToe1_R, new GUIContent(GetTranslatedString("String_RightRingToe")));
+					EditorGUILayout.PropertyField(SerializedTargetLittleToe1_L, new GUIContent(GetTranslatedString("String_LeftLittleToe")));
+					EditorGUILayout.PropertyField(SerializedTargetLittleToe1_R, new GUIContent(GetTranslatedString("String_RightLittleToe")));
 				}
 			}
 			serializedObject.ApplyModifiedProperties();
