@@ -6,7 +6,7 @@ using UnityEditor;
  * Contact : vrsuya@gmail.com // Twitter : https://twitter.com/VRSuya
  */
 
-namespace com.vrsuya.suyasuyafacial {
+namespace VRSuya.Installer {
 
     [CustomEditor(typeof(SuyasuyaFacial))]
     public class SuyasuyaFacialEditor : Editor {

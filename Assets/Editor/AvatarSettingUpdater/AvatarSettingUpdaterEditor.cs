@@ -8,7 +8,7 @@ using static VRSuya.Core.Translator;
  * Contact : vrsuya@gmail.com // Twitter : https://twitter.com/VRSuya
  */
 
-namespace com.vrsuya.installer {
+namespace VRSuya.Installer {
 
     [CustomEditor(typeof(AvatarSettingUpdater))]
     public class AvatarSettingUpdaterEditor : Editor {

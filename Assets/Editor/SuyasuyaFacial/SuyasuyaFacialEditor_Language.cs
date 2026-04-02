@@ -5,7 +5,7 @@
  * Contact : vrsuya@gmail.com // Twitter : https://twitter.com/VRSuya
  */
 
-namespace com.vrsuya.suyasuyafacial {
+namespace VRSuya.Installer {
 
 	public class LanguageHelper : SuyasuyaFacialEditor {
 

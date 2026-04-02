@@ -13,7 +13,7 @@ using VRC.SDK3.Avatars.Components;
  * Contact : vrsuya@gmail.com // Twitter : https://twitter.com/VRSuya
  */
 
-namespace com.vrsuya.animationoffsetupdater {
+namespace VRSuya.Installer {
 
     [ExecuteInEditMode]
 	[AddComponentMenu("VRSuya/VRSuya Animation Offset Updater")]

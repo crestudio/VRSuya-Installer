@@ -9,7 +9,7 @@ using UnityEditor;
  * Thanks to Dalgona. & C_Carrot & Naru & Rekorn
  */
 
-namespace com.vrsuya.avatarrebuilder {
+namespace VRSuya.Installer {
 
 	public class LanguageHelper : AvatarRebuilderEditor {
 

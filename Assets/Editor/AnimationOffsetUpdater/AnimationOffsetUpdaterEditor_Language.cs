@@ -8,7 +8,7 @@ using UnityEditor;
  * Contact : vrsuya@gmail.com // Twitter : https://twitter.com/VRSuya
  */
 
-namespace com.vrsuya.animationoffsetupdater {
+namespace VRSuya.Installer {
 
 	public class LanguageHelper : AnimationOffsetUpdaterEditor {
 
