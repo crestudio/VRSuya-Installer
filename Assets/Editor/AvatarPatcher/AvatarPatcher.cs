@@ -185,11 +185,7 @@ namespace VRSuya.Installer {
 			foreach (JToken TargetToken in JSON_Token) {
 				string TargetName = TargetToken["Name"].ToString();
 				SkinnedMeshRenderer TargetSkinnedMeshRenderer = AvatarSkinnedMeshRenderers.FirstOrDefault(Item => Item.gameObject.name == TargetName);
-				if (!TargetSkinnedMeshRenderer) TargetSkinnedMeshRenderer = NewAvatarGameObject
-					.GetComponentsInChildren<SkinnedMeshRenderer>(true)
-					.Where(Item => Item.name == TargetName)
-					.Where(Item => Item != null)
-					.FirstOrDefault(Item => AssetDatabase.GetAssetPath(Item.sharedMesh) == AvatarAssetPath);
+				if (!TargetSkinnedMeshRenderer) TargetSkinnedMeshRenderer = NewAvatarGameObject.GetComponentsInChildren<SkinnedMeshRenderer>(true).FirstOrDefault(Item => Item.name == TargetName);
 				if (TargetSkinnedMeshRenderer) {
 					Mesh OldMesh = TargetSkinnedMeshRenderer.sharedMesh;
 					Mesh NewMesh = Instantiate(OldMesh);
