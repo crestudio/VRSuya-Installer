@@ -170,7 +170,7 @@ namespace VRSuya.Installer {
 			float Z_Blender = (float)JSON_Array[2];
 			float X_Unity = -X_Blender;
 			float Y_Unity = Z_Blender;
-			float Z_Unity = Y_Blender;
+			float Z_Unity = -Y_Blender;
 			return new Vector3(X_Unity, Y_Unity, Z_Unity);
 		}
 
