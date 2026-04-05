@@ -110,9 +110,16 @@ namespace VRSuya.Installer {
 			NewAvatarGameObject.TryGetComponent(out Animator AvatarAnimatorComponent);
 			if (AvatarAnimatorComponent) {
 				AvatarAnimator = AvatarAnimatorComponent;
-				return true;
 			} else {
 				DestroyImmediate(NewAvatarGameObject);
+				return false;
+			}
+			JObject JSON_Object = JObject.Parse(JSON_Asset.text);
+			JToken JSONVersion_Data = JSON_Object["JsonVersion"];
+			int JSON_Version = (JSONVersion_Data != null) ? JSONVersion_Data.Value<int>() : 0;
+			if (JSON_Version >= 2) {
+				return true;
+			} else {
 				return false;
 			}
 		}
