@@ -28,7 +28,9 @@ namespace VRSuya.Installer {
 
 		Animator AvatarAnimator;
 
-		const float Threshold = 0.001f;
+		AvatarWeight NewAvatarWeight;
+
+		const float Threshold = 0.0001f;
 		const float BorderX = 30f;
 
 		[MenuItem("Tools/VRSuya/Installer/AvatarPatcher", priority = 1000)]
@@ -82,8 +84,8 @@ namespace VRSuya.Installer {
 				AvatarGameObject.SetActive(false);
 				NewAvatarGameObject.name = AvatarName;
 				NewAvatarGameObject.transform.SetSiblingIndex(AvatarGameObject.transform.GetSiblingIndex() + 1);
-				Dictionary<string, Transform> NewBoneTransforms = GetBoneTransfom(NewAvatarGameObject, JSON_Object);
-				if (PatchAvatar(AvatarGameObject, NewAvatarGameObject, JSON_Object, NewBoneTransforms)) {
+				Dictionary<string, Transform> NewBoneTransforms = GetNewBoneTransfom(NewAvatarGameObject);
+				if (PatchAvatar(AvatarGameObject, NewAvatarGameObject, NewBoneTransforms)) {
 					EditorUtility.DisplayDialog("VRSuya AvatarPatcher",
 						string.Format(GetTranslatedString("COMPLETED_PATCH"), AvatarName),
 						GetTranslatedString("String_Okay")
@@ -92,6 +94,64 @@ namespace VRSuya.Installer {
 				}
 			}
 			return null;
+		}
+
+		AvatarWeight GetAvatarWeight(JObject JSON_Object) {
+			AvatarWeight NewAvatarWeight = null;
+			JToken Version_Data = JSON_Object["JsonVersion"];
+			JToken AvatarName_Data = JSON_Object["TargetAvatar"];
+			JToken AvatarVersion_Data = JSON_Object["TargetAvatarVersion"];
+			JToken ArmatureName_Data = JSON_Object["ArmatureObjectName"];
+			JArray Bone_Data = (JArray)JSON_Object["Bones"];
+			JArray Object_Data = (JArray)JSON_Object["TargetObjects"];
+			int Version = Version_Data.Value<int>();
+			string AvatarName = AvatarName_Data.Value<string>();
+			string AvatarVersion = AvatarVersion_Data.Value<string>();
+			string ArmatureName = ArmatureName_Data.Value<string>();
+			List<Bone> BoneList = new List<Bone>();
+			List<Object> ObjectList = new List<Object>();
+			foreach (JToken TargetBone in Bone_Data) {
+				string BoneName = TargetBone["Name"].ToString();
+				JArray HeadPosition_Data = (JArray)TargetBone["Head"];
+				JArray TailPosition_Data = (JArray)TargetBone["Tail"];
+				Vector3 HeadPosition = new Vector3((float)HeadPosition_Data[0], (float)HeadPosition_Data[1], (float)HeadPosition_Data[2]);
+				Vector3 TailPosition = new Vector3((float)TailPosition_Data[0], (float)TailPosition_Data[1], (float)TailPosition_Data[2]);
+				string ParentName = TargetBone["Parent"].ToString();
+				Bone NewBone = new Bone(BoneName, HeadPosition, TailPosition, ParentName);
+				BoneList.Add(NewBone);
+			}
+			foreach (JToken TargetObject in Object_Data) {
+				string ObjectName = TargetObject["Name"].ToString();
+				JToken DisplayName_Data = TargetObject["DisplayName"];
+				string EnglishName = DisplayName_Data["en"].ToString();
+				string KoreanName = DisplayName_Data["ko"].ToString();
+				string JapaneseName = DisplayName_Data["ja"].ToString();
+				string RequiredVertexGroupName = TargetObject["RequiredVertexGroup"].ToString();
+				JToken Weight_Data = TargetObject["Weights"];
+				Dictionary<string, UVWeight[]> ObjectWeightList = new Dictionary<string, UVWeight[]>();
+				foreach (JProperty TargetProperty in Weight_Data.Cast<JProperty>()) {
+					JArray WeightDatas = (JArray)TargetProperty.Value;
+					UVWeight[] UVWeights = WeightDatas
+							.Select(Item => new UVWeight(
+								new Vector2((float)Item["Position"][0], (float)Item["Position"][1]),
+								(string)Item["Material"] ?? "",
+								(float)Item["Weight"]))
+							.ToArray();
+					ObjectWeightList.Add(TargetProperty.Name, UVWeights);
+				}
+				DisplayName NewDisplayName = new DisplayName(EnglishName, KoreanName, JapaneseName);
+				Object NewObject = new Object(ObjectName, NewDisplayName, RequiredVertexGroupName, ObjectWeightList);
+				ObjectList.Add(NewObject);
+			}
+			NewAvatarWeight = new AvatarWeight(
+				Version,
+				AvatarName,
+				AvatarVersion,
+				ArmatureName,
+				BoneList.ToArray(),
+				ObjectList.ToArray()
+			);
+			return NewAvatarWeight;
 		}
 
 		bool VerifyVariable(out GameObject NewAvatarGameObject) {
@@ -114,20 +174,16 @@ namespace VRSuya.Installer {
 				DestroyImmediate(NewAvatarGameObject);
 				return false;
 			}
-			JObject JSON_Object = JObject.Parse(JSON_Asset.text);
-			JToken JSONVersion_Data = JSON_Object["JsonVersion"];
-			int JSON_Version = (JSONVersion_Data != null) ? JSONVersion_Data.Value<int>() : 0;
-			if (JSON_Version >= 2) {
+			NewAvatarWeight = GetAvatarWeight(JObject.Parse(JSON_Asset.text));
+			if (NewAvatarWeight.JSON_Version >= 2) {
 				return true;
 			} else {
 				return false;
 			}
 		}
 
-		Dictionary<string, Transform> GetBoneTransfom(GameObject TargetGameObject, JObject JSON_Object) {
+		Dictionary<string, Transform> GetNewBoneTransfom(GameObject TargetGameObject) {
 			Dictionary<string, Transform> JSON_BoneTransforms = new Dictionary<string, Transform>();
-			JArray Bone_Data = (JArray)JSON_Object["Bones"];
-			if (Bone_Data == null) return JSON_BoneTransforms;
 			Transform[] AvatarHumanoidTransforms = Enum.GetValues(typeof(HumanBodyBones))
 				.Cast<HumanBodyBones>()
 				.Where(Item => Item != HumanBodyBones.LastBone)
@@ -136,21 +192,18 @@ namespace VRSuya.Installer {
 				.ToArray();
 			Transform[] AllAvatarTransforms = TargetGameObject.GetComponentsInChildren<Transform>(true);
 			List<Transform> NewBoneTransforms = new List<Transform>();
-			foreach (JToken TargetBone in Bone_Data) {
-				string BoneName = TargetBone["Name"].ToString();
-				GameObject NewGameObject = new GameObject(BoneName);
+			foreach (Bone TargetBone in NewAvatarWeight.AvatarBones) {
+				GameObject NewGameObject = new GameObject(TargetBone.BoneName);
 				Transform NewTransform = NewGameObject.transform;
-				NewTransform.SetParent(AvatarGameObject.transform);
+				NewTransform.SetParent(TargetGameObject.transform);
 				NewBoneTransforms.Add(NewTransform);
 			}
-			foreach (JToken TargetBone in Bone_Data) {
-				string BoneName = TargetBone["Name"].ToString();
-				string ParentName = TargetBone["Parent"].ToString();
+			foreach (Bone TargetBone in NewAvatarWeight.AvatarBones) {
+				string BoneName = TargetBone.BoneName;
+				string ParentName = TargetBone.ParentName;
 				Transform NewTransform = NewBoneTransforms.First(Item => Item.gameObject.name == BoneName);
-				JArray HeadPosition_Data = (JArray)TargetBone["Head"];
-				JArray TailPosition_Data = (JArray)TargetBone["Tail"];
-				Vector3 HeadPosition = GetBoneTransform(HeadPosition_Data);
-				Vector3 TailPosition = GetBoneTransform(TailPosition_Data);
+				Vector3 HeadPosition = GetUnityBoneTransform(TargetBone.HeadPosition);
+				Vector3 TailPosition = GetUnityBoneTransform(TargetBone.TailPosition);
 				Transform ParentTransform = AllAvatarTransforms.FirstOrDefault(Item => Item.name == ParentName);
 				if (NewBoneTransforms.Any(Item => Item.name == ParentName)) {
 					ParentTransform = NewBoneTransforms.First(Item => Item.name == ParentName);
@@ -172,49 +225,46 @@ namespace VRSuya.Installer {
 			return JSON_BoneTransforms;
 		}
 
-		Vector3 GetBoneTransform(JArray JSON_Array) {
-			float X_Blender = (float)JSON_Array[0];
-			float Y_Blender = (float)JSON_Array[1];
-			float Z_Blender = (float)JSON_Array[2];
-			float X_Unity = -X_Blender;
-			float Y_Unity = Z_Blender;
-			float Z_Unity = -Y_Blender;
-			return new Vector3(X_Unity, Y_Unity, Z_Unity);
+		Vector3 GetUnityBoneTransform(Vector3 TargetPosition) {
+			return new Vector3(-TargetPosition.x, TargetPosition.z, -TargetPosition.y);
 		}
 
-		bool PatchAvatar(GameObject OldAvatarGameObject, GameObject NewAvatarGameObject, JObject JSON_Object, Dictionary<string, Transform> NewBoneTransforms) {
-			JToken JSON_Token = JSON_Object["TargetObjects"];
-			if (JSON_Token == null) return false;
+		bool PatchAvatar(GameObject OldAvatarGameObject, GameObject NewAvatarGameObject, Dictionary<string, Transform> NewBoneTransforms) {
 			string AvatarAssetPath = AssetDatabase.GetAssetPath(AvatarAnimator.avatar);
 			SkinnedMeshRenderer[] AvatarSkinnedMeshRenderers = NewAvatarGameObject
 					.GetComponentsInChildren<SkinnedMeshRenderer>(true)
 					.Where(Item => AssetDatabase.GetAssetPath(Item.sharedMesh) == AvatarAssetPath)
 					.ToArray();
-			foreach (JToken TargetToken in JSON_Token) {
-				string TargetName = TargetToken["Name"].ToString();
+			foreach (Object TargetObject in NewAvatarWeight.AvatarObjects) {
+				string TargetName = TargetObject.MeshName;
 				SkinnedMeshRenderer TargetSkinnedMeshRenderer = AvatarSkinnedMeshRenderers.FirstOrDefault(Item => Item.gameObject.name == TargetName);
 				if (!TargetSkinnedMeshRenderer) TargetSkinnedMeshRenderer = NewAvatarGameObject.GetComponentsInChildren<SkinnedMeshRenderer>(true).FirstOrDefault(Item => Item.name == TargetName);
 				if (TargetSkinnedMeshRenderer) {
 					Mesh OldMesh = TargetSkinnedMeshRenderer.sharedMesh;
 					Mesh NewMesh = Instantiate(OldMesh);
 					NewMesh.name = $"VRSuya_{OldMesh.name}";
-					Vector2[] NewMeshUV = NewMesh.uv;
+					Dictionary<int, Vector2> NewMeshUV = GetMaterialUV(NewMesh, 1);
 					List<Transform> BoneTransforms = TargetSkinnedMeshRenderer.bones.ToList();
-					JToken WeightsToken = TargetToken["Weights"];
-					foreach (JProperty TargetProperty in WeightsToken.Cast<JProperty>()) {
-						string TargetWeightName = TargetProperty.Name;
-						if (NewBoneTransforms.TryGetValue(TargetWeightName, out Transform NewBoneTransform)) {
-							if (!BoneTransforms.Contains(NewBoneTransform)) {
-								BoneTransforms.Add(NewBoneTransform);
-							}
-						}
+					List<Transform> NewBoneTransform = NewAvatarWeight.AvatarObjects
+						.Where(Item => Item.MeshName == TargetSkinnedMeshRenderer.gameObject.name)
+						.SelectMany(Item => Item.UVWeights.Keys)
+						.Distinct()
+						.Where(Item => NewBoneTransforms.ContainsKey(Item))
+						.Select(Item => NewBoneTransforms[Item])
+						.ToList();
+					foreach (Transform NewBone in NewBoneTransform) {
+						if (!BoneTransforms.Contains(NewBone)) BoneTransforms.Add(NewBone);
 					}
 					TargetSkinnedMeshRenderer.bones = BoneTransforms.ToArray();
-					Matrix4x4[] NewBindPose = new Matrix4x4[BoneTransforms.Count];
-					for (int Index = 0; Index < BoneTransforms.Count; Index++) {
-						NewBindPose[Index] = BoneTransforms[Index].worldToLocalMatrix * TargetSkinnedMeshRenderer.transform.localToWorldMatrix;
+					Matrix4x4[] OldBindPoses = OldMesh.bindposes;
+					Matrix4x4[] NewBindPoses = new Matrix4x4[BoneTransforms.Count];
+					for (int Index = 0; Index < OldBindPoses.Length; Index++) {
+						NewBindPoses[Index] = OldBindPoses[Index];
 					}
-					NewMesh.bindposes = NewBindPose;
+					for (int Index = OldBindPoses.Length; Index < BoneTransforms.Count; Index++) {
+						NewBindPoses[Index] = BoneTransforms[Index].worldToLocalMatrix * TargetSkinnedMeshRenderer.transform.localToWorldMatrix;
+					}
+					NewMesh.bindposes = NewBindPoses;
 					BoneWeight[] NewBoneWeights = NewMesh.boneWeights;
 					Dictionary<int, List<VertexWeight>> VertexWeightList = new Dictionary<int, List<VertexWeight>>();
 					for (int Index = 0; Index < NewBoneWeights.Length; Index++) {
@@ -226,33 +276,27 @@ namespace VRSuya.Installer {
 						if (TargetBoneWeight.weight3 > 0) NewVertexWeights.Add(new VertexWeight(TargetBoneWeight.boneIndex3, TargetBoneWeight.weight3));
 						VertexWeightList[Index] = NewVertexWeights;
 					}
-					foreach (JProperty TargetProperty in WeightsToken.Cast<JProperty>()) {
-						string TargetBoneName = TargetProperty.Name;
-						if (NewBoneTransforms.TryGetValue(TargetBoneName, out Transform NewBoneTransform)) {
-							int TargetBoneIndex = BoneTransforms.IndexOf(NewBoneTransform);
-							JArray WeightDatas = (JArray)TargetProperty.Value;
-							List<UVWeight> UVWeightList = WeightDatas
-								.Select(Item => new UVWeight(new Vector2((float)Item["Position"][0], (float)Item["Position"][1]), (float)Item["Weight"]))
-								.ToList();
-							for (int Index = 0; Index < NewMeshUV.Length; Index++) {
-								Vector2 TargetUVPosition = NewMeshUV[Index];
+					foreach (var TargetWeights in TargetObject.UVWeights) {
+						if (NewBoneTransforms.TryGetValue(TargetWeights.Key, out Transform TargetBoneTransform)) {
+							int TargetBoneIndex = BoneTransforms.IndexOf(TargetBoneTransform);
+							List<UVWeight> UVWeightList = TargetWeights.Value.ToList();
+							foreach (var VertexUV in NewMeshUV) {
+								int VertexIndex = VertexUV.Key;
+								Vector2 TargetUVPosition = VertexUV.Value;
 								var TargetUVWeight = UVWeightList
-									.Select(Item => new {
-										Data = Item,
-										Distance = Vector2.Distance(TargetUVPosition, Item.UVPosition)
-									})
+									.Select(Item => new { Data = Item, Distance = Vector2.Distance(TargetUVPosition, Item.UVPosition) })
 									.Where(Item => Item.Distance < Threshold)
 									.OrderBy(Item => Item.Distance)
 									.FirstOrDefault();
 								if (TargetUVWeight != null && TargetUVWeight.Data.WeightValue > 0) {
-									if (!VertexWeightList.ContainsKey(Index)) {
-										VertexWeightList[Index] = new List<VertexWeight>();
+									if (!VertexWeightList.ContainsKey(VertexIndex)) {
+										VertexWeightList[VertexIndex] = new List<VertexWeight>();
 									}
-									VertexWeight TargetVertexWeight = VertexWeightList[Index].FirstOrDefault(Item => Item.VertexIndex == TargetBoneIndex);
+									VertexWeight TargetVertexWeight = VertexWeightList[VertexIndex].FirstOrDefault(Item => Item.VertexIndex == TargetBoneIndex);
 									if (TargetVertexWeight != null) {
 										TargetVertexWeight.WeightValue += TargetUVWeight.Data.WeightValue;
 									} else {
-										VertexWeightList[Index].Add(new VertexWeight(TargetBoneIndex, TargetUVWeight.Data.WeightValue));
+										VertexWeightList[VertexIndex].Add(new VertexWeight(TargetBoneIndex, TargetUVWeight.Data.WeightValue));
 									}
 								}
 							}
@@ -300,8 +344,19 @@ namespace VRSuya.Installer {
 			return NewAssetPath;
 		}
 
-		class VertexWeight {
+		Dictionary<int, Vector2> GetMaterialUV(Mesh TargetMesh, int MaterialIndex) {
+			Vector2[] MeshUV = TargetMesh.uv;
+			Dictionary<int, Vector2> MaterialUV = new Dictionary<int, Vector2>();
+			int[] Indices = TargetMesh.GetIndices(MaterialIndex);
+			foreach (int VertexIndex in new HashSet<int>(Indices)) {
+				if (VertexIndex < MeshUV.Length) {
+					MaterialUV[VertexIndex] = MeshUV[VertexIndex];
+				}
+			}
+			return MaterialUV;
+		}
 
+		class VertexWeight {
 			public int VertexIndex;
 			public float WeightValue;
 
@@ -311,13 +366,72 @@ namespace VRSuya.Installer {
 			}
 		}
 
-		class UVWeight {
+		class AvatarWeight {
+			public int JSON_Version;
+			public string AvatarName;
+			public string AvatarVersion;
+			public string ArmatureName;
+			public Bone[] AvatarBones;
+			public Object[] AvatarObjects;
 
+			public AvatarWeight(int TargetJSON_Version, string TargetAvatarName, string TargetAvatarVersion, string TargetArmatureName, Bone[] TargetAvatarBones, Object[] TargetAvatarObjects) {
+				JSON_Version = TargetJSON_Version;
+				AvatarName = TargetAvatarName;
+				AvatarVersion = TargetAvatarVersion;
+				ArmatureName = TargetArmatureName;
+				AvatarBones = TargetAvatarBones;
+				AvatarObjects = TargetAvatarObjects;
+			}
+		}
+
+		class Bone {
+			public string BoneName;
+			public Vector3 HeadPosition;
+			public Vector3 TailPosition;
+			public string ParentName;
+
+			public Bone(string TargetBoneName, Vector3 TargetHeadPosition, Vector3 TargetTailPosition, string TargetParentName) {
+				BoneName = TargetBoneName;
+				HeadPosition = TargetHeadPosition;
+				TailPosition = TargetTailPosition;
+				ParentName = TargetParentName;
+			}
+		}
+
+		class Object {
+			public string MeshName;
+			public DisplayName MeshDisplayName;
+			public string RequiredVertexGroup;
+			public Dictionary<string, UVWeight[]> UVWeights;
+
+			public Object(string TargetMeshName, DisplayName TargetMeshDisplayName, string TargetRequiredVertexGroup, Dictionary<string, UVWeight[]> TargetUVWeights) {
+				MeshName = TargetMeshName;
+				MeshDisplayName = TargetMeshDisplayName;
+				RequiredVertexGroup = TargetRequiredVertexGroup;
+				UVWeights = TargetUVWeights;
+			}
+		}
+
+		class DisplayName {
+			public string EnglishName;
+			public string KoreanName;
+			public string JapaneseName;
+
+			public DisplayName(string TargetEnglishName, string TargetKoreanName, string TargetJapaneseName) {
+				EnglishName = TargetEnglishName;
+				KoreanName = TargetKoreanName;
+				JapaneseName = TargetJapaneseName;
+			}
+		}
+
+		class UVWeight {
 			public Vector2 UVPosition;
+			public string MaterialName;
 			public float WeightValue;
 
-			public UVWeight(Vector2 TargetUVPosition, float TargetWeightValue) {
+			public UVWeight(Vector2 TargetUVPosition, string TargetMaterialName, float TargetWeightValue) {
 				UVPosition = TargetUVPosition;
+				MaterialName = TargetMaterialName;
 				WeightValue = TargetWeightValue;
 			}
 		}
