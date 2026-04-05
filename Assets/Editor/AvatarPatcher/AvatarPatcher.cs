@@ -126,7 +126,7 @@ namespace VRSuya.Installer {
 
 		Dictionary<string, Transform> GetBoneTransfom(GameObject TargetGameObject, JObject JSON_Object) {
 			Dictionary<string, Transform> JSON_BoneTransforms = new Dictionary<string, Transform>();
-			JToken Bone_Data = JSON_Object["Bones"];
+			JArray Bone_Data = (JArray)JSON_Object["Bones"];
 			if (Bone_Data == null) return JSON_BoneTransforms;
 			Transform[] AvatarHumanoidTransforms = Enum.GetValues(typeof(HumanBodyBones))
 				.Cast<HumanBodyBones>()
@@ -136,19 +136,19 @@ namespace VRSuya.Installer {
 				.ToArray();
 			Transform[] AllAvatarTransforms = TargetGameObject.GetComponentsInChildren<Transform>(true);
 			List<Transform> NewBoneTransforms = new List<Transform>();
-			foreach (JProperty TargetBone in Bone_Data.Cast<JProperty>()) {
-				string BoneName = TargetBone.Name;
+			foreach (JToken TargetBone in Bone_Data) {
+				string BoneName = TargetBone["Name"].ToString();
 				GameObject NewGameObject = new GameObject(BoneName);
 				Transform NewTransform = NewGameObject.transform;
 				NewTransform.SetParent(AvatarGameObject.transform);
 				NewBoneTransforms.Add(NewTransform);
 			}
-			foreach (JProperty TargetBone in Bone_Data.Cast<JProperty>()) {
-				string BoneName = TargetBone.Name;
-				string ParentName = TargetBone.Value["Parent"].ToString();
+			foreach (JToken TargetBone in Bone_Data) {
+				string BoneName = TargetBone["Name"].ToString();
+				string ParentName = TargetBone["Parent"].ToString();
 				Transform NewTransform = NewBoneTransforms.First(Item => Item.gameObject.name == BoneName);
-				JArray HeadPosition_Data = (JArray)TargetBone.Value["Head"];
-				JArray TailPosition_Data = (JArray)TargetBone.Value["Tail"];
+				JArray HeadPosition_Data = (JArray)TargetBone["Head"];
+				JArray TailPosition_Data = (JArray)TargetBone["Tail"];
 				Vector3 HeadPosition = GetBoneTransform(HeadPosition_Data);
 				Vector3 TailPosition = GetBoneTransform(TailPosition_Data);
 				Transform ParentTransform = AllAvatarTransforms.FirstOrDefault(Item => Item.name == ParentName);
