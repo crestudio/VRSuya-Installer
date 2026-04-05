@@ -28,6 +28,7 @@ namespace VRSuya.Installer {
 
 		Animator AvatarAnimator;
 
+		const float Threshold = 0.001f;
 		const float BorderX = 30f;
 
 		[MenuItem("Tools/VRSuya/Installer/AvatarPatcher", priority = 1000)]
@@ -190,6 +191,7 @@ namespace VRSuya.Installer {
 					Mesh OldMesh = TargetSkinnedMeshRenderer.sharedMesh;
 					Mesh NewMesh = Instantiate(OldMesh);
 					NewMesh.name = $"VRSuya_{OldMesh.name}";
+					Vector2[] NewMeshUV = NewMesh.uv;
 					List<Transform> BoneTransforms = TargetSkinnedMeshRenderer.bones.ToList();
 					JToken WeightsToken = TargetToken["Weights"];
 					foreach (JProperty TargetProperty in WeightsToken.Cast<JProperty>()) {
@@ -206,10 +208,10 @@ namespace VRSuya.Installer {
 						NewBindPose[Index] = BoneTransforms[Index].worldToLocalMatrix * TargetSkinnedMeshRenderer.transform.localToWorldMatrix;
 					}
 					NewMesh.bindposes = NewBindPose;
-					BoneWeight[] BoneWeights = NewMesh.boneWeights;
+					BoneWeight[] NewBoneWeights = NewMesh.boneWeights;
 					Dictionary<int, List<VertexWeight>> VertexWeightList = new Dictionary<int, List<VertexWeight>>();
-					for (int Index = 0; Index < BoneWeights.Length; Index++) {
-						BoneWeight TargetBoneWeight = BoneWeights[Index];
+					for (int Index = 0; Index < NewBoneWeights.Length; Index++) {
+						BoneWeight TargetBoneWeight = NewBoneWeights[Index];
 						List<VertexWeight> NewVertexWeights = new List<VertexWeight>();
 						if (TargetBoneWeight.weight0 > 0) NewVertexWeights.Add(new VertexWeight(TargetBoneWeight.boneIndex0, TargetBoneWeight.weight0));
 						if (TargetBoneWeight.weight1 > 0) NewVertexWeights.Add(new VertexWeight(TargetBoneWeight.boneIndex1, TargetBoneWeight.weight1));
@@ -220,35 +222,47 @@ namespace VRSuya.Installer {
 					foreach (JProperty TargetProperty in WeightsToken.Cast<JProperty>()) {
 						string TargetBoneName = TargetProperty.Name;
 						if (NewBoneTransforms.TryGetValue(TargetBoneName, out Transform NewBoneTransform)) {
-							int TargetIndex = BoneTransforms.IndexOf(NewBoneTransform);
-							JArray Weight_Array = (JArray)TargetProperty.Value;
-							foreach (JToken WeightToken in Weight_Array) {
-								int TargetVertexIndex = (int)WeightToken["Index"];
-								float TargetWeight = (float)WeightToken["Weight"];
-								if (TargetWeight >= 0) {
-									if (!VertexWeightList.ContainsKey(TargetVertexIndex)) {
-										VertexWeightList[TargetVertexIndex] = new List<VertexWeight>();
+							int TargetBoneIndex = BoneTransforms.IndexOf(NewBoneTransform);
+							JArray WeightDatas = (JArray)TargetProperty.Value;
+							List<UVWeight> UVWeightList = WeightDatas
+								.Select(Item => new UVWeight(new Vector2((float)Item["Position"][0], (float)Item["Position"][1]), (float)Item["Weight"]))
+								.ToList();
+							for (int Index = 0; Index < NewMeshUV.Length; Index++) {
+								Vector2 TargetUVPosition = NewMeshUV[Index];
+								var TargetUVWeight = UVWeightList
+									.Select(Item => new {
+										Data = Item,
+										Distance = Vector2.Distance(TargetUVPosition, Item.UVPosition)
+									})
+									.Where(Item => Item.Distance < Threshold)
+									.OrderBy(Item => Item.Distance)
+									.FirstOrDefault();
+								if (TargetUVWeight != null && TargetUVWeight.Data.WeightValue > 0) {
+									if (!VertexWeightList.ContainsKey(Index)) {
+										VertexWeightList[Index] = new List<VertexWeight>();
 									}
-									VertexWeightList[TargetVertexIndex].Add(new VertexWeight(TargetIndex, TargetWeight));
+									VertexWeight TargetVertexWeight = VertexWeightList[Index].FirstOrDefault(Item => Item.VertexIndex == TargetBoneIndex);
+									if (TargetVertexWeight != null) {
+										TargetVertexWeight.WeightValue += TargetUVWeight.Data.WeightValue;
+									} else {
+										VertexWeightList[Index].Add(new VertexWeight(TargetBoneIndex, TargetUVWeight.Data.WeightValue));
+									}
 								}
 							}
 						}
 					}
-					for (int Index = 0; Index < BoneWeights.Length; Index++) {
+					for (int Index = 0; Index < NewBoneWeights.Length; Index++) {
 						if (VertexWeightList.TryGetValue(Index, out List<VertexWeight> TargetVertexWeights)) {
 							TargetVertexWeights = TargetVertexWeights.OrderByDescending(Item => Item.WeightValue).Take(4).ToList();
-							float WeightSum = TargetVertexWeights.Sum(Item => Item.WeightValue);
 							BoneWeight NewBoneWeight = new BoneWeight();
-							if (WeightSum > 0) {
-								if (TargetVertexWeights.Count > 0) { NewBoneWeight.boneIndex0 = TargetVertexWeights[0].VertexIndex; NewBoneWeight.weight0 = TargetVertexWeights[0].WeightValue / WeightSum; }
-								if (TargetVertexWeights.Count > 1) { NewBoneWeight.boneIndex1 = TargetVertexWeights[1].VertexIndex; NewBoneWeight.weight1 = TargetVertexWeights[1].WeightValue / WeightSum; }
-								if (TargetVertexWeights.Count > 2) { NewBoneWeight.boneIndex2 = TargetVertexWeights[2].VertexIndex; NewBoneWeight.weight2 = TargetVertexWeights[2].WeightValue / WeightSum; }
-								if (TargetVertexWeights.Count > 3) { NewBoneWeight.boneIndex3 = TargetVertexWeights[3].VertexIndex; NewBoneWeight.weight3 = TargetVertexWeights[3].WeightValue / WeightSum; }
-							}
-							BoneWeights[Index] = NewBoneWeight;
+							if (TargetVertexWeights.Count > 0) { NewBoneWeight.boneIndex0 = TargetVertexWeights[0].VertexIndex; NewBoneWeight.weight0 = TargetVertexWeights[0].WeightValue; }
+							if (TargetVertexWeights.Count > 1) { NewBoneWeight.boneIndex1 = TargetVertexWeights[1].VertexIndex; NewBoneWeight.weight1 = TargetVertexWeights[1].WeightValue; }
+							if (TargetVertexWeights.Count > 2) { NewBoneWeight.boneIndex2 = TargetVertexWeights[2].VertexIndex; NewBoneWeight.weight2 = TargetVertexWeights[2].WeightValue; }
+							if (TargetVertexWeights.Count > 3) { NewBoneWeight.boneIndex3 = TargetVertexWeights[3].VertexIndex; NewBoneWeight.weight3 = TargetVertexWeights[3].WeightValue; }
+							NewBoneWeights[Index] = NewBoneWeight;
 						}
 					}
-					NewMesh.boneWeights = BoneWeights;
+					NewMesh.boneWeights = NewBoneWeights;
 					string NewAssetPath = SaveMeshAsset(OldMesh, NewMesh, NewAvatarGameObject.name, TargetName);
 					if (!string.IsNullOrEmpty(NewAssetPath)) {
 						Mesh LoadedSavedMeshAsset = AssetDatabase.LoadAssetAtPath<Mesh>(NewAssetPath);
@@ -286,6 +300,17 @@ namespace VRSuya.Installer {
 
 			public VertexWeight(int TargetVertexIndex, float TargetWeightValue) {
 				VertexIndex = TargetVertexIndex;
+				WeightValue = TargetWeightValue;
+			}
+		}
+
+		class UVWeight {
+
+			public Vector2 UVPosition;
+			public float WeightValue;
+
+			public UVWeight(Vector2 TargetUVPosition, float TargetWeightValue) {
+				UVPosition = TargetUVPosition;
 				WeightValue = TargetWeightValue;
 			}
 		}
