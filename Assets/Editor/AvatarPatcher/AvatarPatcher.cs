@@ -305,12 +305,27 @@ namespace VRSuya.Installer {
 					for (int Index = 0; Index < NewBoneWeights.Length; Index++) {
 						if (VertexWeightList.TryGetValue(Index, out List<VertexWeight> TargetVertexWeights)) {
 							TargetVertexWeights = TargetVertexWeights.OrderByDescending(Item => Item.WeightValue).Take(4).ToList();
-							BoneWeight NewBoneWeight = new BoneWeight();
-							if (TargetVertexWeights.Count > 0) { NewBoneWeight.boneIndex0 = TargetVertexWeights[0].VertexIndex; NewBoneWeight.weight0 = TargetVertexWeights[0].WeightValue; }
-							if (TargetVertexWeights.Count > 1) { NewBoneWeight.boneIndex1 = TargetVertexWeights[1].VertexIndex; NewBoneWeight.weight1 = TargetVertexWeights[1].WeightValue; }
-							if (TargetVertexWeights.Count > 2) { NewBoneWeight.boneIndex2 = TargetVertexWeights[2].VertexIndex; NewBoneWeight.weight2 = TargetVertexWeights[2].WeightValue; }
-							if (TargetVertexWeights.Count > 3) { NewBoneWeight.boneIndex3 = TargetVertexWeights[3].VertexIndex; NewBoneWeight.weight3 = TargetVertexWeights[3].WeightValue; }
-							NewBoneWeights[Index] = NewBoneWeight;
+							float WeightSum = TargetVertexWeights.Sum(Item => Item.WeightValue);
+							BoneWeight NormalizedBoneWeights = new BoneWeight();
+							if (WeightSum > 0f) {
+								if (TargetVertexWeights.Count > 0) {
+									NormalizedBoneWeights.boneIndex0 = TargetVertexWeights[0].VertexIndex;
+									NormalizedBoneWeights.weight0 = TargetVertexWeights[0].WeightValue / WeightSum;
+								}
+								if (TargetVertexWeights.Count > 1) {
+									NormalizedBoneWeights.boneIndex1 = TargetVertexWeights[1].VertexIndex;
+									NormalizedBoneWeights.weight1 = TargetVertexWeights[1].WeightValue / WeightSum;
+								}
+								if (TargetVertexWeights.Count > 2) {
+									NormalizedBoneWeights.boneIndex2 = TargetVertexWeights[2].VertexIndex;
+									NormalizedBoneWeights.weight2 = TargetVertexWeights[2].WeightValue / WeightSum;
+								}
+								if (TargetVertexWeights.Count > 3) {
+									NormalizedBoneWeights.boneIndex3 = TargetVertexWeights[3].VertexIndex;
+									NormalizedBoneWeights.weight3 = TargetVertexWeights[3].WeightValue / WeightSum;
+								}
+							}
+							NewBoneWeights[Index] = NormalizedBoneWeights;
 						}
 					}
 					NewMesh.boneWeights = NewBoneWeights;
