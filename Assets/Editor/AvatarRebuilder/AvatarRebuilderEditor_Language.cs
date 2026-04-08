@@ -15,8 +15,6 @@ namespace VRSuya.Installer {
 
 	public class LanguageHelper : AvatarRebuilderEditor {
 
-		/// <summary>요청한 아바타 이름을 설정된 언어에 맞춰 리스트를 재작성합니다.</summary>
-		/// <returns>아바타 이름의 현재 설정된 언어 버전</returns>
 		internal static string[] ReturnAvatarName() {
 			return typeof(AvatarRebuilder.Avatar)
 				.GetFields()
@@ -28,8 +26,6 @@ namespace VRSuya.Installer {
 				.ToArray();
 		}
 
-		/// <summary>요청한 아바타 이름들을 설정된 언어에 맞춰 변환합니다.</summary>
-		/// <returns>요청한 아바타 이름들의 현재 설정된 언어 버전</returns>
 		static readonly Dictionary<AvatarRebuilder.Avatar, string[]> dictAvatarNames = new Dictionary<AvatarRebuilder.Avatar, string[]>() {
 			{ AvatarRebuilder.Avatar.General, new string[] { "General", "일반", "一般" } },
 			{ AvatarRebuilder.Avatar.Airi, new string[] { "Airi", "아이리", "愛莉" } },

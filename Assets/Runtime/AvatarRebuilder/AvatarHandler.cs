@@ -20,9 +20,6 @@ namespace VRSuya.Installer {
 	[AddComponentMenu("")]
 	public class AvatarHandler : AvatarRebuilder {
 
-		/// <summary>
-		/// 본 프로그램의 메인 세팅 로직입니다.
-		/// </summary>
 		internal static void RequestCheckNewAvatar() {
 			if (!IsSameFBX() && !NewAvatarPatched) {
 				ApplyNewAvatarFBXModel();
@@ -31,8 +28,6 @@ namespace VRSuya.Installer {
 			}
 		}
 
-        /// <summary>새 아바타 GameObject가 Scene에 존재하는지 여부를 알려줍니다.</summary>
-        /// <returns>새 아바타 GameObject가 Scene에 존재하는지 여부</returns>
         internal static void CheckExistNewAvatarInScene() {
             if (!NewAvatarGameObject.scene.IsValid()) {
                 ApplyNewAvatarFBXModel();
@@ -40,7 +35,6 @@ namespace VRSuya.Installer {
             }
         }
 
-        /// <summary>기존 아바타를 복제하여 백업본을 생성합니다.</summary>
         internal static void CreateDuplicateAvatar() {
 			DuplicateGameObject DuplicatorInstance = new DuplicateGameObject();
 			string TargetName = OldAvatarGameObject.name;
@@ -55,8 +49,6 @@ namespace VRSuya.Installer {
 			Undo.CollapseUndoOperations(UndoGroupIndex);
 		}
 
-        /// <summary>기존 아바타와 신규 아바타가 같은 FBX 파일을 사용하는지 알려줍니다.</summary>
-        /// <returns>같은 FBX 파일을 사용 여부</returns>
         static bool IsSameFBX() {
 			UnityEngine.Avatar OldAnimatorAvatar = OldAvatarAnimator.avatar;
 			UnityEngine.Avatar NewAnimatorAvatar = NewAvatarAnimator.avatar;
@@ -66,7 +58,6 @@ namespace VRSuya.Installer {
 			return false;
 		}
 
-		/// <summary>기존 아바타의 FBX 메타 데이터를 복제하여, 새 아바타의 FBX 메타 데이터에 적용 합니다.</summary>
 		static void ApplyNewAvatarFBXModel() {
 			UnityEngine.Avatar OldAnimatorAvatar = OldAvatarAnimator.avatar;
 			string OldAvatarAssetPath = AssetDatabase.GetAssetPath(OldAnimatorAvatar);
@@ -144,7 +135,6 @@ namespace VRSuya.Installer {
 			NewAvatarPatched = true;
 		}
 
-		/// <summary>Legacy Blend Shape Normals 속성을 강제 복제합니다.</summary>
 		static void CheckLegacyBlendShapeNormals(ModelImporter OldModelImporter, ModelImporter NewModelImporter) {
 			string PropertyName = "legacyComputeAllNormalsFromSmoothingGroupsWhenMeshHasBlendShapes";
 			PropertyInfo OldLegacyProperty = OldModelImporter.GetType().GetProperty(PropertyName, BindingFlags.Instance | BindingFlags.NonPublic | BindingFlags.Public);
@@ -154,7 +144,6 @@ namespace VRSuya.Installer {
 			NewLegacyProperty.SetValue(NewModelImporter, (bool)OldLegacyProperty.GetValue(OldModelImporter));
 		}
 
-		/// <summary>기존 아바타에서 지정된 Material이 있을 경우에 신규 아바타로 Material을 복제합니다.</summary>
 		static void CheckAvatarMaterials(ModelImporter OldModelImporter, ModelImporter NewModelImporter) {
 			Object[] OldAvatarObjects = OldModelImporter.GetExternalObjectMap().Values.ToArray();
 			Material[] OldAvatarMaterials = new Material[OldAvatarObjects.Length];
@@ -172,7 +161,6 @@ namespace VRSuya.Installer {
 			}
 		}
 
-		/// <summary>새 아바타 GameObject를 Scene에 배치를 합니다.</summary>
 		static void PlaceGameObejctInScene() {
 			GameObject NewInstance = Instantiate(NewAvatarGameObject);
 			NewInstance.name = NewAvatarGameObject.name;
@@ -181,7 +169,6 @@ namespace VRSuya.Installer {
 			NewAvatarGameObject = NewInstance;
 		}
 
-        /// <summary>새로 복제된 기존 아바타의 Animator의 Avatar를 신규 아바타의 Avatar로 변경합니다.</summary>
         static void ReplaceOldAvatarAnimatorAvatar() {
 			OldAvatarAnimator.avatar = NewAvatarAnimator.avatar;
             EditorUtility.SetDirty(OldAvatarAnimator);

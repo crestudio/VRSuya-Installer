@@ -51,7 +51,6 @@ namespace VRSuya.Installer {
 			}
 		}
 
-		/// <summary>아바타와 애니메이션으로부터 볼 본의 원점을 구합니다</summary>
 		public void UpdateOriginPositions() {
 			ClearVariable();
 			if (TargetAvatarAuthorName != null) TargetAvatarAuthorType = (AvatarAuthor)Enum.Parse(typeof(AvatarAuthor), TargetAvatarAuthorName);
@@ -68,9 +67,6 @@ namespace VRSuya.Installer {
             }
         }
 
-		/// <summary>
-		/// 본 프로그램의 메인 세팅 로직입니다.
-		/// </summary>
 		public void UpdateAnimationOffset() {
 			ClearVariable();
 			if (TargetAvatarAuthorName != null) TargetAvatarAuthorType = (AvatarAuthor)Enum.Parse(typeof(AvatarAuthor), TargetAvatarAuthorName);
@@ -92,8 +88,6 @@ namespace VRSuya.Installer {
             }
         }
 
-		/// <summary>찾아야 하는 볼 본의 이름를 조회해서 반환합니다.</summary>
-		/// <returns>목표 볼 본의 이름</returns>
 		string[] GetTargetCheekBoneNames() {
             switch (TargetAvatarAuthorType) {
 				case AvatarAuthor.ChocolateRice:
@@ -115,8 +109,6 @@ namespace VRSuya.Installer {
             return TargetCheekBoneNames;
         }
 
-		/// <summary>아바타의 현재 상태를 검사하여 패치가 가능한지 확인합니다.</summary>
-		/// <returns>업데이트 가능 여부</returns>
 		bool VerifyVariable() {
             if (!AvatarGameObject) {
                 AvatarGameObject = this.gameObject;
@@ -133,16 +125,12 @@ namespace VRSuya.Installer {
             return true;
         }
 
-		/// <summary>상태를 초기화 합니다.</summary>
 		void ClearVariable() {
 			AnimationOriginPosition = new Vector3(0.0f, 0.0f, 0.0f);
 			AvatarOriginPosition = new Vector3(0.0f, 0.0f, 0.0f);
 			StatusCode = null;
         }
 
-
-		/// <summary>FX 레이어에서 모구모구 애니메이션을 찾아서 리스트로 반환 합니다.</summary>
-		/// <returns>모구모구 애니메이션 클립 어레이</returns>
 		AnimationClip[] GetVRSuyaMogumoguAnimations(AnimatorController TargetAnimatorController) {
 			AnimationClip[] NewMogumoguAnimationClips = new AnimationClip[4];
 			if (TargetAnimatorController) {
@@ -152,8 +140,6 @@ namespace VRSuya.Installer {
 			return NewMogumoguAnimationClips;
 		}
 
-		/// <summary>아바타의 볼 트랜스폼의 위치를 가져옵니다.</summary>
-		/// <returns>아바타의 볼 원점 Position</returns>
 		Transform[] GetCheekBoneTransforms() {
 			Transform[] CheekTransforms = new Transform[0];
             Transform[] ChildTransforms = AvatarGameObject.GetComponent<Animator>().GetBoneTransform(HumanBodyBones.Head).GetComponentsInChildren<Transform>(true);
@@ -161,7 +147,6 @@ namespace VRSuya.Installer {
             return CheekTransforms;
         }
 
-		/// <summary>아바타와 애니메이션에서 볼의 원점 기준을 가져옵니다</summary>
 		void GetOriginPositions() {
 			AnimationClip PoseAnimationClip = Array.Find(AvatarAnimationClips, Item => Item.length == 0);
             if (PoseAnimationClip) {
@@ -175,8 +160,6 @@ namespace VRSuya.Installer {
 			AvatarOriginPosition = AvatarCheekBoneTransforms[0].localPosition;
         }
 
-		/// <summary>포즈 애니메이션에서 볼 원점의 위치를 가져옵니다.</summary>
-		/// <returns>포즈 애니메이션 볼 원점 Position</returns>
 		Vector3 GetAnimationOriginTransform(string TargetAnimationPath) {
             AnimationClip PoseAnimationClip = Array.Find(AvatarAnimationClips, Item => Item.length == 0);
 			Vector3 NewOriginPosition = new Vector3(0.0f, 0.0f, 0.0f);
@@ -201,8 +184,6 @@ namespace VRSuya.Installer {
             return NewOriginPosition;
         }
 
-		/// <summary>아바타에서 볼 원점의 위치를 가져옵니다.</summary>
-		/// <returns>아바타 볼 원점 Position</returns>
 		Vector3 GetAvatarOriginTransform(string TargetAnimationPath) {
             Transform TargetCheekTransform = Array.Find(AvatarCheekBoneTransforms, CheekTransform => TargetAnimationPath.Contains(CheekTransform.name));
 			Vector3 NewOriginPosition = new Vector3(0.0f, 0.0f, 0.0f);
@@ -210,7 +191,6 @@ namespace VRSuya.Installer {
             return NewOriginPosition;
         }
 
-		/// <summary>포즈 애니메이션 클립들을 Array 맨 뒤로 이동합니다</summary>
 		AnimationClip[] ReorderAnimationClips() {
             AnimationClip[] NewAnimationClips = new AnimationClip[AvatarAnimationClips.Length];
             int StartIndex = 0;
@@ -228,7 +208,6 @@ namespace VRSuya.Installer {
             return NewAnimationClips;
         }
 
-		/// <summary>애니메이션 클립들을 업데이트 합니다</summary>
 		void UpdateAnimationKeyframes() {
             foreach (AnimationClip TargetAnimationClip in AvatarAnimationClips) {
                 foreach (EditorCurveBinding TargetBinding in AnimationUtility.GetCurveBindings(TargetAnimationClip)) {

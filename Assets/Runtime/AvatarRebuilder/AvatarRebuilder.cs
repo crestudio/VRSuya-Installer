@@ -17,7 +17,6 @@ namespace VRSuya.Installer {
 	[AddComponentMenu("VRSuya/VRSuya AvatarRebuilder")]
 	public class AvatarRebuilder : MonoBehaviour {
 
-		// 에디터용 변수
 		public GameObject NewAvatarGameObjectEditor = null;
 		public GameObject OldAvatarGameObjectEditor = null;
 		public int AvatarTypeIndexEditor;
@@ -28,7 +27,6 @@ namespace VRSuya.Installer {
 		public bool ToggleReorderGameObjectEditor = true;
 		public string StatusStringEditor = string.Empty;
 
-		// 정적 변수
 		protected static GameObject NewAvatarGameObject;
 		protected static Animator NewAvatarAnimator;
 		protected static GameObject OldAvatarGameObject;
@@ -76,7 +74,6 @@ namespace VRSuya.Installer {
 		protected static bool NewAvatarPatched;
 		protected static int UndoGroupIndex;
 
-		// 컴포넌트 최초 로드시 동작
 		void OnEnable() {
 			if (!ActiveAvatarRebuilder) {
 				OldAvatarGameObjectEditor = this.gameObject;
@@ -92,7 +89,6 @@ namespace VRSuya.Installer {
 			}
 		}
 
-		/// <summary>에디터 변수 -> 정적 변수 동기화합니다.</summary>
 		void SetStaticVariable() {
 			NewAvatarGameObject = NewAvatarGameObjectEditor;
 			OldAvatarGameObject = OldAvatarGameObjectEditor;
@@ -104,7 +100,6 @@ namespace VRSuya.Installer {
 			ToggleReorderGameObject = ToggleReorderGameObjectEditor;
 		}
 
-		/// <summary>정적 변수 -> 에디터 변수 동기화합니다.</summary>
 		void SetEditorVariable() {
 			NewAvatarGameObjectEditor = NewAvatarGameObject;
 			OldAvatarGameObjectEditor = OldAvatarGameObject;
@@ -113,7 +108,6 @@ namespace VRSuya.Installer {
 			StatusStringEditor = StatusString;
 		}
 
-		/// <summary>패치 대상 SkinnedMeshRenderer 목록을 가져옵니다</summary>
 		public void UpdateSkinnedMeshRendererList() {
             SetStaticVariable();
 			ClearVariable();
@@ -124,9 +118,6 @@ namespace VRSuya.Installer {
             SetEditorVariable();
         }
 
-		/// <summary>
-		/// 본 프로그램의 메인 세팅 로직입니다.
-		/// </summary>
 		public void ReplaceSkinnedMeshRendererGameObjects() {
 			Undo.IncrementCurrentGroup();
 			Undo.SetCurrentGroupName("VRSuya Avatar Rebuilder");
@@ -148,15 +139,12 @@ namespace VRSuya.Installer {
 			ActiveAvatarRebuilder = false;
         }
 
-		/// <summary>정적 변수를 초기화 합니다.</summary>
 		static void ClearVariable() {
 			NewAvatarSkinnedMeshRenderers = new SkinnedMeshRenderer[0];
 			NewAvatarPatched = false;
 			StatusString = string.Empty;
         }
 
-		/// <summary>아바타의 현재 상태를 검사하여 설치가 가능한지 확인합니다.</summary>
-		/// <returns>설치 가능 여부</returns>
 		static bool VerifyVariable() {
 			if (!NewAvatarGameObject) {
 				StatusString = "NO_AVATAR";

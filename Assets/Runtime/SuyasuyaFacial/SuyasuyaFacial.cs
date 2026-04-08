@@ -46,20 +46,17 @@ namespace VRSuya.Installer {
 	[AddComponentMenu("VRSuya/VRSuya SuyasuyaFacial")]
 	public class SuyasuyaFacial : MonoBehaviour {
 
-        // 아바타 에디터용 변수
         public GameObject AvatarGameObject;
 		public SkinnedMeshRenderer AvatarHeadSkinnedMeshRenderer;
 		public AnimatorController AvatarFXAnimatorController;
 		public AnimationClip[] TargetAnimationClips = new AnimationClip[0];
 		public FaceBlendShape[] TargetBlendShapes = new FaceBlendShape[0];
 		public AnimationBlendShape[] TargetAnimationBlendShapes = new AnimationBlendShape[0];
-		
-		// 상태 반환
+
 		public string StatusCode = string.Empty;
 		public int CountUpdatedCurve = 0;
 		int UndoGroupIndex;
 
-		// 컴포넌트 최초 로드시 동작
 		void OnEnable() {
 			if (!AvatarGameObject) AvatarGameObject = this.gameObject;
 			AvatarHeadSkinnedMeshRenderer = GetAvatarHeadSkinnedMeshRenderer(AvatarGameObject);
@@ -74,9 +71,6 @@ namespace VRSuya.Installer {
 			CleanupBlendShapeList();
 		}
 
-		/// <summary>
-		/// 본 프로그램의 메인 세팅 로직입니다.
-		/// </summary>
 		public void UpdateAnimationClips() {
 			Undo.IncrementCurrentGroup();
 			Undo.SetCurrentGroupName("VRSuya Suyasuya Facial");
@@ -88,7 +82,6 @@ namespace VRSuya.Installer {
             }
         }
 
-		/// <summary>변수를 초기화하고 다시 불러옵니다.</summary>
 		public void ReloadVariable() {
 			TargetBlendShapes = new FaceBlendShape[0];
 			TargetAnimationBlendShapes = new AnimationBlendShape[0];
@@ -108,8 +101,6 @@ namespace VRSuya.Installer {
 			CleanupBlendShapeList();
 		}
 
-		/// <summary>아바타의 현재 상태를 검사하여 패치가 가능한지 확인합니다.</summary>
-		/// <returns>설치 가능 여부</returns>
 		bool VerifyVariable() {
 			if (AvatarHeadSkinnedMeshRenderer) {
 				return true;
@@ -129,8 +120,6 @@ namespace VRSuya.Installer {
 			}
         }
 
-		/// <summary>아바타의 Head 스킨드 메쉬 렌더러를 찾습니다.</summary>
-		/// <returns>아바타의 Head 스킨드 메쉬 렌더러</returns>
 		SkinnedMeshRenderer GetAvatarHeadSkinnedMeshRenderer(GameObject TargetGameObject) {
 			AvatarGameObject.TryGetComponent(typeof(VRCAvatarDescriptor), out Component AvatarDescriptor);
 			if (AvatarDescriptor) {
@@ -139,8 +128,6 @@ namespace VRSuya.Installer {
 			return null;
 		}
 
-		/// <summary>아바타의 FX 레이어 애니메이터 컨트롤러를 찾습니다.</summary>
-		/// <returns>아바타의 FX 레이어 애니메이터 컨트롤러</returns>
 		AnimatorController GetAvatarFXAnimatorController(GameObject TargetGameObject) {
 			AvatarGameObject.TryGetComponent(typeof(VRCAvatarDescriptor), out Component AvatarDescriptor);
 			if (AvatarDescriptor) {
@@ -150,8 +137,6 @@ namespace VRSuya.Installer {
 			return null;
 		}
 
-		/// <summary>아바타에서 적용된 Blendshape 리스트를 반환합니다.</summary>
-		/// <returns>활성화 아바타 BlendShape 어레이</returns>
 		FaceBlendShape[] GetAvatarBlendShapeStatus(SkinnedMeshRenderer TargetSkinnedMeshRenderer) {
 			FaceBlendShape[] newFaceBlendShapeList = new FaceBlendShape[0];
 			if (TargetSkinnedMeshRenderer.sharedMesh.blendShapeCount > 0) {
@@ -170,8 +155,6 @@ namespace VRSuya.Installer {
 			return newFaceBlendShapeList;
 		}
 
-		/// <summary>애니메이션에서 적용된 Blendshape 리스트를 반환합니다.</summary>
-		/// <returns>활성화 FX 레이어 BlendShape 어레이</returns>
 		AnimationBlendShape[] GetAnimationBlendShapeStatus(AnimatorController TargetAnimatorController) {
 			AnimationBlendShape[] newAnimationBlendShapeList = new AnimationBlendShape[0];
 			string TargetPath = "Body";
@@ -204,7 +187,6 @@ namespace VRSuya.Installer {
 			return newAnimationBlendShapeList;
 		}
 
-		/// <summary>블렌드쉐이프 리스트에서 중복된 값을 제외합니다.</summary>
 		void CleanupBlendShapeList() {
 			if (TargetAnimationClips.Length > 0) {
 				string TargetPath = "Body";
@@ -223,8 +205,6 @@ namespace VRSuya.Installer {
 			}
 		}
 
-		/// <summary>에셋에서 Suyasuya 애니메이션을 찾아서 리스트로 반환 합니다.</summary>
-		/// <returns>Suyasuya 애니메이션 클립 어레이</returns>
 		AnimationClip[] GetVRSuyaSuyasuyaAnimations() {
 			Dictionary<string,string> dictSuyasuyaAnimationClips = new Dictionary<string, string> {
 				{ "3e14bdc27b543fc4d9c16398be0a9d9c", "VRSuya_Suyasuya_Animation_50_Sleeping_Animation" },
@@ -246,7 +226,6 @@ namespace VRSuya.Installer {
 			return newAnimationClips;
 		}
 
-		/// <summary>애니메이션 클립에서 0 값의 Blendshape 애니메이션 키를 추가합니다.</summary>
 		void UpdateSuyasuyaAnimationClips() {
 			CountUpdatedCurve = 0;
 			foreach (AnimationClip CurrentAnimationClip in TargetAnimationClips) {
@@ -272,8 +251,6 @@ namespace VRSuya.Installer {
 			Debug.Log($"[VRSuya] {CountUpdatedCurve} blendshapes have been added to the animation clip");
 		}
 
-		/// <summary>애니메이션 클립에서 존재하는 Blendshape 리스트를 반환 합니다.</summary>
-		/// <returns>애니메이션 클립에 존재하는 Blendshape 리스트</returns>
 		List<(string Path, string BlendShapeName)> GetExistAnimationBlendshapes(AnimationClip TargetAnimationClip, bool HasValue) {
 			List<(string Path, string BlendShapeName)> newExistBlendshapes = new List<(string, string)> { };
 			foreach (EditorCurveBinding Binding in AnimationUtility.GetCurveBindings(TargetAnimationClip)) {
@@ -295,8 +272,6 @@ namespace VRSuya.Installer {
 			return newExistBlendshapes;
 		}
 
-		/// <summary>애니메이션 클립과 비교하여 실제로 삽입해야 되는 Blendshape 어레이를 반환합니다.</summary>
-		/// <returns>중복 되지 않는 Blendshape 어레이</returns>
 		string[] GetAddBlendshapeList(AnimationClip TargetAnimationClip) {
 			string[] TargetAnimationBlendshapeList = GetExistAnimationBlendshapes(TargetAnimationClip, false)
 				.Where((AnimationBlendShape) => AnimationBlendShape.Path == AvatarHeadSkinnedMeshRenderer.name)
@@ -317,8 +292,6 @@ namespace VRSuya.Installer {
 			return AddBlendshapeList;
 		}
 
-		/// <summary>요청한 GUID를 파일 이름으로 반환합니다. 2번째 인자는 확장명 포함 여부를 결정합니다.</summary>
-		/// <returns>파일 이름</returns>
 		string GUIDToAssetName(string GUID, bool OnlyFileName) {
 			string FileName = string.Empty;
 			FileName = AssetDatabase.GUIDToAssetPath(GUID).Split('/')[AssetDatabase.GUIDToAssetPath(GUID).Split('/').Length - 1];
