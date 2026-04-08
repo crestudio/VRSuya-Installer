@@ -27,6 +27,7 @@ namespace VRSuya.Installer {
 		public TextAsset JSON_Asset;
 
 		Animator AvatarAnimator;
+		Material[] AvatarMaterials;
 
 		AvatarWeight NewAvatarWeight;
 
@@ -175,11 +176,11 @@ namespace VRSuya.Installer {
 				return false;
 			}
 			NewAvatarWeight = GetAvatarWeight(JObject.Parse(JSON_Asset.text));
-			if (NewAvatarWeight.JSON_Version >= 2) {
-				return true;
-			} else {
+			if (NewAvatarWeight.JSON_Version < 2) {
 				return false;
 			}
+			AvatarMaterials = GetAvatarMaterials();
+			return true;
 		}
 
 		Dictionary<string, Transform> GetNewBoneTransfom(GameObject TargetGameObject) {
@@ -243,92 +244,100 @@ namespace VRSuya.Installer {
 					Mesh OldMesh = TargetSkinnedMeshRenderer.sharedMesh;
 					Mesh NewMesh = Instantiate(OldMesh);
 					NewMesh.name = $"VRSuya_{OldMesh.name}";
-					Dictionary<int, Vector2> NewMeshUV = GetMaterialUV(NewMesh, 1);
-					List<Transform> BoneTransforms = TargetSkinnedMeshRenderer.bones.ToList();
-					List<Transform> NewBoneTransform = NewAvatarWeight.AvatarObjects
-						.Where(Item => Item.MeshName == TargetSkinnedMeshRenderer.gameObject.name)
-						.SelectMany(Item => Item.UVWeights.Keys)
+					string[] TargetMaterialNames = TargetObject.UVWeights
+						.SelectMany(Item => Item.Value)
+						.Select(Item => Item.MaterialName)
 						.Distinct()
-						.Where(Item => NewBoneTransforms.ContainsKey(Item))
-						.Select(Item => NewBoneTransforms[Item])
-						.ToList();
-					foreach (Transform NewBone in NewBoneTransform) {
-						if (!BoneTransforms.Contains(NewBone)) BoneTransforms.Add(NewBone);
-					}
-					TargetSkinnedMeshRenderer.bones = BoneTransforms.ToArray();
-					Matrix4x4[] OldBindPoses = OldMesh.bindposes;
-					Matrix4x4[] NewBindPoses = new Matrix4x4[BoneTransforms.Count];
-					for (int Index = 0; Index < OldBindPoses.Length; Index++) {
-						NewBindPoses[Index] = OldBindPoses[Index];
-					}
-					for (int Index = OldBindPoses.Length; Index < BoneTransforms.Count; Index++) {
-						NewBindPoses[Index] = BoneTransforms[Index].worldToLocalMatrix * TargetSkinnedMeshRenderer.transform.localToWorldMatrix;
-					}
-					NewMesh.bindposes = NewBindPoses;
-					BoneWeight[] NewBoneWeights = NewMesh.boneWeights;
-					Dictionary<int, List<VertexWeight>> VertexWeightList = new Dictionary<int, List<VertexWeight>>();
-					for (int Index = 0; Index < NewBoneWeights.Length; Index++) {
-						BoneWeight TargetBoneWeight = NewBoneWeights[Index];
-						List<VertexWeight> NewVertexWeights = new List<VertexWeight>();
-						if (TargetBoneWeight.weight0 > 0) NewVertexWeights.Add(new VertexWeight(TargetBoneWeight.boneIndex0, TargetBoneWeight.weight0));
-						if (TargetBoneWeight.weight1 > 0) NewVertexWeights.Add(new VertexWeight(TargetBoneWeight.boneIndex1, TargetBoneWeight.weight1));
-						if (TargetBoneWeight.weight2 > 0) NewVertexWeights.Add(new VertexWeight(TargetBoneWeight.boneIndex2, TargetBoneWeight.weight2));
-						if (TargetBoneWeight.weight3 > 0) NewVertexWeights.Add(new VertexWeight(TargetBoneWeight.boneIndex3, TargetBoneWeight.weight3));
-						VertexWeightList[Index] = NewVertexWeights;
-					}
-					foreach (var TargetWeights in TargetObject.UVWeights) {
-						if (NewBoneTransforms.TryGetValue(TargetWeights.Key, out Transform TargetBoneTransform)) {
-							int TargetBoneIndex = BoneTransforms.IndexOf(TargetBoneTransform);
-							List<UVWeight> UVWeightList = TargetWeights.Value.ToList();
-							foreach (var VertexUV in NewMeshUV) {
-								int VertexIndex = VertexUV.Key;
-								Vector2 TargetUVPosition = VertexUV.Value;
-								var TargetUVWeight = UVWeightList
-									.Select(Item => new { Data = Item, Distance = Vector2.Distance(TargetUVPosition, Item.UVPosition) })
-									.Where(Item => Item.Distance < Threshold)
-									.OrderBy(Item => Item.Distance)
-									.FirstOrDefault();
-								if (TargetUVWeight != null && TargetUVWeight.Data.WeightValue > 0) {
-									if (!VertexWeightList.ContainsKey(VertexIndex)) {
-										VertexWeightList[VertexIndex] = new List<VertexWeight>();
-									}
-									VertexWeight TargetVertexWeight = VertexWeightList[VertexIndex].FirstOrDefault(Item => Item.VertexIndex == TargetBoneIndex);
-									if (TargetVertexWeight != null) {
-										TargetVertexWeight.WeightValue += TargetUVWeight.Data.WeightValue;
-									} else {
-										VertexWeightList[VertexIndex].Add(new VertexWeight(TargetBoneIndex, TargetUVWeight.Data.WeightValue));
+						.ToArray();
+					foreach (string TargetMaterialName in TargetMaterialNames) {
+						int TargetMaterialIndex = GetMaterialIndex(TargetSkinnedMeshRenderer, TargetMaterialName, 0);
+						Dictionary<int, Vector2> NewMeshUV = GetMaterialUV(NewMesh, TargetMaterialIndex);
+						List<Transform> BoneTransforms = TargetSkinnedMeshRenderer.bones.ToList();
+						List<Transform> NewBoneTransform = NewAvatarWeight.AvatarObjects
+							.Where(Item => Item.MeshName == TargetSkinnedMeshRenderer.gameObject.name)
+							.SelectMany(Item => Item.UVWeights.Keys)
+							.Distinct()
+							.Where(Item => NewBoneTransforms.ContainsKey(Item))
+							.Select(Item => NewBoneTransforms[Item])
+							.ToList();
+						foreach (Transform NewBone in NewBoneTransform) {
+							if (!BoneTransforms.Contains(NewBone)) BoneTransforms.Add(NewBone);
+						}
+						TargetSkinnedMeshRenderer.bones = BoneTransforms.ToArray();
+						Matrix4x4[] OldBindPoses = OldMesh.bindposes;
+						Matrix4x4[] NewBindPoses = new Matrix4x4[BoneTransforms.Count];
+						for (int Index = 0; Index < OldBindPoses.Length; Index++) {
+							NewBindPoses[Index] = OldBindPoses[Index];
+						}
+						for (int Index = OldBindPoses.Length; Index < BoneTransforms.Count; Index++) {
+							NewBindPoses[Index] = BoneTransforms[Index].worldToLocalMatrix * TargetSkinnedMeshRenderer.transform.localToWorldMatrix;
+						}
+						NewMesh.bindposes = NewBindPoses;
+						BoneWeight[] NewBoneWeights = NewMesh.boneWeights;
+						Dictionary<int, List<VertexWeight>> VertexWeightList = new Dictionary<int, List<VertexWeight>>();
+						for (int Index = 0; Index < NewBoneWeights.Length; Index++) {
+							BoneWeight TargetBoneWeight = NewBoneWeights[Index];
+							List<VertexWeight> NewVertexWeights = new List<VertexWeight>();
+							if (TargetBoneWeight.weight0 > 0) NewVertexWeights.Add(new VertexWeight(TargetBoneWeight.boneIndex0, TargetBoneWeight.weight0));
+							if (TargetBoneWeight.weight1 > 0) NewVertexWeights.Add(new VertexWeight(TargetBoneWeight.boneIndex1, TargetBoneWeight.weight1));
+							if (TargetBoneWeight.weight2 > 0) NewVertexWeights.Add(new VertexWeight(TargetBoneWeight.boneIndex2, TargetBoneWeight.weight2));
+							if (TargetBoneWeight.weight3 > 0) NewVertexWeights.Add(new VertexWeight(TargetBoneWeight.boneIndex3, TargetBoneWeight.weight3));
+							VertexWeightList[Index] = NewVertexWeights;
+						}
+						foreach (var TargetWeights in TargetObject.UVWeights) {
+							if (NewBoneTransforms.TryGetValue(TargetWeights.Key, out Transform TargetBoneTransform)) {
+								int TargetBoneIndex = BoneTransforms.IndexOf(TargetBoneTransform);
+								List<UVWeight> UVWeightList = TargetWeights.Value.ToList();
+								foreach (var VertexUV in NewMeshUV) {
+									int VertexIndex = VertexUV.Key;
+									Vector2 TargetUVPosition = VertexUV.Value;
+									var TargetUVWeight = UVWeightList
+										.Select(Item => new { Data = Item, Distance = Vector2.Distance(TargetUVPosition, Item.UVPosition) })
+										.Where(Item => Item.Distance < Threshold)
+										.OrderBy(Item => Item.Distance)
+										.FirstOrDefault();
+									if (TargetUVWeight != null && TargetUVWeight.Data.WeightValue > 0) {
+										if (!VertexWeightList.ContainsKey(VertexIndex)) {
+											VertexWeightList[VertexIndex] = new List<VertexWeight>();
+										}
+										VertexWeight TargetVertexWeight = VertexWeightList[VertexIndex].FirstOrDefault(Item => Item.VertexIndex == TargetBoneIndex);
+										if (TargetVertexWeight != null) {
+											TargetVertexWeight.WeightValue += TargetUVWeight.Data.WeightValue;
+										} else {
+											VertexWeightList[VertexIndex].Add(new VertexWeight(TargetBoneIndex, TargetUVWeight.Data.WeightValue));
+										}
 									}
 								}
 							}
 						}
-					}
-					for (int Index = 0; Index < NewBoneWeights.Length; Index++) {
-						if (VertexWeightList.TryGetValue(Index, out List<VertexWeight> TargetVertexWeights)) {
-							TargetVertexWeights = TargetVertexWeights.OrderByDescending(Item => Item.WeightValue).Take(4).ToList();
-							float WeightSum = TargetVertexWeights.Sum(Item => Item.WeightValue);
-							BoneWeight NormalizedBoneWeights = new BoneWeight();
-							if (WeightSum > 0f) {
-								if (TargetVertexWeights.Count > 0) {
-									NormalizedBoneWeights.boneIndex0 = TargetVertexWeights[0].VertexIndex;
-									NormalizedBoneWeights.weight0 = TargetVertexWeights[0].WeightValue / WeightSum;
+						for (int Index = 0; Index < NewBoneWeights.Length; Index++) {
+							if (VertexWeightList.TryGetValue(Index, out List<VertexWeight> TargetVertexWeights)) {
+								TargetVertexWeights = TargetVertexWeights.OrderByDescending(Item => Item.WeightValue).Take(4).ToList();
+								float WeightSum = TargetVertexWeights.Sum(Item => Item.WeightValue);
+								BoneWeight NormalizedBoneWeights = new BoneWeight();
+								if (WeightSum > 0f) {
+									if (TargetVertexWeights.Count > 0) {
+										NormalizedBoneWeights.boneIndex0 = TargetVertexWeights[0].VertexIndex;
+										NormalizedBoneWeights.weight0 = TargetVertexWeights[0].WeightValue / WeightSum;
+									}
+									if (TargetVertexWeights.Count > 1) {
+										NormalizedBoneWeights.boneIndex1 = TargetVertexWeights[1].VertexIndex;
+										NormalizedBoneWeights.weight1 = TargetVertexWeights[1].WeightValue / WeightSum;
+									}
+									if (TargetVertexWeights.Count > 2) {
+										NormalizedBoneWeights.boneIndex2 = TargetVertexWeights[2].VertexIndex;
+										NormalizedBoneWeights.weight2 = TargetVertexWeights[2].WeightValue / WeightSum;
+									}
+									if (TargetVertexWeights.Count > 3) {
+										NormalizedBoneWeights.boneIndex3 = TargetVertexWeights[3].VertexIndex;
+										NormalizedBoneWeights.weight3 = TargetVertexWeights[3].WeightValue / WeightSum;
+									}
 								}
-								if (TargetVertexWeights.Count > 1) {
-									NormalizedBoneWeights.boneIndex1 = TargetVertexWeights[1].VertexIndex;
-									NormalizedBoneWeights.weight1 = TargetVertexWeights[1].WeightValue / WeightSum;
-								}
-								if (TargetVertexWeights.Count > 2) {
-									NormalizedBoneWeights.boneIndex2 = TargetVertexWeights[2].VertexIndex;
-									NormalizedBoneWeights.weight2 = TargetVertexWeights[2].WeightValue / WeightSum;
-								}
-								if (TargetVertexWeights.Count > 3) {
-									NormalizedBoneWeights.boneIndex3 = TargetVertexWeights[3].VertexIndex;
-									NormalizedBoneWeights.weight3 = TargetVertexWeights[3].WeightValue / WeightSum;
-								}
+								NewBoneWeights[Index] = NormalizedBoneWeights;
 							}
-							NewBoneWeights[Index] = NormalizedBoneWeights;
 						}
+						NewMesh.boneWeights = NewBoneWeights;
 					}
-					NewMesh.boneWeights = NewBoneWeights;
 					string NewAssetPath = SaveMeshAsset(OldMesh, NewMesh, NewAvatarGameObject.name, TargetName);
 					if (!string.IsNullOrEmpty(NewAssetPath)) {
 						Mesh LoadedSavedMeshAsset = AssetDatabase.LoadAssetAtPath<Mesh>(NewAssetPath);
@@ -369,6 +378,45 @@ namespace VRSuya.Installer {
 				}
 			}
 			return MaterialUV;
+		}
+
+		Material[] GetAvatarMaterials() {
+			UnityEngine.Avatar TargetAvatar = AvatarAnimator.avatar;
+			string ModelAssetPath = AssetDatabase.GetAssetPath(TargetAvatar);
+			if (!string.IsNullOrEmpty(ModelAssetPath)) {
+				ModelImporter TargetModelImporter = AssetImporter.GetAtPath(ModelAssetPath) as ModelImporter;
+				if (TargetModelImporter) {
+					return TargetModelImporter.GetExternalObjectMap()
+						.Where(Item => Item.Value is Material)
+						.Select(Item => Item.Value as Material)
+						.ToArray();
+				}
+			}
+			return null;
+		}
+
+		int GetMaterialIndex(SkinnedMeshRenderer TargetRenderer, string TargetMaterialName, int FallbackIndex) {
+			Material[] TargetMaterials = TargetRenderer.sharedMaterials;
+			Material TargetMaterial = AvatarMaterials.FirstOrDefault(Item => Item.name == TargetMaterialName);
+			if (TargetMaterial) {
+				for (int Index = 0; Index < TargetMaterials.Length; Index++) {
+					if (TargetMaterials[Index]) {
+						if (TargetMaterials[Index] == TargetMaterial) {
+							return Index;
+						}
+					}
+
+				}
+			}
+			for (int Index = 0; Index < TargetMaterials.Length; Index++) {
+				if (TargetMaterials[Index]) {
+					if (TargetMaterials[Index].name.Contains(TargetMaterialName, StringComparison.OrdinalIgnoreCase)) {
+						return Index;
+					}
+				}
+				
+			}
+			return FallbackIndex;
 		}
 
 		class VertexWeight {
