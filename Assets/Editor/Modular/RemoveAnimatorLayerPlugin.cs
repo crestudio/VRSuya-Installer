@@ -38,6 +38,7 @@ namespace VRSuya.Modular.Editor {
 	public class RemoveAnimatorLayerPass : Pass<RemoveAnimatorLayerPass> {
 
 		public override string DisplayName => "RemoveAnimatorLayer";
+		const string PreservedLayerName = "AFK/";
 
 		protected override void Execute(BuildContext TargetBuildContext) {
 			RemoveAnimatorLayer[] RemoveAnimatorLayerComponents = TargetBuildContext.AvatarRootObject.GetComponentsInChildren<RemoveAnimatorLayer>(true);
@@ -51,7 +52,7 @@ namespace VRSuya.Modular.Editor {
 						foreach (RemoveAnimatorLayer TargetComponent in RemoveAnimatorLayerComponents) {
 							if (TargetComponent) {
 								foreach (string LayerName in TargetComponent.TargetLayerName) {
-									if (!string.IsNullOrEmpty(LayerName) && !RemoveLayerNames.Contains(LayerName)) {
+									if (!string.IsNullOrEmpty(LayerName) && !RemoveLayerNames.Contains(PreservedLayerName)) {
 										RemoveLayerNames.Add(LayerName);
 									}
 								}
@@ -59,7 +60,7 @@ namespace VRSuya.Modular.Editor {
 						}
 						for (int Index = TargetFXLayer.layers.Length - 1; Index >= 0; Index--) {
 							string LayerName = TargetFXLayer.layers[Index].name;
-							if (RemoveLayerNames.Contains(LayerName) && LayerName != "TypeAFK") {
+							if (RemoveLayerNames.Contains(LayerName) && !LayerName.Contains("")) {
 								TargetFXLayer.RemoveLayer(Index);
 							}
 						}
