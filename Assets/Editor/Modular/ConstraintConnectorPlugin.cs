@@ -1,16 +1,14 @@
 ﻿#if MODULAR_AVATAR
-using System;
-using System.Linq;
-
 using UnityEditor;
 using UnityEngine;
+
+using VRC.Dynamics;
 
 using nadena.dev.ndmf;
 
 using static VRSuya.Core.Translator;
 
 using Object = UnityEngine.Object;
-using VRC.Dynamics;
 
 /*
  * VRSuya Modular Component
