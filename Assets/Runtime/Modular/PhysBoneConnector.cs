@@ -1,6 +1,7 @@
 ﻿using UnityEngine;
 
 using VRC.SDK3.Dynamics.PhysBone.Components;
+using VRC.SDKBase;
 
 /*
  * VRSuya Modular Component
@@ -15,7 +16,7 @@ namespace VRSuya.Modular {
 
 	[AddComponentMenu("VRSuya/Modular/VRSuya PhysBoneConnector")]
 	[HelpURL("https://vrsuya.booth.pm/")]
-	public class PhysBoneConnector : MonoBehaviour {
+	public class PhysBoneConnector : MonoBehaviour, IEditorOnly {
 		public PhysBoneType TargetType = PhysBoneType.Cheek;
 		public VRCPhysBone TargetCheek_L;
 		public VRCPhysBone TargetCheek_R;
