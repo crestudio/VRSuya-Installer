@@ -52,7 +52,7 @@ namespace VRSuya.Modular.Editor {
 						foreach (RemoveAnimatorLayer TargetComponent in RemoveAnimatorLayerComponents) {
 							if (TargetComponent) {
 								foreach (string LayerName in TargetComponent.TargetLayerName) {
-									if (!string.IsNullOrEmpty(LayerName) && !RemoveLayerNames.Contains(PreservedLayerName)) {
+									if (!string.IsNullOrEmpty(LayerName) && !RemoveLayerNames.Contains(LayerName)) {
 										RemoveLayerNames.Add(LayerName);
 									}
 								}
@@ -60,7 +60,7 @@ namespace VRSuya.Modular.Editor {
 						}
 						for (int Index = TargetFXLayer.layers.Length - 1; Index >= 0; Index--) {
 							string LayerName = TargetFXLayer.layers[Index].name;
-							if (RemoveLayerNames.Contains(LayerName) && !LayerName.Contains("")) {
+							if (RemoveLayerNames.Contains(LayerName) && !LayerName.Contains(PreservedLayerName)) {
 								TargetFXLayer.RemoveLayer(Index);
 							}
 						}
