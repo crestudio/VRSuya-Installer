@@ -129,19 +129,22 @@ namespace VRSuya.Installer {
 				string JapaneseName = DisplayName_Data["ja"].ToString();
 				string RequiredVertexGroupName = TargetObject["RequiredVertexGroup"].ToString();
 				JToken Weight_Data = TargetObject["Weights"];
-				Dictionary<string, UVWeight[]> ObjectWeightList = new Dictionary<string, UVWeight[]>();
+				List<MeshWeight> MeshWeightList = new List<MeshWeight>();
 				foreach (JProperty TargetProperty in Weight_Data.Cast<JProperty>()) {
-					JArray WeightDatas = (JArray)TargetProperty.Value;
-					UVWeight[] UVWeights = WeightDatas
+					string NewBoneName = TargetProperty.Name;
+					JToken MeshToken = TargetProperty.Value;
+					string NewMaterialName = MeshToken["MaterialName"].ToString();
+					JArray WeightDatas = (JArray)MeshToken["Vertices"];
+					UVWeight[] NewUVWeights = WeightDatas
 							.Select(Item => new UVWeight(
 								new Vector2((float)Item["Position"][0], (float)Item["Position"][1]),
-								(string)Item["Material"] ?? "",
 								(float)Item["Weight"]))
 							.ToArray();
-					ObjectWeightList.Add(TargetProperty.Name, UVWeights);
+					SubMeshWeight NewSubMeshWeight = new SubMeshWeight (NewMaterialName, NewUVWeights );
+					MeshWeightList.Add(new MeshWeight(NewBoneName, NewSubMeshWeight));
 				}
 				DisplayName NewDisplayName = new DisplayName(EnglishName, KoreanName, JapaneseName);
-				Object NewObject = new Object(ObjectName, NewDisplayName, RequiredVertexGroupName, ObjectWeightList);
+				Object NewObject = new Object(ObjectName, NewDisplayName, RequiredVertexGroupName, MeshWeightList.ToArray());
 				ObjectList.Add(NewObject);
 			}
 			NewAvatarWeight = new AvatarWeight(
@@ -244,8 +247,8 @@ namespace VRSuya.Installer {
 					Mesh OldMesh = TargetSkinnedMeshRenderer.sharedMesh;
 					Mesh NewMesh = Instantiate(OldMesh);
 					NewMesh.name = $"VRSuya_{OldMesh.name}";
-					string[] TargetMaterialNames = TargetObject.UVWeights
-						.SelectMany(Item => Item.Value)
+					string[] TargetMaterialNames = TargetObject.MeshWeights
+						.Select(Item => Item.SubMeshWeight)
 						.Select(Item => Item.MaterialName)
 						.Distinct()
 						.ToArray();
@@ -255,7 +258,8 @@ namespace VRSuya.Installer {
 						List<Transform> BoneTransforms = TargetSkinnedMeshRenderer.bones.ToList();
 						List<Transform> NewBoneTransform = NewAvatarWeight.AvatarObjects
 							.Where(Item => Item.MeshName == TargetSkinnedMeshRenderer.gameObject.name)
-							.SelectMany(Item => Item.UVWeights.Keys)
+							.SelectMany(Item => Item.MeshWeights)
+							.Select(Item => Item.BoneName)
 							.Distinct()
 							.Where(Item => NewBoneTransforms.ContainsKey(Item))
 							.Select(Item => NewBoneTransforms[Item])
@@ -284,10 +288,10 @@ namespace VRSuya.Installer {
 							if (TargetBoneWeight.weight3 > 0) NewVertexWeights.Add(new VertexWeight(TargetBoneWeight.boneIndex3, TargetBoneWeight.weight3));
 							VertexWeightList[Index] = NewVertexWeights;
 						}
-						foreach (var TargetWeights in TargetObject.UVWeights) {
-							if (NewBoneTransforms.TryGetValue(TargetWeights.Key, out Transform TargetBoneTransform)) {
+						foreach (MeshWeight TargetMeshWeights in TargetObject.MeshWeights) {
+							if (NewBoneTransforms.TryGetValue(TargetMeshWeights.BoneName, out Transform TargetBoneTransform)) {
 								int TargetBoneIndex = BoneTransforms.IndexOf(TargetBoneTransform);
-								List<UVWeight> UVWeightList = TargetWeights.Value.ToList();
+								List<UVWeight> UVWeightList = TargetMeshWeights.SubMeshWeight.UVWeights.ToList();
 								foreach (var VertexUV in NewMeshUV) {
 									int VertexIndex = VertexUV.Key;
 									Vector2 TargetUVPosition = VertexUV.Value;
@@ -465,13 +469,13 @@ namespace VRSuya.Installer {
 			public string MeshName;
 			public DisplayName MeshDisplayName;
 			public string RequiredVertexGroup;
-			public Dictionary<string, UVWeight[]> UVWeights;
+			public MeshWeight[] MeshWeights;
 
-			public Object(string TargetMeshName, DisplayName TargetMeshDisplayName, string TargetRequiredVertexGroup, Dictionary<string, UVWeight[]> TargetUVWeights) {
+			public Object(string TargetMeshName, DisplayName TargetMeshDisplayName, string TargetRequiredVertexGroup, MeshWeight[] TargetMeshWeights) {
 				MeshName = TargetMeshName;
 				MeshDisplayName = TargetMeshDisplayName;
 				RequiredVertexGroup = TargetRequiredVertexGroup;
-				UVWeights = TargetUVWeights;
+				MeshWeights = TargetMeshWeights;
 			}
 		}
 
@@ -487,14 +491,32 @@ namespace VRSuya.Installer {
 			}
 		}
 
+		class MeshWeight {
+			public string BoneName;
+			public SubMeshWeight SubMeshWeight;
+
+			public MeshWeight(string TargetBoneName, SubMeshWeight TargetSubMeshWeight) {
+				BoneName = TargetBoneName;
+				SubMeshWeight = TargetSubMeshWeight;
+			}
+		}
+
+		class SubMeshWeight {
+			public string MaterialName;
+			public UVWeight[] UVWeights;
+
+			public SubMeshWeight(string TargetMaterialName, UVWeight[] TargetUVWeights) {
+				MaterialName = TargetMaterialName;
+				UVWeights = TargetUVWeights;
+			}
+		}
+
 		class UVWeight {
 			public Vector2 UVPosition;
-			public string MaterialName;
 			public float WeightValue;
 
-			public UVWeight(Vector2 TargetUVPosition, string TargetMaterialName, float TargetWeightValue) {
+			public UVWeight(Vector2 TargetUVPosition, float TargetWeightValue) {
 				UVPosition = TargetUVPosition;
-				MaterialName = TargetMaterialName;
 				WeightValue = TargetWeightValue;
 			}
 		}
