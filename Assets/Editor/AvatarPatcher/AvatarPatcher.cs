@@ -31,7 +31,7 @@ namespace VRSuya.Installer {
 
 		AvatarWeight NewAvatarWeight;
 
-		const float Threshold = 0.0001f;
+		const float Threshold = 0.001f;
 		const float BorderX = 30f;
 
 		[MenuItem("Tools/VRSuya/Installer/AvatarPatcher", priority = 1000)]
@@ -289,28 +289,33 @@ namespace VRSuya.Installer {
 							VertexWeightList[Index] = NewVertexWeights;
 						}
 						foreach (MeshWeight TargetMeshWeights in TargetObject.MeshWeights) {
-							if (NewBoneTransforms.TryGetValue(TargetMeshWeights.BoneName, out Transform TargetBoneTransform)) {
-								int TargetBoneIndex = BoneTransforms.IndexOf(TargetBoneTransform);
-								List<UVWeight> UVWeightList = TargetMeshWeights.SubMeshWeight.UVWeights.ToList();
-								foreach (var VertexUV in NewMeshUV) {
-									int VertexIndex = VertexUV.Key;
-									Vector2 TargetUVPosition = VertexUV.Value;
-									var TargetUVWeight = UVWeightList
-										.Select(Item => new { Data = Item, Distance = Vector2.Distance(TargetUVPosition, Item.UVPosition) })
-										.Where(Item => Item.Distance < Threshold)
-										.OrderBy(Item => Item.Distance)
-										.FirstOrDefault();
-									if (TargetUVWeight != null && TargetUVWeight.Data.WeightValue > 0) {
-										if (!VertexWeightList.ContainsKey(VertexIndex)) {
-											VertexWeightList[VertexIndex] = new List<VertexWeight>();
-										}
-										VertexWeight TargetVertexWeight = VertexWeightList[VertexIndex].FirstOrDefault(Item => Item.VertexIndex == TargetBoneIndex);
-										if (TargetVertexWeight != null) {
-											TargetVertexWeight.WeightValue += TargetUVWeight.Data.WeightValue;
-										} else {
-											VertexWeightList[VertexIndex].Add(new VertexWeight(TargetBoneIndex, TargetUVWeight.Data.WeightValue));
-										}
-									}
+							if (!NewBoneTransforms.TryGetValue(TargetMeshWeights.BoneName, out Transform TargetBoneTransform)) continue;
+							int TargetBoneIndex = BoneTransforms.IndexOf(TargetBoneTransform);
+							List<UVWeight> UVWeightList = TargetMeshWeights.SubMeshWeight.UVWeights.ToList();
+							HashSet<int> AssignedVertexList = new HashSet<int>();
+							foreach (UVWeight TargetUVWeight in UVWeightList) {
+								if (TargetUVWeight.WeightValue < 0) continue;
+								var MatchResult = NewMeshUV
+									.Where(Item => !AssignedVertexList.Contains(Item.Key))
+									.Select(Item => new {
+										VertexIndex = Item.Key,
+										Distance = Vector2.Distance(TargetUVWeight.UVPosition, Item.Value)
+									})
+									.Where(Item => Item.Distance < Threshold)
+									.OrderBy(Item => Item.Distance)
+									.FirstOrDefault();
+								if (MatchResult == null) continue;
+								int VertexIndex = MatchResult.VertexIndex;
+								AssignedVertexList.Add(VertexIndex);
+								if (!VertexWeightList.ContainsKey(VertexIndex)) {
+									VertexWeightList[VertexIndex] = new List<VertexWeight>();
+								}
+								VertexWeight ExistingVertexWeight = VertexWeightList[VertexIndex]
+									.FirstOrDefault(Item => Item.VertexIndex == TargetBoneIndex);
+								if (ExistingVertexWeight != null) {
+									ExistingVertexWeight.WeightValue += TargetUVWeight.WeightValue;
+								} else {
+									VertexWeightList[VertexIndex].Add(new VertexWeight(TargetBoneIndex, TargetUVWeight.WeightValue));
 								}
 							}
 						}
