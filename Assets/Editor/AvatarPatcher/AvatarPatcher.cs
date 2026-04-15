@@ -180,6 +180,7 @@ namespace VRSuya.Installer {
 			}
 			NewAvatarWeight = GetAvatarWeight(JObject.Parse(JSON_Asset.text));
 			if (NewAvatarWeight.JSON_Version < 2) {
+				DestroyImmediate(NewAvatarGameObject);
 				return false;
 			}
 			AvatarMaterials = GetAvatarMaterials();
