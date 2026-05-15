@@ -68,7 +68,8 @@ namespace VRSuya.Modular.Editor {
 				AnimatorState StandingState = GetStandingState(TargetStateMachine, AllAnimatorStates);
 				if (StandingState) {
 					bool TargetWriteDefaults = GetWriteDefaults(AllAnimatorStates);
-					AnimatorState ActionState = GetActionState(TargetStateMachine, AllAnimatorStates, TargetAnimationClip, TargetWriteDefaults);
+					AnimationClip NewStandingClip = GetStandingAnimation(StandingState, TargetAnimationClip);
+					AnimatorState ActionState = GetActionState(TargetStateMachine, AllAnimatorStates, NewStandingClip, TargetWriteDefaults);
 					bool IsVerify = VerifyTransitions(ActionState.transitions);
 					if (!IsVerify) {
 						SetStatePosition(TargetStateMachine, StandingState, ActionState);
@@ -114,6 +115,19 @@ namespace VRSuya.Modular.Editor {
 			ActionState.motion = TargetAnimationClip;
 			ActionState.writeDefaultValues = TargetWriteDefaults;
 			return ActionState;
+		}
+
+		AnimationClip GetStandingAnimation(AnimatorState TargetStandingState, AnimationClip TargetAnimationClip) {
+			if (TargetStandingState.motion && TargetStandingState.motion is BlendTree) {
+				BlendTree StandingBlendTree = TargetStandingState.motion as BlendTree;
+				ChildMotion[] StandingMotion = StandingBlendTree.children.Where(Item => Item.position == new Vector2(0f, 0f)).ToArray();
+				if (StandingMotion.Length > 0) {
+					if (StandingMotion[0].motion && StandingMotion[0].motion is AnimationClip) {
+						return StandingMotion[0].motion as AnimationClip;
+					}
+				}
+			}
+			return TargetAnimationClip;
 		}
 
 		bool GetWriteDefaults(AnimatorState[] AllAnimatorStates) {
