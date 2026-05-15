@@ -72,14 +72,14 @@ namespace VRSuya.Modular.Editor {
 					bool IsVerify = VerifyTransitions(ActionState.transitions);
 					if (!IsVerify) {
 						SetStatePosition(TargetStateMachine, StandingState, ActionState);
-						AnimatorStateTransition StandingToAction_AFK = StandingState.AddTransition(ActionState);
-						AnimatorStateTransition StandingToAction_Emote = StandingState.AddTransition(ActionState);
-						AnimatorStateTransition StandingToAction_Wotagei = StandingState.AddTransition(ActionState);
+						AnimatorStateTransition AnyStateToAction_AFK = TargetStateMachine.AddAnyStateTransition(ActionState);
+						AnimatorStateTransition AnyStateToAction_Emote = TargetStateMachine.AddAnyStateTransition(ActionState);
+						AnimatorStateTransition AnyStateToAction_Wotagei = TargetStateMachine.AddAnyStateTransition(ActionState);
 						AnimatorStateTransition ActionToStanding = ActionState.AddTransition(StandingState);
 						AddParameters(TargetAnimator);
-						SetTransition(StandingToAction_AFK, "AFK");
-						SetTransition(StandingToAction_Emote, "VRCEmote");
-						SetTransition(StandingToAction_Wotagei, "Wotagei/Action/Type");
+						SetTransition(AnyStateToAction_AFK, "AFK");
+						SetTransition(AnyStateToAction_Emote, "VRCEmote");
+						SetTransition(AnyStateToAction_Wotagei, "Wotagei/Action/Type");
 						SetTransition(ActionToStanding);
 					}
 				}
@@ -200,6 +200,7 @@ namespace VRSuya.Modular.Editor {
 			TargetTransition.duration = (TargetParameter == null) ? 0.25f : 0f;
 			TargetTransition.offset = 0;
 			TargetTransition.interruptionSource = TransitionInterruptionSource.None;
+			TargetTransition.canTransitionToSelf = false;
 			switch (TargetParameter) {
 				case "AFK":
 					TargetTransition.AddCondition(AnimatorConditionMode.If, 1f, "AFK");
