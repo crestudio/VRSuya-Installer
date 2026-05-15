@@ -211,7 +211,7 @@ namespace VRSuya.Modular.Editor {
 			TargetTransition.hasExitTime = false;
 			TargetTransition.exitTime = 0;
 			TargetTransition.hasFixedDuration = true;
-			TargetTransition.duration = (TargetParameter == null) ? 0.25f : 0f;
+			TargetTransition.duration = 0.25f;
 			TargetTransition.offset = 0;
 			TargetTransition.interruptionSource = TransitionInterruptionSource.None;
 			TargetTransition.canTransitionToSelf = false;
