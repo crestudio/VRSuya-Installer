@@ -33,7 +33,7 @@ namespace VRSuya.Modular.Editor {
 		public override string DisplayName => "VRSuya FixLocomotion";
 
 		protected override void Configure() {
-			InPhase(BuildPhase.Optimizing).Run(FixLocomotionPass.Instance);
+			InPhase(BuildPhase.Generating).Run(FixLocomotionPass.Instance);
 		}
 	}
 
@@ -63,12 +63,14 @@ namespace VRSuya.Modular.Editor {
 		void FixLocomotion(AnimatorController TargetAnimator, AnimationClip TargetAnimationClip) {
 			if (TargetAnimator.layers.Length > 0) {
 				Animator AnimatorInstance = new Animator();
+				Avatar AvatarInstance = new Avatar();
 				AnimatorStateMachine TargetStateMachine = TargetAnimator.layers[0].stateMachine;
 				AnimatorState[] AllAnimatorStates = AnimatorInstance.GetAllStates(TargetStateMachine);
-				AnimatorState StandingState = GetStandingState(TargetStateMachine, AllAnimatorStates);
+				AnimatorState StandingState = AvatarInstance.GetStandingState(TargetAnimator);
 				if (StandingState) {
 					bool TargetWriteDefaults = GetWriteDefaults(AllAnimatorStates);
-					AnimationClip NewStandingClip = GetStandingAnimation(StandingState, TargetAnimationClip);
+					AnimationClip NewStandingClip = AvatarInstance.GetStandingAnimation(TargetAnimator);
+					if (!NewStandingClip) NewStandingClip = TargetAnimationClip;
 					AnimatorState ActionState = GetActionState(TargetStateMachine, AllAnimatorStates, NewStandingClip, TargetWriteDefaults);
 					bool IsVerify = VerifyTransitions(ActionState.transitions);
 					if (!IsVerify) {
@@ -84,18 +86,6 @@ namespace VRSuya.Modular.Editor {
 						SetTransition(ActionToStanding);
 					}
 				}
-			}
-		}
-
-		AnimatorState GetStandingState(AnimatorStateMachine TargetStateMachine, AnimatorState[] AllAnimatorStates) {
-			AnimatorState StandingState = AllAnimatorStates.FirstOrDefault(Item => Item.name == "Standing");
-			if (StandingState) return StandingState;
-			StandingState = AllAnimatorStates.FirstOrDefault(Item => Item.name.Contains("Stand", StringComparison.OrdinalIgnoreCase));
-			if (StandingState) return StandingState;
-			if (TargetStateMachine.defaultState) {
-				return TargetStateMachine.defaultState;
-			} else {
-				return null;
 			}
 		}
 
@@ -115,19 +105,6 @@ namespace VRSuya.Modular.Editor {
 			ActionState.motion = TargetAnimationClip;
 			ActionState.writeDefaultValues = TargetWriteDefaults;
 			return ActionState;
-		}
-
-		AnimationClip GetStandingAnimation(AnimatorState TargetStandingState, AnimationClip TargetAnimationClip) {
-			if (TargetStandingState.motion && TargetStandingState.motion is BlendTree) {
-				BlendTree StandingBlendTree = TargetStandingState.motion as BlendTree;
-				ChildMotion[] StandingMotion = StandingBlendTree.children.Where(Item => Item.position == new Vector2(0f, 0f)).ToArray();
-				if (StandingMotion.Length > 0) {
-					if (StandingMotion[0].motion && StandingMotion[0].motion is AnimationClip) {
-						return StandingMotion[0].motion as AnimationClip;
-					}
-				}
-			}
-			return TargetAnimationClip;
 		}
 
 		bool GetWriteDefaults(AnimatorState[] AllAnimatorStates) {
