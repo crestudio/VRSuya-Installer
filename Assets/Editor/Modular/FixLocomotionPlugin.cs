@@ -87,7 +87,7 @@ namespace VRSuya.Modular.Editor {
 		AnimatorState GetStandingState(AnimatorStateMachine TargetStateMachine, AnimatorState[] AllAnimatorStates) {
 			AnimatorState StandingState = AllAnimatorStates.FirstOrDefault(Item => Item.name == "Standing");
 			if (StandingState) return StandingState;
-			StandingState = AllAnimatorStates.FirstOrDefault(Item => Item.name.Contains("Standing", StringComparison.OrdinalIgnoreCase));
+			StandingState = AllAnimatorStates.FirstOrDefault(Item => Item.name.Contains("Stand", StringComparison.OrdinalIgnoreCase));
 			if (StandingState) return StandingState;
 			if (TargetStateMachine.defaultState) {
 				return TargetStateMachine.defaultState;
