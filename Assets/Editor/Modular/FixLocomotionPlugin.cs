@@ -61,25 +61,27 @@ namespace VRSuya.Modular.Editor {
 		}
 
 		void FixLocomotion(AnimatorController TargetAnimator, AnimationClip TargetAnimationClip) {
-			Animator AnimatorInstance = new Animator();
-			AnimatorStateMachine TargetStateMachine = TargetAnimator.layers[0].stateMachine;
-			AnimatorState[] AllAnimatorStates = AnimatorInstance.GetAllStates(TargetStateMachine);
-			AnimatorState StandingState = GetStandingState(TargetStateMachine, AllAnimatorStates);
-			if (StandingState) {
-				bool TargetWriteDefaults = GetWriteDefaults(AllAnimatorStates);
-				AnimatorState ActionState = GetActionState(TargetStateMachine, AllAnimatorStates, TargetAnimationClip, TargetWriteDefaults);
-				bool NeedTransitions = VerifyTransitions(ActionState.transitions);
-				if (!NeedTransitions) {
-					SetStatePosition(TargetStateMachine, StandingState, ActionState);
-					AnimatorStateTransition StandingToAction_AFK = StandingState.AddTransition(ActionState);
-					AnimatorStateTransition StandingToAction_Emote = StandingState.AddTransition(ActionState);
-					AnimatorStateTransition StandingToAction_Wotagei = StandingState.AddTransition(ActionState);
-					AnimatorStateTransition ActionToStanding = ActionState.AddTransition(StandingState);
-					AddParameters(TargetAnimator);
-					SetTransition(StandingToAction_AFK, "AFK");
-					SetTransition(StandingToAction_Emote, "VRCEmote");
-					SetTransition(StandingToAction_Wotagei, "Wotagei/Action/Type");
-					SetTransition(ActionToStanding);
+			if (TargetAnimator.layers.Length > 0) {
+				Animator AnimatorInstance = new Animator();
+				AnimatorStateMachine TargetStateMachine = TargetAnimator.layers[0].stateMachine;
+				AnimatorState[] AllAnimatorStates = AnimatorInstance.GetAllStates(TargetStateMachine);
+				AnimatorState StandingState = GetStandingState(TargetStateMachine, AllAnimatorStates);
+				if (StandingState) {
+					bool TargetWriteDefaults = GetWriteDefaults(AllAnimatorStates);
+					AnimatorState ActionState = GetActionState(TargetStateMachine, AllAnimatorStates, TargetAnimationClip, TargetWriteDefaults);
+					bool IsVerify = VerifyTransitions(ActionState.transitions);
+					if (!IsVerify) {
+						SetStatePosition(TargetStateMachine, StandingState, ActionState);
+						AnimatorStateTransition StandingToAction_AFK = StandingState.AddTransition(ActionState);
+						AnimatorStateTransition StandingToAction_Emote = StandingState.AddTransition(ActionState);
+						AnimatorStateTransition StandingToAction_Wotagei = StandingState.AddTransition(ActionState);
+						AnimatorStateTransition ActionToStanding = ActionState.AddTransition(StandingState);
+						AddParameters(TargetAnimator);
+						SetTransition(StandingToAction_AFK, "AFK");
+						SetTransition(StandingToAction_Emote, "VRCEmote");
+						SetTransition(StandingToAction_Wotagei, "Wotagei/Action/Type");
+						SetTransition(ActionToStanding);
+					}
 				}
 			}
 		}
