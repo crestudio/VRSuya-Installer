@@ -1,0 +1,37 @@
+﻿#if UNITY_EDITOR
+using System;
+using System.IO;
+
+using UnityEditor;
+using UnityEngine;
+
+/*
+ * VRSuya Installer
+ * Contact : vrsuya@gmail.com // Twitter : https://twitter.com/VRSuya
+ */
+
+namespace VRSuya.Installer {
+
+    [ExecuteInEditMode]
+	public class ReplaceModelAsset {
+
+		public void RequestReplaceModelAsset(string OldModelPath, string NewModelPath) {
+			string OldAvatarFullPath = Path.GetFullPath(OldModelPath);
+			string NewAvatarFullPath = Path.GetFullPath(NewModelPath);
+			string BackupAssetPath = GetBackupModelPath(OldModelPath);
+			string BackupFullPath = Path.GetFullPath(BackupAssetPath);
+			File.Copy(OldAvatarFullPath, BackupFullPath);
+			AssetDatabase.ImportAsset(BackupAssetPath);
+			File.Copy(NewAvatarFullPath, OldAvatarFullPath, overwrite: true);
+			AssetDatabase.ImportAsset(OldModelPath);
+		}
+
+		string GetBackupModelPath(string OldAssetPath) {
+			string DirectoryPath = Path.GetDirectoryName(OldAssetPath);
+			string FileName = Path.GetFileNameWithoutExtension(OldAssetPath);
+			string RandomSuffix = Guid.NewGuid().ToString("N").Substring(0, 8).ToUpper();
+			return $"{DirectoryPath}/{FileName}_Backup_{RandomSuffix}.fbx";
+		}
+	}
+}
+#endif
