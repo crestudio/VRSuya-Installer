@@ -58,11 +58,17 @@ namespace VRSuya.Modular.Editor {
 								}
 							}
 						}
+						bool IsModified = false;
 						for (int Index = TargetFXLayer.layers.Length - 1; Index >= 0; Index--) {
 							string LayerName = TargetFXLayer.layers[Index].name;
 							if (RemoveLayerNames.Contains(LayerName) && !LayerName.Contains(PreservedLayerName)) {
 								TargetFXLayer.RemoveLayer(Index);
+								IsModified = true;
 							}
+						}
+						if (IsModified) {
+							EditorUtility.SetDirty(TargetFXLayer);
+							AssetDatabase.SaveAssets();
 						}
 					}
 				}

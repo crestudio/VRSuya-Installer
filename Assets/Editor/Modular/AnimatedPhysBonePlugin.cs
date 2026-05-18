@@ -54,6 +54,7 @@ namespace VRSuya.Modular.Editor {
 						foreach (VRCPhysBone TargetVRCPhysBone in Cheek_PhysBoneComponents) {
 							if (TargetVRCPhysBone) {
 								if (!TargetVRCPhysBone.isAnimated) TargetVRCPhysBone.isAnimated = true;
+								EditorUtility.SetDirty(TargetVRCPhysBone);
 							}
 						}
 					}

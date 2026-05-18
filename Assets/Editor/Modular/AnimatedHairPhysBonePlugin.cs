@@ -57,6 +57,7 @@ namespace VRSuya.Modular.Editor {
 							VRCPhysBone TargetVRCPhysBones = HeadPhysBones.FirstOrDefault(Item => Item.gameObject.name == "TargetName");
 							if (TargetVRCPhysBones) {
 								if (!TargetVRCPhysBones.isAnimated) TargetVRCPhysBones.isAnimated = true;
+								EditorUtility.SetDirty(TargetVRCPhysBones);
 							}
 						}
 					}

@@ -49,6 +49,7 @@ namespace VRSuya.Modular.Editor {
 					AnimationClip TargetAnimationClip = AvatarInstance.GetStandingAnimation(BaseAnimator);
 					if (TargetAnimationClip) {
 						ChangeStandingPose(ActionAnimator, TargetAnimationClip);
+						AssetDatabase.SaveAssets();
 					}
 				}
 				foreach (ChangeStandingPose TargetComponent in ChangeStandingPoseComponents) {
@@ -67,6 +68,7 @@ namespace VRSuya.Modular.Editor {
 					.ToArray();
 				foreach (AnimatorState TargetAnimatorState in TargetAnimatorStates) {
 					TargetAnimatorState.motion = StandAnimationClip;
+					EditorUtility.SetDirty(TargetAnimatorState);
 				}
 			}
 		}

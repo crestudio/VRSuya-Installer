@@ -49,9 +49,11 @@ namespace VRSuya.Modular.Editor {
 							Transform Cheek_R_Transform = HeadTransforms.FirstOrDefault(Item => Cheek_R_Names.Contains(Item.name));
 							if (Cheek_L_Transform && TargetComponent.TargetCheek_L) {
 								TargetComponent.TargetCheek_L.rootTransform = Cheek_L_Transform;
+								EditorUtility.SetDirty(TargetComponent.TargetCheek_L);
 							}
 							if (Cheek_R_Transform && TargetComponent.TargetCheek_R) {
 								TargetComponent.TargetCheek_R.rootTransform = Cheek_R_Transform;
+								EditorUtility.SetDirty(TargetComponent.TargetCheek_R);
 							}
 						} else {
 							Transform[] Toe_L_Transform = TargetAnimator.GetBoneTransform(HumanBodyBones.LeftToes).GetComponentsInChildren<Transform>(true);
@@ -68,33 +70,43 @@ namespace VRSuya.Modular.Editor {
 							Transform LittleToe1_R_Transform = Toe_R_Transform.FirstOrDefault(Item => Item.name == "LittleToe1_R" || Item.name == "Toe_Little_Proximal_R");
 							if (ThumbToe1_L_Transform && TargetComponent.TargetThumbToe1_L) {
 								TargetComponent.TargetThumbToe1_L.rootTransform = ThumbToe1_L_Transform;
+								EditorUtility.SetDirty(TargetComponent.TargetThumbToe1_L);
 							}
 							if (ThumbToe1_R_Transform && TargetComponent.TargetThumbToe1_R) {
 								TargetComponent.TargetThumbToe1_R.rootTransform = ThumbToe1_R_Transform;
+								EditorUtility.SetDirty(TargetComponent.TargetThumbToe1_R);
 							}
 							if (IndexToe1_L_Transform && TargetComponent.TargetIndexToe1_L) {
 								TargetComponent.TargetIndexToe1_L.rootTransform = IndexToe1_L_Transform;
+								EditorUtility.SetDirty(TargetComponent.TargetIndexToe1_L);
 							}
 							if (IndexToe1_R_Transform && TargetComponent.TargetIndexToe1_R) {
 								TargetComponent.TargetIndexToe1_R.rootTransform = IndexToe1_R_Transform;
+								EditorUtility.SetDirty(TargetComponent.TargetIndexToe1_R);
 							}
 							if (MiddleToe1_L_Transform && TargetComponent.TargetMiddleToe1_L) {
 								TargetComponent.TargetMiddleToe1_L.rootTransform = MiddleToe1_L_Transform;
+								EditorUtility.SetDirty(TargetComponent.TargetMiddleToe1_L);
 							}
 							if (MiddleToe1_R_Transform && TargetComponent.TargetMiddleToe1_R) {
 								TargetComponent.TargetMiddleToe1_R.rootTransform = MiddleToe1_R_Transform;
+								EditorUtility.SetDirty(TargetComponent.TargetMiddleToe1_R);
 							}
 							if (RingToe1_L_Transform && TargetComponent.TargetRingToe1_L) {
 								TargetComponent.TargetRingToe1_L.rootTransform = RingToe1_L_Transform;
+								EditorUtility.SetDirty(TargetComponent.TargetRingToe1_L);
 							}
 							if (RingToe1_R_Transform && TargetComponent.TargetRingToe1_R) {
 								TargetComponent.TargetRingToe1_R.rootTransform = RingToe1_R_Transform;
+								EditorUtility.SetDirty(TargetComponent.TargetRingToe1_R);
 							}
 							if (LittleToe1_L_Transform && TargetComponent.TargetLittleToe1_L) {
 								TargetComponent.TargetLittleToe1_L.rootTransform = LittleToe1_L_Transform;
+								EditorUtility.SetDirty(TargetComponent.TargetLittleToe1_L);
 							}
 							if (LittleToe1_R_Transform && TargetComponent.TargetLittleToe1_R) {
 								TargetComponent.TargetLittleToe1_R.rootTransform = LittleToe1_R_Transform;
+								EditorUtility.SetDirty(TargetComponent.TargetLittleToe1_R);
 							}
 						}
 					}

@@ -51,7 +51,9 @@ namespace VRSuya.Modular.Editor {
 						.Select(Item => Item.TargetAnimationClip)
 						.FirstOrDefault(Item => Item != null);
 					if (TargetAnimationClip) {
-						FixLocomotion(TargetAnimator, TargetAnimationClip);
+						if (FixLocomotion(TargetAnimator, TargetAnimationClip)) {
+							AssetDatabase.SaveAssets();
+						}
 					}
 				}
 				foreach (FixLocomotion TargetComponent in FixLocomotionComponents) {
@@ -60,7 +62,7 @@ namespace VRSuya.Modular.Editor {
 			}
 		}
 
-		void FixLocomotion(AnimatorController TargetAnimator, AnimationClip TargetAnimationClip) {
+		bool FixLocomotion(AnimatorController TargetAnimator, AnimationClip TargetAnimationClip) {
 			if (TargetAnimator.layers.Length > 0) {
 				Animator AnimatorInstance = new Animator();
 				Avatar AvatarInstance = new Avatar();
@@ -84,9 +86,12 @@ namespace VRSuya.Modular.Editor {
 						SetTransition(AnyStateToAction_Emote, "VRCEmote");
 						SetTransition(AnyStateToAction_Wotagei, "Wotagei/Action/Type");
 						SetTransition(ActionToStanding);
+						EditorUtility.SetDirty(TargetAnimator);
+						return true;
 					}
 				}
 			}
+			return false;
 		}
 
 		AnimatorState GetActionState(AnimatorStateMachine TargetStateMachine, AnimatorState[] AllAnimatorStates, AnimationClip TargetAnimationClip, bool TargetWriteDefaults) {

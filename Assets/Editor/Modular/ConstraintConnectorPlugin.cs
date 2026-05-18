@@ -50,12 +50,14 @@ namespace VRSuya.Modular.Editor {
 									ParentRotationOffset = TargetComponent.LeftHandConstraint.Sources[0].ParentRotationOffset
 								};
 								TargetComponent.LeftHandConstraint.Sources[0] = NewConstraintSource;
+								EditorUtility.SetDirty(TargetComponent);
 							} else {
 								VRCConstraintSource NewConstraintSource = new VRCConstraintSource {
 									SourceTransform = LeftHandTransform,
 									Weight = 1.0f
 								};
 								TargetComponent.LeftHandConstraint.Sources.Add(NewConstraintSource);
+								EditorUtility.SetDirty(TargetComponent);
 							}
 						}
 						if (TargetComponent.RightHandConstraint) {
@@ -68,12 +70,14 @@ namespace VRSuya.Modular.Editor {
 									ParentRotationOffset = TargetComponent.RightHandConstraint.Sources[0].ParentRotationOffset
 								};
 								TargetComponent.RightHandConstraint.Sources[0] = NewConstraintSource;
+								EditorUtility.SetDirty(TargetComponent);
 							} else {
 								VRCConstraintSource NewConstraintSource = new VRCConstraintSource {
 									SourceTransform = RightHandTransform,
 									Weight = 1.0f
 								};
 								TargetComponent.RightHandConstraint.Sources.Add(NewConstraintSource);
+								EditorUtility.SetDirty(TargetComponent);
 							}
 						}
 					}
