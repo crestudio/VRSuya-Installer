@@ -142,7 +142,7 @@ namespace VRSuya.Installer {
 		}
 
 		void RenameGameObjects() {
-			Transform[] NewAvatarTransforms = NewAvatarGameObject.GetComponentsInParent<Transform>(true);
+			Transform[] NewAvatarTransforms = NewAvatarGameObject.GetComponentsInChildren<Transform>(true);
 			Transform EYOHairTransform = NewAvatarTransforms.FirstOrDefault(Item => Item.gameObject.name == "Eyo_hair 1");
 			if (EYOHairTransform) {
 				Undo.RecordObject(EYOHairTransform, UndoGroupName);
