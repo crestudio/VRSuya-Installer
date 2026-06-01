@@ -27,7 +27,7 @@ namespace VRSuya.Installer {
 				if (AvatarBoneDictionary.Count == 0) return "NO_MATCHED_SKINNEDMESHRENDERERS";
 				MissingBoneTransforms = GetMissingBoneTransforms();
 				AddMissingBones();
-				UpdateSkinnedMeshRendererBones();
+				UpdateSkinnedMeshRenderer();
 				UpdateAnimatorAvatar();
 			} finally {
 				Object.DestroyImmediate(Context.NewAvatarGameObject);
@@ -88,7 +88,7 @@ namespace VRSuya.Installer {
 			}
 		}
 
-		void UpdateSkinnedMeshRendererBones() {
+		void UpdateSkinnedMeshRenderer() {
 			Dictionary<string, SkinnedMeshRenderer> ExistingSkinnedMeshRendererDictionary = Context.OldAvatarGameObject
 				.GetComponentsInChildren<SkinnedMeshRenderer>(true)
 				.GroupBy(Item => Item.name)
@@ -101,6 +101,7 @@ namespace VRSuya.Installer {
 				if (!ExistingSkinnedMeshRendererDictionary.TryGetValue(TargetSkinnedMeshRenderer.name, out SkinnedMeshRenderer OldSkinnedMeshRenderer)) continue;
 				Transform[] NewBones = GetNewBones(TargetSkinnedMeshRenderer.bones);
 				Undo.RecordObject(OldSkinnedMeshRenderer, UndoGroupName);
+				OldSkinnedMeshRenderer.sharedMesh = TargetSkinnedMeshRenderer.sharedMesh;
 				OldSkinnedMeshRenderer.bones = NewBones;
 				EditorUtility.SetDirty(OldSkinnedMeshRenderer);
 				Undo.CollapseUndoOperations(Context.UndoGroupIndex);
