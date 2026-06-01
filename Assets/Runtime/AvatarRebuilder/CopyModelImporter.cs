@@ -103,8 +103,6 @@ namespace VRSuya.Installer {
 			string PropertyName = "legacyComputeAllNormalsFromSmoothingGroupsWhenMeshHasBlendShapes";
 			PropertyInfo OldProperty = OldModelImporter.GetType().GetProperty(PropertyName, BindingFlags.Instance | BindingFlags.NonPublic | BindingFlags.Public);
 			PropertyInfo NewProperty = NewModelImporter.GetType().GetProperty(PropertyName, BindingFlags.Instance | BindingFlags.NonPublic | BindingFlags.Public);
-			OldModelImporter.isReadable = true;
-			NewModelImporter.isReadable = true;
 			NewProperty.SetValue(NewModelImporter, (bool)OldProperty.GetValue(OldModelImporter));
 		}
 
