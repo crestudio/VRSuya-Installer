@@ -12,7 +12,6 @@ using UnityEngine;
 
 namespace VRSuya.Installer {
 
-	[ExecuteInEditMode]
 	public class AvatarHandler {
 
 		public AvatarRebuilderContext Context;

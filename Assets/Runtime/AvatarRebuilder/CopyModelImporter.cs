@@ -13,7 +13,6 @@ using UnityEngine;
 
 namespace VRSuya.Installer {
 
-    [ExecuteInEditMode]
 	public class CopyModelImporter {
 
 		const string UndoGroupName = "VRSuya CopyModelImporter";

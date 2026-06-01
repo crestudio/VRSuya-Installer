@@ -12,7 +12,6 @@ using UnityEngine;
 
 namespace VRSuya.Installer {
 
-    [ExecuteInEditMode]
 	public class ReplaceModelAsset {
 
 		public void RequestReplaceModelAsset(string OldModelPath, string NewModelPath, int UndoGroupIndex) {

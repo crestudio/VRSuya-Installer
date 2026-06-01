@@ -8,7 +8,6 @@ using UnityEngine;
 
 namespace VRSuya.Installer {
 
-	[ExecuteInEditMode]
 	public class AvatarRebuilderContext {
 
 		public GameObject OldAvatarGameObject;
