@@ -33,8 +33,9 @@ namespace VRSuya.Installer {
 		string GetBackupModelPath(string OldAssetPath) {
 			string DirectoryPath = Path.GetDirectoryName(OldAssetPath);
 			string FileName = Path.GetFileNameWithoutExtension(OldAssetPath);
-			string RandomSuffix = Guid.NewGuid().ToString("N").Substring(0, 8).ToUpper();
-			return $"{DirectoryPath}/{FileName}_Backup_{RandomSuffix}.fbx";
+			string Date = DateTime.Now.ToString("yyMMdd");
+			string RandomSuffix = Guid.NewGuid().ToString("N").Substring(0, 2).ToUpper();
+			return $"{DirectoryPath}/{FileName}_Backup_{Date}_{RandomSuffix}.fbx";
 		}
 	}
 }
