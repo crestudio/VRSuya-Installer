@@ -86,6 +86,10 @@ namespace VRSuya.Installer {
 				StatusString = "NO_NEW_ANIMATOR";
 				return false;
 			}
+			if (OldAvatarAnimator.avatar == NewAvatarAnimator.avatar) {
+				StatusString = "SAME_AVATAR";
+				return false;
+			}
 			return true;
 		}
 
