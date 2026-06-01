@@ -4,7 +4,11 @@ using System;
 using UnityEditor;
 using UnityEngine;
 
+using VRSuya.Core;
+
 using static VRSuya.Core.Unity;
+
+using Animator = UnityEngine.Animator;
 
 /*
  * VRSuya Installer
@@ -36,10 +40,26 @@ namespace VRSuya.Installer {
 			if (!CheckNewAvatar()) return StatusString;
 			if (IsVarientModelPrefab()) {
 				ReplaceModelAsset();
+				StatusString = "COMPLETED";
 			} else {
-
+				CreateBackup();
+				if (!NewAvatarGameObject.scene.IsValid()) {
+					PlaceGameObjectInScene();
+					if (!CheckNewAvatar()) return StatusString;
+				}
+				AvatarRebuilderContext Context = new AvatarRebuilderContext {
+					OldAvatarGameObject = OldAvatarGameObject,
+					NewAvatarGameObject = NewAvatarGameObject,
+					OldAvatarAnimator = OldAvatarAnimator,
+					NewAvatarAnimator = NewAvatarAnimator,
+					OldAvatarRootBone = OldAvatarRootBone,
+					NewAvatarRootBone = NewAvatarRootBone,
+					UndoGroupIndex = UndoGroupIndex
+				};
+				AvatarHandler AvatarHandlerInstance = new AvatarHandler();
+				AvatarHandlerInstance.Context = Context;
+				StatusString = AvatarHandlerInstance.UpdateAvatarArmature();
 			}
-			StatusString = "COMPLETED";
 			return StatusString;
 		}
 
@@ -105,6 +125,26 @@ namespace VRSuya.Installer {
 			string NewModelPath = AssetDatabase.GetAssetPath(NewAvatarAnimator.avatar);
 			ReplaceModelAsset ReplaceModelAssetInstance = new ReplaceModelAsset();
 			ReplaceModelAssetInstance.RequestReplaceModelAsset(OldModelPath, NewModelPath);
+		}
+
+		void CreateBackup() {
+			DuplicateGameObject DuplicatorInstance = new DuplicateGameObject();
+			GameObject DuplicatedAvatar = DuplicatorInstance.DuplicateGameObjectInstance(OldAvatarGameObject);
+			Undo.RegisterCreatedObjectUndo(DuplicatedAvatar, UndoGroupName);
+			DuplicatedAvatar.name = $"{OldAvatarGameObject.name} (Backup)";
+			DuplicatedAvatar.transform.SetSiblingIndex(OldAvatarGameObject.transform.GetSiblingIndex() + 1);
+			DuplicatedAvatar.SetActive(false);
+			EditorUtility.SetDirty(DuplicatedAvatar);
+			Undo.CollapseUndoOperations(UndoGroupIndex);
+		}
+
+		void PlaceGameObjectInScene() {
+			GameObject NewAvatarGameObjectInstance = Instantiate(NewAvatarGameObject);
+			NewAvatarGameObjectInstance.name = NewAvatarGameObject.name;
+			NewAvatarGameObjectInstance.hideFlags = HideFlags.HideAndDontSave;
+			Undo.RegisterCreatedObjectUndo(NewAvatarGameObjectInstance, UndoGroupName);
+			Undo.CollapseUndoOperations(UndoGroupIndex);
+			NewAvatarGameObject = NewAvatarGameObjectInstance;
 		}
 	}
 }
