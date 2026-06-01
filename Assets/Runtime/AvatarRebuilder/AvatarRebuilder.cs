@@ -26,9 +26,6 @@ namespace VRSuya.Installer {
         Animator OldAvatarAnimator;
 		Animator NewAvatarAnimator;
 
-		Transform OldAvatarRootBone;
-		Transform NewAvatarRootBone;
-
 		const string UndoGroupName = "VRSuya AvatarRebuilder";
 		int UndoGroupIndex;
 		string StatusString;
@@ -52,8 +49,6 @@ namespace VRSuya.Installer {
 					NewAvatarGameObject = NewAvatarGameObject,
 					OldAvatarAnimator = OldAvatarAnimator,
 					NewAvatarAnimator = NewAvatarAnimator,
-					OldAvatarRootBone = OldAvatarRootBone,
-					NewAvatarRootBone = NewAvatarRootBone,
 					UndoGroupIndex = UndoGroupIndex
 				};
 				AvatarHandler AvatarHandlerInstance = new AvatarHandler();
@@ -73,11 +68,6 @@ namespace VRSuya.Installer {
 				StatusString = "NO_OLD_ANIMATOR";
 				return false;
 			}
-			OldAvatarRootBone = OldAvatarAnimator.GetBoneTransform(HumanBodyBones.Hips);
-			if (!OldAvatarRootBone) {
-				StatusString = "NO_OLD_ROOTBONE";
-				return false;
-			}
 			return true;
 		}
 
@@ -93,11 +83,6 @@ namespace VRSuya.Installer {
 			NewAvatarAnimator = NewAvatarGameObject.GetComponent<Animator>();
 			if (!NewAvatarAnimator) {
 				StatusString = "NO_NEW_ANIMATOR";
-				return false;
-			}
-			NewAvatarRootBone = NewAvatarAnimator.GetBoneTransform(HumanBodyBones.Hips);
-			if (!NewAvatarRootBone) {
-				StatusString = "NO_NEW_ROOTBONE";
 				return false;
 			}
 			return true;

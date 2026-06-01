@@ -17,9 +17,6 @@ namespace VRSuya.Installer {
 		public Animator OldAvatarAnimator;
 		public Animator NewAvatarAnimator;
 
-		public Transform OldAvatarRootBone;
-		public Transform NewAvatarRootBone;
-
 		public int UndoGroupIndex;
 	}
 }
