@@ -36,7 +36,7 @@ namespace VRSuya.Installer {
 			if (!CheckOldAvatar()) return StatusString;
 			CopyModelImporter();
 			if (!CheckNewAvatar()) return StatusString;
-			if (IsVarientModelPrefab()) {
+			if (IsVariantModelPrefab()) {
 				ReplaceModelAsset();
 				StatusString = "COMPLETED";
 			} else {
@@ -99,7 +99,7 @@ namespace VRSuya.Installer {
 			}
 		}
 
-		bool IsVarientModelPrefab() {
+		bool IsVariantModelPrefab() {
 			if (!PrefabUtility.IsPartOfVariantPrefab(OldAvatarGameObject)) return false;
 			GameObject PrefabSourceGameObject = OldAvatarGameObject;
 			string PrefabSourceAssetPath = AssetDatabase.GetAssetPath(OldAvatarGameObject);
