@@ -101,9 +101,16 @@ namespace VRSuya.Installer {
 
 		bool IsVarientModelPrefab() {
 			if (!PrefabUtility.IsPartOfVariantPrefab(OldAvatarGameObject)) return false;
-			GameObject PrefabSource = PrefabUtility.GetCorrespondingObjectFromSource(OldAvatarGameObject);
-			if (!PrefabSource) return false;
-			string PrefabSourceAssetPath = AssetDatabase.GetAssetPath(PrefabSource);
+			GameObject PrefabSourceGameObject = OldAvatarGameObject;
+			string PrefabSourceAssetPath = AssetDatabase.GetAssetPath(OldAvatarGameObject);
+			while (PrefabSourceGameObject) {
+				string CurrentAssetPath = AssetDatabase.GetAssetPath(PrefabSourceGameObject);
+				if (!string.IsNullOrEmpty(CurrentAssetPath)) PrefabSourceAssetPath = CurrentAssetPath;
+				GameObject ParentPrefabSourceGameObject = PrefabUtility.GetCorrespondingObjectFromSource(PrefabSourceGameObject);
+				if (!ParentPrefabSourceGameObject) break;
+				PrefabSourceGameObject = ParentPrefabSourceGameObject;
+			}
+			if (string.IsNullOrEmpty(PrefabSourceAssetPath)) return false;
 			return PrefabSourceAssetPath.EndsWith(".fbx", StringComparison.OrdinalIgnoreCase);
 		}
 
