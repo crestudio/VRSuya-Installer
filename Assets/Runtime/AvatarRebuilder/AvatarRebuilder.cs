@@ -123,6 +123,7 @@ namespace VRSuya.Installer {
 			DuplicatedAvatar.SetActive(false);
 			EditorUtility.SetDirty(DuplicatedAvatar);
 			Undo.CollapseUndoOperations(UndoGroupIndex);
+			Selection.activeGameObject = OldAvatarGameObject;
 		}
 
 		void PlaceGameObjectInScene() {
