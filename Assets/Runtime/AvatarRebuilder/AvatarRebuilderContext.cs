@@ -8,15 +8,15 @@ using UnityEngine;
 
 namespace VRSuya.Installer {
 
-	public class AvatarRebuilderContext {
+	internal class AvatarRebuilderContext {
 
-		public GameObject OldAvatarGameObject;
-		public GameObject NewAvatarGameObject;
+		internal GameObject OldAvatarGameObject;
+		internal GameObject NewAvatarGameObject;
 
-		public Animator OldAvatarAnimator;
-		public Animator NewAvatarAnimator;
+		internal Animator OldAvatarAnimator;
+		internal Animator NewAvatarAnimator;
 
-		public int UndoGroupIndex;
+		internal int UndoGroupIndex;
 	}
 }
 #endif

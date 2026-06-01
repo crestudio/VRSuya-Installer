@@ -53,8 +53,7 @@ namespace VRSuya.Installer {
 					NewAvatarAnimator = NewAvatarAnimator,
 					UndoGroupIndex = UndoGroupIndex
 				};
-				AvatarHandler AvatarHandlerInstance = new AvatarHandler();
-				AvatarHandlerInstance.Context = Context;
+				AvatarHandler AvatarHandlerInstance = new AvatarHandler(Context);
 				StatusString = AvatarHandlerInstance.UpdateAvatarArmature();
 			}
 			return StatusString;

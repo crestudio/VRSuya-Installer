@@ -12,15 +12,20 @@ using UnityEngine;
 
 namespace VRSuya.Installer {
 
-	public class AvatarHandler {
+	internal class AvatarHandler {
 
-		public AvatarRebuilderContext Context;
+		readonly AvatarRebuilderContext Context;
+
+		internal AvatarHandler(AvatarRebuilderContext Context) {
+			this.Context = Context;
+		}
+
 		Dictionary<string, Transform> AvatarBoneDictionary = new Dictionary<string, Transform>();
 		Transform[] MissingBoneTransforms = new Transform[0];
 
 		const string UndoGroupName = "VRSuya AvatarRebuilder";
 
-		public string UpdateAvatarArmature() {
+		internal string UpdateAvatarArmature() {
 			try {
 				AvatarBoneDictionary = GetAvatarBoneDictionary();
 				if (AvatarBoneDictionary.Count == 0) return "NO_MATCHED_SKINNEDMESHRENDERERS";
