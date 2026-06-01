@@ -62,9 +62,14 @@ namespace VRSuya.Installer {
 		}
 
 		Transform[] GetMissingBoneTransforms() {
-			return Context.NewAvatarGameObject
-				.GetComponentsInChildren<Transform>(true)
-				.Where(Item => Item != Context.NewAvatarGameObject.transform && !AvatarBoneDictionary.ContainsKey(Item.name))
+			HashSet<Transform> NewBoneTransforms = new HashSet<Transform>(
+				Context.NewAvatarGameObject
+					.GetComponentsInChildren<SkinnedMeshRenderer>(true)
+					.SelectMany(Item => Item.bones)
+					.Where(Item => Item != null)
+			);
+			return NewBoneTransforms
+				.Where(Item => !AvatarBoneDictionary.ContainsKey(Item.name))
 				.ToArray();
 		}
 
