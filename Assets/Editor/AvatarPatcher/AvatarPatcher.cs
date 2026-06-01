@@ -51,7 +51,7 @@ namespace VRSuya.Installer {
 			EditorGUILayout.Space(EditorGUIUtility.singleLineHeight);
 			EditorGUILayout.BeginHorizontal();
 			GUILayout.Space(BorderX);
-			AvatarGameObject = (GameObject)EditorGUILayout.ObjectField(GetTranslatedString("String_TargetAvatar"), AvatarGameObject, typeof(GameObject), true);
+			AvatarGameObject = (GameObject)EditorGUILayout.ObjectField(GetTranslatedString("String_Avatar"), AvatarGameObject, typeof(GameObject), true);
 			GUILayout.Space(BorderX);
 			EditorGUILayout.EndHorizontal();
 			EditorGUILayout.BeginHorizontal();
@@ -63,7 +63,7 @@ namespace VRSuya.Installer {
 			EditorGUILayout.BeginHorizontal();
 			GUILayout.Space(BorderX);
 			GUI.backgroundColor = Color.cyan;
-			if (GUILayout.Button(GetTranslatedString("String_ReplaceAvatar"), GUILayout.Height(40))) {
+			if (GUILayout.Button(GetTranslatedString("String_Replace"), GUILayout.Height(40))) {
 				RequestPatchAvatar();
 				Close();
 			}

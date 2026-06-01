@@ -59,7 +59,7 @@ namespace VRSuya.Installer {
 			EditorGUILayout.Space(EditorGUIUtility.singleLineHeight);
 			EditorGUILayout.BeginHorizontal();
 			GUILayout.Space(BorderX);
-			EditorGUILayout.PropertyField(SerializedOldAvatarGameObject, new GUIContent(GetTranslatedString("String_OriginalAvatar")));
+			EditorGUILayout.PropertyField(SerializedOldAvatarGameObject, new GUIContent(GetTranslatedString("String_OldAvatar")));
 			GUILayout.Space(BorderX);
 			EditorGUILayout.EndHorizontal();
 			EditorGUILayout.BeginHorizontal();
@@ -71,7 +71,7 @@ namespace VRSuya.Installer {
 			EditorGUILayout.BeginHorizontal();
 			GUILayout.Space(BorderX);
 			GUI.backgroundColor = Color.cyan;
-			if (GUILayout.Button(GetTranslatedString("String_ReplaceAvatar"), GUILayout.Height(40))) {
+			if (GUILayout.Button(GetTranslatedString("String_Replace"), GUILayout.Height(40))) {
 				string ReturnCode = AvatarRebuilderInstance.RequestRebuildAvatar();
 				string DialogString = (ReturnCode == "COMPLETED")
 					? string.Format(GetTranslatedString("COMPLETED_PATCH"), AvatarRebuilderInstance.OldAvatarGameObject.name)

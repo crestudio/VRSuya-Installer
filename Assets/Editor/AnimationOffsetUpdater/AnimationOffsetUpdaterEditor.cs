@@ -40,7 +40,7 @@ namespace VRSuya.Installer {
 			AvatarAuthorNames = GetAvatarAuthorName(SerializedAvatarAuthors);
 			LanguageIndex = EditorGUILayout.Popup(GetTranslatedString("String_Language"), LanguageIndex, LanguageOption);
 			EditorGUILayout.Space(EditorGUIUtility.singleLineHeight);
-			EditorGUILayout.PropertyField(SerializedAvatarGameObject, new GUIContent(GetTranslatedString("String_TargetAvatar")));
+			EditorGUILayout.PropertyField(SerializedAvatarGameObject, new GUIContent(GetTranslatedString("String_Avatar")));
 			AvatarAuthorType = EditorGUILayout.Popup(GetTranslatedString("String_AvatarAuthor"), AvatarAuthorType, AvatarAuthorNames);
 			SerializedProperty SelectedAvatarAuthorProperty = SerializedAvatarAuthors.GetArrayElementAtIndex(AvatarAuthorType);
 			SelectedAvatarAuthor = SelectedAvatarAuthorProperty.enumNames[SelectedAvatarAuthorProperty.enumValueIndex];
@@ -59,7 +59,7 @@ namespace VRSuya.Installer {
             }
             serializedObject.ApplyModifiedProperties();
 			EditorGUILayout.LabelField(string.Empty, GUI.skin.horizontalSlider);
-			if (GUILayout.Button(GetTranslatedString("String_UpdateAnimation"))) {
+			if (GUILayout.Button(GetTranslatedString("String_Update"))) {
                 (target as AnimationOffsetUpdater).UpdateAnimationOffset();
             }
         }
