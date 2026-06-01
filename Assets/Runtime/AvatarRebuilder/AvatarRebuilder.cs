@@ -118,7 +118,7 @@ namespace VRSuya.Installer {
 			string OldModelPath = AssetDatabase.GetAssetPath(OldAvatarAnimator.avatar);
 			string NewModelPath = AssetDatabase.GetAssetPath(NewAvatarAnimator.avatar);
 			ReplaceModelAsset ReplaceModelAssetInstance = new ReplaceModelAsset();
-			ReplaceModelAssetInstance.RequestReplaceModelAsset(OldModelPath, NewModelPath);
+			ReplaceModelAssetInstance.RequestReplaceModelAsset(OldModelPath, NewModelPath, UndoGroupIndex);
 		}
 
 		void CreateBackup() {
