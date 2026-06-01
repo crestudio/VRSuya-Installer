@@ -107,16 +107,9 @@ namespace VRSuya.Installer {
 		}
 
 		void CopyMaterials() {
-			Dictionary<string, Material> OldModelMaterialDictionary = OldModelImporter.GetExternalObjectMap()
-				.Where(KeyValuePair => KeyValuePair.Value is Material)
-				.ToDictionary(
-					KeyValuePair => KeyValuePair.Key.name,
-					KeyValuePair => KeyValuePair.Value as Material
-				);
-			foreach (KeyValuePair<AssetImporter.SourceAssetIdentifier, Object> NewModelExternalObject in NewModelImporter.GetExternalObjectMap()) {
-				if (!(NewModelExternalObject.Value is Material)) continue;
-				if (!OldModelMaterialDictionary.TryGetValue(NewModelExternalObject.Key.name, out Material MatchedMaterial)) continue;
-				NewModelImporter.AddRemap(NewModelExternalObject.Key, MatchedMaterial);
+			foreach (KeyValuePair<AssetImporter.SourceAssetIdentifier, Object> OldModelExternalObject in OldModelImporter.GetExternalObjectMap()) {
+				if (!(OldModelExternalObject.Value is Material OldMaterial)) continue;
+				NewModelImporter.AddRemap(OldModelExternalObject.Key, OldMaterial);
 			}
 		}
 	}
