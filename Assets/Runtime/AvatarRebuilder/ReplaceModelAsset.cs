@@ -18,6 +18,7 @@ namespace VRSuya.Installer {
 		public void RequestReplaceModelAsset(string OldModelPath, string NewModelPath, int UndoGroupIndex) {
 			string OldAvatarFullPath = Path.GetFullPath(OldModelPath);
 			string NewAvatarFullPath = Path.GetFullPath(NewModelPath);
+			string NewAvatarMetaFullPath = $"{NewAvatarFullPath}.meta";
 			string BackupAssetPath = GetBackupModelPath(OldModelPath);
 			string BackupFullPath = Path.GetFullPath(BackupAssetPath);
 			File.Copy(OldAvatarFullPath, BackupFullPath);
@@ -25,8 +26,8 @@ namespace VRSuya.Installer {
 			CopyModelImporter CopyModelImporterInstance = new CopyModelImporter();
 			CopyModelImporterInstance.RequestCopyModelImporter(OldModelPath, BackupAssetPath, UndoGroupIndex);
 			File.Copy(NewAvatarFullPath, OldAvatarFullPath, overwrite: true);
-			AssetDatabase.ImportAsset(OldModelPath);
 			File.Delete(NewAvatarFullPath);
+			File.Delete(NewAvatarMetaFullPath);
 			AssetDatabase.Refresh();
 		}
 
