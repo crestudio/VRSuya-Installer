@@ -1,5 +1,6 @@
 ﻿#if UNITY_EDITOR
 using System;
+using System.Linq;
 
 using UnityEditor;
 using UnityEngine;
@@ -44,6 +45,7 @@ namespace VRSuya.Installer {
 					PlaceGameObjectInScene();
 					if (!CheckNewAvatar()) return StatusString;
 				}
+				RenameGameObjects();
 				AvatarRebuilderContext Context = new AvatarRebuilderContext {
 					OldAvatarGameObject = OldAvatarGameObject,
 					NewAvatarGameObject = NewAvatarGameObject,
@@ -130,6 +132,24 @@ namespace VRSuya.Installer {
 			Undo.RegisterCreatedObjectUndo(NewAvatarGameObjectInstance, UndoGroupName);
 			Undo.CollapseUndoOperations(UndoGroupIndex);
 			NewAvatarGameObject = NewAvatarGameObjectInstance;
+		}
+
+		void RenameGameObjects() {
+			Transform[] NewAvatarTransforms = NewAvatarGameObject.GetComponentsInParent<Transform>(true);
+			Transform EYOHairTransform = NewAvatarTransforms.FirstOrDefault(Item => Item.gameObject.name == "Eyo_hair 1");
+			if (EYOHairTransform) {
+				Undo.RecordObject(EYOHairTransform, UndoGroupName);
+				EYOHairTransform.name = "Eyo_hair";
+				EditorUtility.SetDirty(EYOHairTransform);
+				Undo.CollapseUndoOperations(UndoGroupIndex);
+			}
+			Transform IMERISHairTransform = NewAvatarTransforms.FirstOrDefault(Item => Item.gameObject.name == "Imeris_hair 1");
+			if (IMERISHairTransform) {
+				Undo.RecordObject(IMERISHairTransform, UndoGroupName);
+				IMERISHairTransform.name = "Imeris_hair";
+				EditorUtility.SetDirty(IMERISHairTransform);
+				Undo.CollapseUndoOperations(UndoGroupIndex);
+			}
 		}
 	}
 }
