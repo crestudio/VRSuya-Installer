@@ -23,6 +23,10 @@ namespace VRSuya.Installer {
 		Dictionary<string, Transform> AvatarBoneDictionary = new Dictionary<string, Transform>();
 		Transform[] MissingBoneTransforms = new Transform[0];
 
+		static readonly string[] RestoreBoneNames = new string[] {
+			"Cheek_Root_L", "Cheek_Root_R", "Cheek_L", "Cheek_R", "ho_L", "ho_R"
+		};
+
 		const string UndoGroupName = "VRSuya AvatarRebuilder";
 
 		internal string UpdateAvatarArmature() {
@@ -31,6 +35,7 @@ namespace VRSuya.Installer {
 				if (AvatarBoneDictionary.Count == 0) return "NO_MATCHED_SKINNEDMESHRENDERERS";
 				MissingBoneTransforms = GetMissingBoneTransforms();
 				AddMissingBones();
+				RestoreCheekTransform();
 				UpdateSkinnedMeshRenderer();
 				UpdateAnimatorAvatar();
 			} finally {
@@ -140,6 +145,32 @@ namespace VRSuya.Installer {
 			Context.OldAvatarAnimator.avatar = Context.NewAvatarAnimator.avatar;
 			EditorUtility.SetDirty(Context.OldAvatarAnimator);
 			Undo.CollapseUndoOperations(Context.UndoGroupIndex);
+		}
+
+		void RestoreCheekTransform() {
+			List<Transform> RestoreBoneList = AvatarBoneDictionary
+				.Where(Item => RestoreBoneNames.Contains(Item.Key))
+				.Select(Item => Item.Value)
+				.ToList();
+			if (RestoreBoneList.Count > 0) {
+				HashSet<Transform> NewAvatarBoneTransform = new HashSet<Transform>(
+					Context.NewAvatarGameObject
+						.GetComponentsInChildren<SkinnedMeshRenderer>(true)
+						.SelectMany(Item => Item.bones)
+						.Where(Item => RestoreBoneNames.Contains(Item.name))
+				);
+				foreach (Transform TargetTransform in RestoreBoneList) {
+					Transform NewTransform = NewAvatarBoneTransform.FirstOrDefault(Item => Item.name == TargetTransform.name);
+					if (NewTransform) {
+						Undo.RecordObject(TargetTransform, UndoGroupName);
+						TargetTransform.transform.localPosition = NewTransform.localPosition;
+						TargetTransform.transform.localRotation = NewTransform.localRotation;
+						TargetTransform.transform.localScale = NewTransform.localScale;
+						EditorUtility.SetDirty(TargetTransform);
+						Undo.CollapseUndoOperations(Context.UndoGroupIndex);
+					}
+				}
+			}
 		}
 
 		int GetTransformDepth(Transform TargetTransform) {
