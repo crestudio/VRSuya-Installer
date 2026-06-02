@@ -46,6 +46,7 @@ namespace VRSuya.Installer {
 					if (!CheckNewAvatar()) return StatusString;
 				}
 				RenameGameObjects();
+				ResizeNewAvatarTransform();
 				AvatarRebuilderContext Context = new AvatarRebuilderContext {
 					OldAvatarGameObject = OldAvatarGameObject,
 					NewAvatarGameObject = NewAvatarGameObject,
@@ -161,6 +162,16 @@ namespace VRSuya.Installer {
 				EditorUtility.SetDirty(IMERISHairTransform);
 				Undo.CollapseUndoOperations(UndoGroupIndex);
 			}
+		}
+
+		void ResizeNewAvatarTransform() {
+			Undo.RecordObject(NewAvatarGameObject, UndoGroupName);
+			NewAvatarGameObject.transform.SetPositionAndRotation(OldAvatarGameObject.transform.position, OldAvatarGameObject.transform.rotation);
+			NewAvatarGameObject.transform.localPosition = OldAvatarGameObject.transform.localPosition;
+			NewAvatarGameObject.transform.localRotation = OldAvatarGameObject.transform.localRotation;
+			NewAvatarGameObject.transform.localScale = OldAvatarGameObject.transform.localScale;
+			EditorUtility.SetDirty(NewAvatarGameObject);
+			Undo.CollapseUndoOperations(UndoGroupIndex);
 		}
 	}
 }
