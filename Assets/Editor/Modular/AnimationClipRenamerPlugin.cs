@@ -78,6 +78,7 @@ namespace VRSuya.Modular.Editor {
 						string NewPath = TargetBinding.path.Replace(TargetExpression.Before, TargetExpression.After);
 						AnimationCurve TargetCurve = AnimationUtility.GetEditorCurve(TargetAnimationClip, TargetBinding);
 						TargetAnimationClip.SetCurve(NewPath, TargetBinding.type, TargetBinding.propertyName, TargetCurve);
+						TargetAnimationClip.SetCurve(TargetBinding.path, TargetBinding.type, TargetBinding.propertyName, null);
 					}
 					EditorUtility.SetDirty(TargetAnimationClip);
 					return true;
@@ -101,6 +102,7 @@ namespace VRSuya.Modular.Editor {
 						AnimationCurve TargetCurve = AnimationUtility.GetEditorCurve(TargetAnimationClip, TargetBinding);
 						Debug.Log($"TargetBinding.propertyName : {TargetBinding.propertyName} > blendShape.{TargetExpression.After}");
 						TargetAnimationClip.SetCurve(TargetBinding.path, TargetBinding.type, $"blendShape.{TargetExpression.After}", TargetCurve);
+						TargetAnimationClip.SetCurve(TargetBinding.path, TargetBinding.type, TargetBinding.propertyName, null);
 					}
 					EditorUtility.SetDirty(TargetAnimationClip);
 					return true;
