@@ -100,7 +100,6 @@ namespace VRSuya.Modular.Editor {
 						.ToList();
 					foreach (EditorCurveBinding TargetBinding in TargetBindingList) {
 						AnimationCurve TargetCurve = AnimationUtility.GetEditorCurve(TargetAnimationClip, TargetBinding);
-						Debug.Log($"TargetBinding.propertyName : {TargetBinding.propertyName} > blendShape.{TargetExpression.After}");
 						TargetAnimationClip.SetCurve(TargetBinding.path, TargetBinding.type, $"blendShape.{TargetExpression.After}", TargetCurve);
 						TargetAnimationClip.SetCurve(TargetBinding.path, TargetBinding.type, TargetBinding.propertyName, null);
 					}
