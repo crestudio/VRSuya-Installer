@@ -1,5 +1,6 @@
 ﻿#if MODULAR_AVATAR
 using System.Collections.Generic;
+using System.Linq;
 
 using UnityEditor;
 using UnityEditor.Animations;
@@ -48,27 +49,32 @@ namespace VRSuya.Modular.Editor {
 					Avatar AvatarInstance = new Avatar();
 					AnimatorController TargetFXLayer = AvatarInstance.GetAnimatorController(TargetBuildContext.AvatarRootObject, AnimLayerType.FX);
 					if (TargetFXLayer) {
-						List<string> RemoveLayerNames = new List<string>();
-						foreach (RemoveAnimatorLayer TargetComponent in RemoveAnimatorLayerComponents) {
-							if (TargetComponent) {
-								foreach (string LayerName in TargetComponent.TargetLayerName) {
-									if (!string.IsNullOrEmpty(LayerName) && !RemoveLayerNames.Contains(LayerName)) {
-										RemoveLayerNames.Add(LayerName);
+						if (TargetFXLayer.layers.Length > 0) {
+							List<string> RemoveLayerNames = new List<string>();
+							foreach (RemoveAnimatorLayer TargetComponent in RemoveAnimatorLayerComponents) {
+								if (TargetComponent) {
+									foreach (string LayerName in TargetComponent.TargetLayerName) {
+										if (!string.IsNullOrEmpty(LayerName) && !RemoveLayerNames.Contains(LayerName)) {
+											RemoveLayerNames.Add(LayerName);
+										}
 									}
 								}
 							}
-						}
-						bool IsModified = false;
-						for (int Index = TargetFXLayer.layers.Length - 1; Index >= 0; Index--) {
-							string LayerName = TargetFXLayer.layers[Index].name;
-							if (RemoveLayerNames.Contains(LayerName) && !LayerName.Contains(PreservedLayerName)) {
-								TargetFXLayer.RemoveLayer(Index);
-								IsModified = true;
+							List<string> FXLayerNames = TargetFXLayer.layers.Select(Item => Item.name).ToList();
+							if (RemoveLayerNames.Any(Item => FXLayerNames.Contains(Item))) {
+								bool IsModified = false;
+								for (int Index = TargetFXLayer.layers.Length - 1; Index >= 0; Index--) {
+									string LayerName = TargetFXLayer.layers[Index].name;
+									if (RemoveLayerNames.Contains(LayerName) && !LayerName.Contains(PreservedLayerName)) {
+										TargetFXLayer.RemoveLayer(Index);
+										IsModified = true;
+									}
+								}
+								if (IsModified) {
+									EditorUtility.SetDirty(TargetFXLayer);
+									AssetDatabase.SaveAssets();
+								}
 							}
-						}
-						if (IsModified) {
-							EditorUtility.SetDirty(TargetFXLayer);
-							AssetDatabase.SaveAssets();
 						}
 					}
 				}
