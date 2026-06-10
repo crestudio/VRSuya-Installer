@@ -46,10 +46,15 @@ namespace VRSuya.Modular.Editor {
 				AnimatorController BaseAnimator = AvatarInstance.GetAnimatorController(TargetBuildContext.AvatarRootObject, VRCAvatarDescriptor.AnimLayerType.Base);
 				AnimatorController ActionAnimator = AvatarInstance.GetAnimatorController(TargetBuildContext.AvatarRootObject, VRCAvatarDescriptor.AnimLayerType.Action);
 				if (BaseAnimator && ActionAnimator) {
-					AnimationClip TargetAnimationClip = AvatarInstance.GetStandingAnimation(BaseAnimator);
-					if (TargetAnimationClip) {
-						ChangeStandingPose(ActionAnimator, TargetAnimationClip);
-						AssetDatabase.SaveAssets();
+					if (HasDefaultPose(ActionAnimator, out AnimatorState[] TargetAnimatorStates)) {
+						AnimationClip TargetAnimationClip = AvatarInstance.GetStandingAnimation(BaseAnimator);
+						if (TargetAnimationClip) {
+							foreach (AnimatorState TargetAnimatorState in TargetAnimatorStates) {
+								TargetAnimatorState.motion = TargetAnimationClip;
+								EditorUtility.SetDirty(TargetAnimatorState);
+							}
+							AssetDatabase.SaveAssets();
+						}
 					}
 				}
 				foreach (ChangeStandingPose TargetComponent in ChangeStandingPoseComponents) {
@@ -58,19 +63,21 @@ namespace VRSuya.Modular.Editor {
 			}
 		}
 
-		void ChangeStandingPose(AnimatorController TargetAnimator, AnimationClip StandAnimationClip) {
-			if (TargetAnimator.layers.Length > 0) {
-				string[] TargetAnimationNames = new string[] { "proxy_stand_still", "VRSuya_Wotagei_Wotagei_Stand" };
-				Animator AnimatorInstance = new Animator();
-				AnimatorState[] TargetAnimatorStates = AnimatorInstance.GetAllAnimatorStates(TargetAnimator)
-					.Where(Item => Item.motion != null)
-					.Where(Item => TargetAnimationNames.Contains(Item.motion.name))
-					.ToArray();
-				foreach (AnimatorState TargetAnimatorState in TargetAnimatorStates) {
-					TargetAnimatorState.motion = StandAnimationClip;
-					EditorUtility.SetDirty(TargetAnimatorState);
+		bool HasDefaultPose(AnimatorController TargetAnimator, out AnimatorState[] TargetAnimatorStates) {
+			if (TargetAnimator) {
+				if (TargetAnimator.layers.Length > 0) {
+					string[] TargetAnimationNames = new string[] { "proxy_stand_still", "VRSuya_Wotagei_Wotagei_Stand" };
+					Animator AnimatorInstance = new Animator();
+					TargetAnimatorStates = AnimatorInstance.GetAllAnimatorStates(TargetAnimator)
+						.Where(Item => Item.motion != null)
+						.Where(Item => Item.motion is AnimationClip)
+						.Where(Item => TargetAnimationNames.Contains(Item.motion.name))
+						.ToArray();
+					return TargetAnimatorStates.Length > 0;
 				}
 			}
+			TargetAnimatorStates = null;
+			return false;
 		}
 	}
 
