@@ -131,18 +131,21 @@ namespace VRSuya.Modular.Editor {
 			EditorGUILayout.Space();
 			EditorGUILayout.PropertyField(SerializedTargetAnimationClips, new GUIContent(GetTranslatedString("String_AnimationClip")));
 			EditorGUILayout.LabelField(GetTranslatedString("String_Path"), EditorStyles.boldLabel);
-			EditorGUI.indentLevel++;
-			for (int Index = 0; Index < SerializedTargetPathRenameList.arraySize; Index++) {
-				SerializedProperty PathProperty = SerializedTargetPathRenameList.GetArrayElementAtIndex(Index);
-				SerializedProperty BeforeProperty = PathProperty.FindPropertyRelative("Before");
-				SerializedProperty AfterProperty = PathProperty.FindPropertyRelative("After");
-				EditorGUILayout.BeginHorizontal();
-				EditorGUILayout.PropertyField(BeforeProperty, new GUIContent(string.Empty));
-				EditorGUILayout.PropertyField(AfterProperty, new GUIContent(string.Empty));
-				if (GUILayout.Button("-")) {
-					AnimationClipRenamerInstance.TargetPathRenameList.RemoveAt(Index);
+			if (SerializedTargetPathRenameList.arraySize > 0) {
+				using (new EditorGUILayout.VerticalScope(EditorStyles.helpBox)) {
+					for (int Index = 0; Index < SerializedTargetPathRenameList.arraySize; Index++) {
+						SerializedProperty PathProperty = SerializedTargetPathRenameList.GetArrayElementAtIndex(Index);
+						SerializedProperty BeforeProperty = PathProperty.FindPropertyRelative("Before");
+						SerializedProperty AfterProperty = PathProperty.FindPropertyRelative("After");
+						EditorGUILayout.BeginHorizontal();
+						EditorGUILayout.PropertyField(BeforeProperty, new GUIContent(string.Empty));
+						EditorGUILayout.PropertyField(AfterProperty, new GUIContent(string.Empty));
+						if (GUILayout.Button("-")) {
+							AnimationClipRenamerInstance.TargetPathRenameList.RemoveAt(Index);
+						}
+						EditorGUILayout.EndHorizontal();
+					}
 				}
-				EditorGUILayout.EndHorizontal();
 			}
 			EditorGUILayout.BeginHorizontal();
 			if (GUILayout.Button(GetTranslatedString("String_Add"))) {
@@ -154,20 +157,22 @@ namespace VRSuya.Modular.Editor {
 				}
 			}
 			EditorGUILayout.EndHorizontal();
-			EditorGUI.indentLevel--;
 			EditorGUILayout.LabelField(GetTranslatedString("String_BlendShape"), EditorStyles.boldLabel);
-			EditorGUI.indentLevel++;
-			for (int Index = 0; Index < SerializedTargetBlendshapeRenameList.arraySize; Index++) {
-				SerializedProperty BlendShapeProperty = SerializedTargetBlendshapeRenameList.GetArrayElementAtIndex(Index);
-				SerializedProperty BeforeProperty = BlendShapeProperty.FindPropertyRelative("Before");
-				SerializedProperty AfterProperty = BlendShapeProperty.FindPropertyRelative("After");
-				EditorGUILayout.BeginHorizontal();
-				EditorGUILayout.PropertyField(BeforeProperty, new GUIContent(string.Empty));
-				EditorGUILayout.PropertyField(AfterProperty, new GUIContent(string.Empty));
-				if (GUILayout.Button("-")) {
-					AnimationClipRenamerInstance.TargetBlendshapeRenameList.RemoveAt(Index);
+			if (SerializedTargetBlendshapeRenameList.arraySize > 0) {
+				using (new EditorGUILayout.VerticalScope(EditorStyles.helpBox)) {
+					for (int Index = 0; Index < SerializedTargetBlendshapeRenameList.arraySize; Index++) {
+						SerializedProperty BlendShapeProperty = SerializedTargetBlendshapeRenameList.GetArrayElementAtIndex(Index);
+						SerializedProperty BeforeProperty = BlendShapeProperty.FindPropertyRelative("Before");
+						SerializedProperty AfterProperty = BlendShapeProperty.FindPropertyRelative("After");
+						EditorGUILayout.BeginHorizontal();
+						EditorGUILayout.PropertyField(BeforeProperty, new GUIContent(string.Empty));
+						EditorGUILayout.PropertyField(AfterProperty, new GUIContent(string.Empty));
+						if (GUILayout.Button("-")) {
+							AnimationClipRenamerInstance.TargetBlendshapeRenameList.RemoveAt(Index);
+						}
+						EditorGUILayout.EndHorizontal();
+					}
 				}
-				EditorGUILayout.EndHorizontal();
 			}
 			EditorGUILayout.BeginHorizontal();
 			if (GUILayout.Button(GetTranslatedString("String_Add"))) {
@@ -179,7 +184,6 @@ namespace VRSuya.Modular.Editor {
 				}
 			}
 			EditorGUILayout.EndHorizontal();
-			EditorGUI.indentLevel--;
 			serializedObject.ApplyModifiedProperties();
 		}
 	}
