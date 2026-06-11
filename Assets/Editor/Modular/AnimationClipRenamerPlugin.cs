@@ -7,8 +7,8 @@ using UnityEngine;
 
 using nadena.dev.ndmf;
 
-using static VRSuya.Core.RenameStruct;
 using static VRSuya.Core.Translator;
+using static VRSuya.Modular.AnimationClipRenamer;
 
 using Object = UnityEngine.Object;
 
