@@ -50,15 +50,12 @@ namespace VRSuya.Modular.Editor {
 					}
 				}
 				if (TargetPhysBoneNames.Count > 0) {
-					TargetBuildContext.AvatarRootObject.TryGetComponent(out Animator TargetAnimator);
-					if (TargetAnimator) {
-						VRCPhysBone[] HeadPhysBones = TargetAnimator.GetBoneTransform(HumanBodyBones.Head).GetComponentsInChildren<VRCPhysBone>(true);
-						foreach (string TargetName in TargetPhysBoneNames) {
-							VRCPhysBone TargetVRCPhysBones = HeadPhysBones.FirstOrDefault(Item => Item.gameObject.name == "TargetName");
-							if (TargetVRCPhysBones) {
-								if (!TargetVRCPhysBones.isAnimated) TargetVRCPhysBones.isAnimated = true;
-								EditorUtility.SetDirty(TargetVRCPhysBones);
-							}
+					VRCPhysBone[] HeadPhysBones = TargetBuildContext.AvatarRootObject.GetComponentsInChildren<VRCPhysBone>(true);
+					foreach (string TargetName in TargetPhysBoneNames) {
+						VRCPhysBone TargetVRCPhysBones = HeadPhysBones.FirstOrDefault(Item => Item.gameObject.name == TargetName);
+						if (TargetVRCPhysBones) {
+							if (!TargetVRCPhysBones.isAnimated) TargetVRCPhysBones.isAnimated = true;
+							EditorUtility.SetDirty(TargetVRCPhysBones);
 						}
 					}
 				}
