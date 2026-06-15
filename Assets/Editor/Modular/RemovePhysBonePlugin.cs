@@ -1,9 +1,9 @@
 ﻿#if MODULAR_AVATAR
 using System;
+using System.Collections.Generic;
 using System.Linq;
 
 using UnityEditor;
-using UnityEngine;
 
 using VRC.SDK3.Dynamics.PhysBone.Components;
 
@@ -39,21 +39,20 @@ namespace VRSuya.Modular.Editor {
 		protected override void Execute(BuildContext TargetBuildContext) {
 			RemovePhysBone[] RemovePhysBoneComponents = TargetBuildContext.AvatarRootObject.GetComponentsInChildren<RemovePhysBone>(true);
 			if (RemovePhysBoneComponents.Length > 0) {
-				TargetBuildContext.AvatarRootObject.TryGetComponent(out Animator TargetAnimator);
-				if (TargetAnimator) {
-					string[] Cheek_L_Names = new string[] { "Cheek.L", "Cheek1_L", "Cheek_Root_L", "Cheek_root_L", "Hoppe.L" };
-					string[] Cheek_R_Names = new string[] { "Cheek.R", "Cheek1_R", "Cheek_Root_R", "Cheek_root_R", "Hoppe.R" };
-					Transform[] HeadTransforms = TargetAnimator.GetBoneTransform(HumanBodyBones.Head).GetComponentsInChildren<Transform>(true);
-					Transform Cheek_L_Transform = HeadTransforms.FirstOrDefault(Item => Cheek_L_Names.Contains(Item.name));
-					Transform Cheek_R_Transform = HeadTransforms.FirstOrDefault(Item => Cheek_R_Names.Contains(Item.name));
-					VRCPhysBone[] Cheek_PhysBoneComponents =
-						Cheek_L_Transform.GetComponentsInChildren<VRCPhysBone>(true)
-						.Concat(Cheek_R_Transform.GetComponentsInChildren<VRCPhysBone>(true))
-						.ToArray();
-					if (Cheek_PhysBoneComponents.Length > 0) {
-						foreach (VRCPhysBone TargetComponent in Cheek_PhysBoneComponents) {
-							if (TargetComponent) Object.DestroyImmediate(TargetComponent);
-						}
+				string[] Cheek_Names = new string[] { 
+					"Cheek_L", "Cheek.L", "Cheek1_L", "Cheek_Root_L", "Cheek_root_L", "Hoppe.L",
+					"Cheek_L", "Cheek.R", "Cheek1_R", "Cheek_Root_R", "Cheek_root_R", "Hoppe.R"
+				};
+				VRCPhysBone[] AvatarPhysBoneComponents = TargetBuildContext.AvatarRootObject.GetComponentsInChildren<VRCPhysBone>(true);
+				List<VRCPhysBone> TargetPhysBoneComponents = new List<VRCPhysBone>();
+				TargetPhysBoneComponents.AddRange(AvatarPhysBoneComponents
+					.Where(Item => Item.rootTransform != null)
+					.Where(Item => Cheek_Names.Contains(Item.rootTransform.name, StringComparer.OrdinalIgnoreCase)));
+				TargetPhysBoneComponents.AddRange(AvatarPhysBoneComponents
+					.Where(Item => Cheek_Names.Contains(Item.gameObject.name, StringComparer.OrdinalIgnoreCase)));
+				if (TargetPhysBoneComponents.Count > 0) {
+					foreach (VRCPhysBone TargetComponent in TargetPhysBoneComponents) {
+						if (TargetComponent) Object.DestroyImmediate(TargetComponent);
 					}
 				}
 				foreach (RemovePhysBone TargetComponent in RemovePhysBoneComponents) {
