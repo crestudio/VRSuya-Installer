@@ -1,5 +1,5 @@
-﻿using UnityEngine;
-using UnityEditor;
+﻿using UnityEditor;
+using UnityEngine;
 
 using static VRSuya.Core.Translator;
 
@@ -10,58 +10,91 @@ using static VRSuya.Core.Translator;
 
 namespace VRSuya.Installer {
 
-    [CustomEditor(typeof(AnimationOffsetUpdater))]
-    public class AnimationOffsetUpdaterEditor : Editor {
+    public class AnimationOffsetUpdaterEditor : EditorWindow {
 
-        SerializedProperty SerializedAvatarGameObject;
-        SerializedProperty SerializedAvatarAnimationClips;
-        SerializedProperty SerializedAnimationStrength;
-		SerializedProperty SerializedAvatarAuthors;
-		SerializedProperty SerializedAnimationOriginPosition;
-        SerializedProperty SerializedAvatarOriginPosition;
-        SerializedProperty SerializedStatusCode;
+		AnimationOffsetUpdater AnimationOffsetUpdaterInstance;
+		SerializedObject SerializedAnimationOffsetUpdater;
 
-		public static int AvatarAuthorType = 0;
-		public static string[] AvatarAuthorNames = new string[0];
-		public static string SelectedAvatarAuthor = string.Empty;
+		SerializedProperty SerializedAvatarGameObject;
+		SerializedProperty SerializedAvatarAnimationClips;
+		SerializedProperty SerializedAnimationStrength;
 
-        void OnEnable() {
-            SerializedAvatarGameObject = serializedObject.FindProperty("AvatarGameObject");
-            SerializedAvatarAnimationClips = serializedObject.FindProperty("AvatarAnimationClips");
-            SerializedAnimationStrength = serializedObject.FindProperty("AnimationStrength");
-			SerializedAvatarAuthors = serializedObject.FindProperty("AvatarAuthors");
-			SerializedAnimationOriginPosition = serializedObject.FindProperty("AnimationOriginPosition");
-            SerializedAvatarOriginPosition = serializedObject.FindProperty("AvatarOriginPosition");
-			SerializedStatusCode = serializedObject.FindProperty("StatusCode");
-        }
+		const float BorderX = 30f;
+		float ButtonWidth = float.NaN;
 
-        public override void OnInspectorGUI() {
-            serializedObject.Update();
-			AvatarAuthorNames = GetAvatarAuthorName(SerializedAvatarAuthors);
-			LanguageIndex = EditorGUILayout.Popup(GetTranslatedString("String_Language"), LanguageIndex, LanguageOption);
+		void Reinitialize() {
+			if (!AnimationOffsetUpdaterInstance) AnimationOffsetUpdaterInstance = CreateInstance<AnimationOffsetUpdater>();
+			SerializedAnimationOffsetUpdater = new SerializedObject(AnimationOffsetUpdaterInstance);
+			SerializedAvatarGameObject = SerializedAnimationOffsetUpdater.FindProperty("AvatarGameObject");
+			SerializedAvatarAnimationClips = SerializedAnimationOffsetUpdater.FindProperty("AvatarAnimationClips");
+			SerializedAnimationStrength = SerializedAnimationOffsetUpdater.FindProperty("AnimationStrength");
+		}
+
+		void OnEnable() {
+			Reinitialize();
+		}
+
+		[MenuItem("Tools/VRSuya/Installer/AnimationOffsetUpdater", priority = 1000)]
+		static void CreateWindow() {
+			AnimationOffsetUpdaterEditor AppWindow = GetWindow<AnimationOffsetUpdaterEditor>(true, "VRSuya AnimationOffsetUpdater");
+			AppWindow.minSize = new Vector2(500, 220);
+		}
+
+		void OnGUI() {
+			if (SerializedAnimationOffsetUpdater == null || !SerializedAnimationOffsetUpdater.targetObject) {
+				Reinitialize();
+				if (SerializedAnimationOffsetUpdater == null) {
+					Close();
+					return;
+				}
+			}
+			SerializedAnimationOffsetUpdater.Update();
+			Vector2 WindowSize = position.size;
+			UpdateRect(WindowSize);
 			EditorGUILayout.Space(EditorGUIUtility.singleLineHeight);
-			EditorGUILayout.PropertyField(SerializedAvatarGameObject, new GUIContent(GetTranslatedString("String_Avatar")));
-			AvatarAuthorType = EditorGUILayout.Popup(GetTranslatedString("String_AvatarAuthor"), AvatarAuthorType, AvatarAuthorNames);
-			SerializedProperty SelectedAvatarAuthorProperty = SerializedAvatarAuthors.GetArrayElementAtIndex(AvatarAuthorType);
-			SelectedAvatarAuthor = SelectedAvatarAuthorProperty.enumNames[SelectedAvatarAuthorProperty.enumValueIndex];
-			(target as AnimationOffsetUpdater).TargetAvatarAuthorName = SelectedAvatarAuthor;
-            EditorGUILayout.PropertyField(SerializedAvatarAnimationClips, new GUIContent(GetTranslatedString("String_AnimationClip")));
-			GUI.enabled = false;
-            EditorGUILayout.PropertyField(SerializedAnimationOriginPosition, new GUIContent(GetTranslatedString("String_AnimationOrigin")));
-            EditorGUILayout.PropertyField(SerializedAvatarOriginPosition, new GUIContent(GetTranslatedString("String_AvatarOrigin")));
-            GUI.enabled = true;
-            EditorGUILayout.PropertyField(SerializedAnimationStrength, new GUIContent(GetTranslatedString("String_AnimationStrength")));
-            if (GUILayout.Button(GetTranslatedString("String_GetPosition"))) {
-                (target as AnimationOffsetUpdater).UpdateOriginPositions();
-            }
-            if (!string.IsNullOrEmpty(SerializedStatusCode.stringValue)) {
-                EditorGUILayout.HelpBox(GetTranslatedString(SerializedStatusCode.stringValue), MessageType.Warning);
-            }
-            serializedObject.ApplyModifiedProperties();
+			EditorGUILayout.BeginHorizontal();
+			GUILayout.Space(BorderX);
+			EditorGUIUtility.labelWidth = 100f;
+			LanguageIndex = EditorGUILayout.Popup(GetTranslatedString("String_Language"), LanguageIndex, LanguageOption);
+			GUILayout.Space(BorderX);
+			EditorGUILayout.EndHorizontal();
 			EditorGUILayout.LabelField(string.Empty, GUI.skin.horizontalSlider);
-			if (GUILayout.Button(GetTranslatedString("String_Update"))) {
-                (target as AnimationOffsetUpdater).UpdateAnimationOffset();
-            }
-        }
-    }
+			EditorGUILayout.BeginHorizontal();
+			GUILayout.Space(BorderX);
+			EditorGUILayout.PropertyField(SerializedAvatarGameObject, new GUIContent(GetTranslatedString("String_Avatar")));
+			GUILayout.Space(BorderX);
+			EditorGUILayout.EndHorizontal();
+			EditorGUILayout.BeginHorizontal();
+			GUILayout.Space(BorderX);
+			EditorGUILayout.PropertyField(SerializedAvatarAnimationClips, new GUIContent(GetTranslatedString("String_AnimationClip")));
+			GUILayout.Space(BorderX);
+			EditorGUILayout.EndHorizontal();
+			EditorGUILayout.BeginHorizontal();
+			GUILayout.Space(BorderX);
+			EditorGUILayout.PropertyField(SerializedAnimationStrength, new GUIContent(GetTranslatedString("String_Strength")));
+			GUILayout.Space(BorderX);
+			EditorGUILayout.EndHorizontal();
+			EditorGUILayout.LabelField(string.Empty, GUI.skin.horizontalSlider);
+			EditorGUILayout.BeginHorizontal();
+			GUILayout.Space(BorderX);
+			GUILayout.FlexibleSpace();
+			GUI.backgroundColor = Color.cyan;
+			if (GUILayout.Button(GetTranslatedString("String_Update"), GUILayout.Width(ButtonWidth * 1.44f), GUILayout.Height(40))) {
+				string StatusCode = AnimationOffsetUpdaterInstance.RequestUpdateAnimationClips();
+				EditorUtility.DisplayDialog("VRSuya AnimationOffsetUpdater",
+					GetTranslatedString(StatusCode),
+					GetTranslatedString("String_Okay")
+				);
+			}
+			GUI.backgroundColor = Color.white;
+			GUILayout.FlexibleSpace();
+			GUILayout.Space(BorderX);
+			EditorGUILayout.EndHorizontal();
+			SerializedAnimationOffsetUpdater.ApplyModifiedProperties();
+		}
+
+		void UpdateRect(Vector2 CurrentWindowSize) {
+			ButtonWidth = (CurrentWindowSize.x / 5f);
+		}
+	}
 }

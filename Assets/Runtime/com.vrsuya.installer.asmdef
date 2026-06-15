@@ -2,7 +2,8 @@
     "name": "com.vrsuya.installer",
     "rootNamespace": "",
     "references": [
-        "GUID:0bae3e2f09a0c454da701a2e8b59d048"
+        "GUID:0bae3e2f09a0c454da701a2e8b59d048",
+        "GUID:fc900867c0f47cd49b6e2ae4ef907300"
     ],
     "includePlatforms": [],
     "excludePlatforms": [],
@@ -11,6 +12,12 @@
     "precompiledReferences": [],
     "autoReferenced": true,
     "defineConstraints": [],
-    "versionDefines": [],
+    "versionDefines": [
+        {
+            "name": "nadena.dev.modular-avatar",
+            "expression": "",
+            "define": "MODULAR_AVATAR"
+        }
+    ],
     "noEngineReferences": false
 }
