@@ -97,6 +97,8 @@ namespace VRSuya.Installer {
 				$"{string.Format(GetTranslatedString("COMPLETED_PATCH"), AvatarGameObject.name)}\n\n{OutputAssetPath}",
 				GetTranslatedString("String_Okay")
 			);
+			VRSuya.Core.Asset AssetInstance = new VRSuya.Core.Asset();
+			AssetInstance.PingAsset(OutputAssetPath);
 			return true;
 		}
 
