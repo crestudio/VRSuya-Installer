@@ -19,12 +19,13 @@ namespace VRSuya.Installer {
 
 		public GameObject AvatarGameObject;
 		public string HDiffFilePath = string.Empty;
+		public bool ReplaceModel = true;
 
 		const float BorderX = 30f;
 
 		[MenuItem("Tools/VRSuya/Installer/HDiffPatcher", priority = 1000)]
 		static void CreateWindow() {
-			HDiffPatcherEditorWindow AppWindow = GetWindowWithRect<HDiffPatcherEditorWindow>(new Rect(0, 0, 400, 180), true, "VRSuya HDiffPatcher");
+			HDiffPatcherEditorWindow AppWindow = GetWindowWithRect<HDiffPatcherEditorWindow>(new Rect(0, 0, 400, 200), true, "VRSuya HDiffPatcher");
 			AppWindow.Initialize();
 		}
 
@@ -60,14 +61,22 @@ namespace VRSuya.Installer {
 			}
 			GUILayout.Space(BorderX);
 			EditorGUILayout.EndHorizontal();
+			EditorGUILayout.BeginHorizontal();
+			GUILayout.Space(BorderX);
+			ReplaceModel = EditorGUILayout.ToggleLeft(GetTranslatedString("String_ReplaceAfterPatch"), ReplaceModel);
+			GUILayout.Space(BorderX);
+			EditorGUILayout.EndHorizontal();
 			EditorGUILayout.Space(EditorGUIUtility.singleLineHeight);
 			EditorGUILayout.BeginHorizontal();
 			GUILayout.Space(BorderX);
 			GUI.backgroundColor = Color.cyan;
 			EditorGUI.BeginDisabledGroup(!IsReadyToPatch());
 			if (GUILayout.Button(GetTranslatedString("String_Update"), GUILayout.Height(40))) {
-				if (RequestAvatarPatch()) {
-					Close();
+				string OutputAssetPath = RequestAvatarPatch();
+				if (!string.IsNullOrEmpty(OutputAssetPath) && ReplaceModel) {
+					if (ReplaceAvatarModel(OutputAssetPath)) {
+						Close();
+					}
 				}
 			}
 			EditorGUI.EndDisabledGroup();
@@ -80,7 +89,7 @@ namespace VRSuya.Installer {
 			return AvatarGameObject && !string.IsNullOrEmpty(HDiffFilePath);
 		}
 
-		bool RequestAvatarPatch() {
+		string RequestAvatarPatch() {
 			HDiffPatcher HDiffPatcherInstance = new HDiffPatcher();
 			string AvatarFilePath = GetAvatarFilePath();
 			string OutputAssetPath = HDiffPatcherInstance.RequestHDiffPatch(AvatarFilePath, HDiffFilePath);
@@ -90,16 +99,18 @@ namespace VRSuya.Installer {
 					GetTranslatedString("ERROR_CONSOLE"),
 					GetTranslatedString("String_Okay")
 				);
-				return false;
+				return null;
 			}
-			EditorUtility.DisplayDialog(
-				"VRSuya HDiffPatcher",
-				$"{string.Format(GetTranslatedString("COMPLETED_PATCH"), AvatarGameObject.name)}\n\n{OutputAssetPath}",
-				GetTranslatedString("String_Okay")
-			);
+			if (!ReplaceModel) {
+				EditorUtility.DisplayDialog(
+					"VRSuya HDiffPatcher",
+					$"{string.Format(GetTranslatedString("COMPLETED_PATCH"), AvatarGameObject.name)}\n\n{OutputAssetPath}",
+					GetTranslatedString("String_Okay")
+				);
+			}
 			VRSuya.Core.Asset AssetInstance = new VRSuya.Core.Asset();
 			AssetInstance.PingAsset(OutputAssetPath);
-			return true;
+			return OutputAssetPath;
 		}
 
 		string GetAvatarFilePath() {
@@ -128,6 +139,27 @@ namespace VRSuya.Installer {
 				string UnityProjectPath = Path.GetDirectoryName(UnityProjectAssetsPath);
 				string FullFilePath = Path.Combine(UnityProjectPath, TargetAssetPath);
 				return Path.GetFullPath(FullFilePath);
+			}
+		}
+
+		bool ReplaceAvatarModel(string TargetAssetPath) {
+			GameObject NewAvatarGameObject = AssetDatabase.LoadAssetAtPath<GameObject>(TargetAssetPath);
+			AvatarRebuilder AvatarRebuilderInstance = new AvatarRebuilder(AvatarGameObject, NewAvatarGameObject);
+			string StatusString = AvatarRebuilderInstance.RequestRebuildAvatar(true);
+			if (StatusString == "COMPLETED") {
+				EditorUtility.DisplayDialog(
+					"VRSuya HDiffPatcher",
+					$"{string.Format(GetTranslatedString("COMPLETED_PATCH"), AvatarGameObject.name)}\n\n{TargetAssetPath}",
+					GetTranslatedString("String_Okay")
+				);
+				return true;
+			} else {
+				EditorUtility.DisplayDialog(
+					"VRSuya HDiffPatcher",
+					GetTranslatedString(StatusString),
+					GetTranslatedString("String_Okay")
+				);
+				return false;
 			}
 		}
 	}

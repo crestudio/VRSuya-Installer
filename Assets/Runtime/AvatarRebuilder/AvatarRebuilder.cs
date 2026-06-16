@@ -24,20 +24,25 @@ namespace VRSuya.Installer {
         public GameObject OldAvatarGameObject;
         public GameObject NewAvatarGameObject;
 
-        Animator OldAvatarAnimator;
+		public AvatarRebuilder(GameObject NewOldAvatarGameObject, GameObject NewNewAvatarGameObject) {
+			OldAvatarGameObject = NewOldAvatarGameObject;
+			NewAvatarGameObject = NewNewAvatarGameObject;
+		}
+
+		Animator OldAvatarAnimator;
 		Animator NewAvatarAnimator;
 
 		const string UndoGroupName = "VRSuya AvatarRebuilder";
 		int UndoGroupIndex;
 		string StatusString;
 
-		public string RequestRebuildAvatar() {
+		public string RequestRebuildAvatar(bool Backuped = false) {
 			UndoGroupIndex = InitializeUndoGroup(UndoGroupName);
 			if (!CheckOldAvatar()) return StatusString;
 			CopyModelImporter();
 			if (!CheckNewAvatar()) return StatusString;
 			if (IsVariantModelPrefab()) {
-				ReplaceModelAsset();
+				ReplaceModelAsset(Backuped);
 				StatusString = "COMPLETED";
 			} else {
 				CreateBackup();
@@ -62,6 +67,10 @@ namespace VRSuya.Installer {
 		bool CheckOldAvatar() {
 			if (!OldAvatarGameObject) {
 				StatusString = "NO_OLD_AVATAR";
+				return false;
+			}
+			if (!OldAvatarGameObject.scene.IsValid()) {
+				StatusString = "NO_OLD_AVATAR_SCENE";
 				return false;
 			}
 			OldAvatarAnimator = OldAvatarGameObject.GetComponent<Animator>();
@@ -117,11 +126,11 @@ namespace VRSuya.Installer {
 			return PrefabSourceAssetPath.EndsWith(".fbx", StringComparison.OrdinalIgnoreCase);
 		}
 
-		void ReplaceModelAsset() {
+		void ReplaceModelAsset(bool Backuped) {
 			string OldModelPath = AssetDatabase.GetAssetPath(OldAvatarAnimator.avatar);
 			string NewModelPath = AssetDatabase.GetAssetPath(NewAvatarAnimator.avatar);
 			ReplaceModelAsset ReplaceModelAssetInstance = new ReplaceModelAsset();
-			ReplaceModelAssetInstance.RequestReplaceModelAsset(OldModelPath, NewModelPath, UndoGroupIndex);
+			ReplaceModelAssetInstance.RequestReplaceModelAsset(OldModelPath, NewModelPath, Backuped, UndoGroupIndex);
 		}
 
 		void CreateBackup() {
