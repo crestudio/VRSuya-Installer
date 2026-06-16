@@ -41,7 +41,7 @@ namespace VRSuya.Modular.Editor {
 			if (RemovePhysBoneComponents.Length > 0) {
 				string[] Cheek_Names = new string[] { 
 					"Cheek_L", "Cheek.L", "Cheek1_L", "Cheek_Root_L", "Cheek_root_L", "Hoppe.L",
-					"Cheek_L", "Cheek.R", "Cheek1_R", "Cheek_Root_R", "Cheek_root_R", "Hoppe.R"
+					"Cheek_R", "Cheek.R", "Cheek1_R", "Cheek_Root_R", "Cheek_root_R", "Hoppe.R"
 				};
 				VRCPhysBone[] AvatarPhysBoneComponents = TargetBuildContext.AvatarRootObject.GetComponentsInChildren<VRCPhysBone>(true);
 				List<VRCPhysBone> TargetPhysBoneComponents = new List<VRCPhysBone>();

@@ -34,7 +34,7 @@ namespace VRSuya.Installer {
 		Vector3 RightOriginPosition = Vector3.zero;
 
 		static readonly string[] Cheek_L_Names = new string[] { "Cheek_L", "Cheek.L", "Cheek1_L", "Cheek_Root_L", "Cheek_root_L", "Hoppe.L", "ho_L" };
-		static readonly string[] Cheek_R_Names = new string[] { "Cheek_L", "Cheek.R", "Cheek1_R", "Cheek_Root_R", "Cheek_root_R", "Hoppe.R", "ho_R" };
+		static readonly string[] Cheek_R_Names = new string[] { "Cheek_R", "Cheek.R", "Cheek1_R", "Cheek_Root_R", "Cheek_root_R", "Hoppe.R", "ho_R" };
 
 		string StatusCode;
 

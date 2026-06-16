@@ -41,8 +41,8 @@ namespace VRSuya.Modular.Editor {
 			if (AnimatedPhysBoneComponents.Length > 0) {
 				TargetBuildContext.AvatarRootObject.TryGetComponent(out Animator TargetAnimator);
 				if (TargetAnimator) {
-					string[] Cheek_L_Names = new string[] { "Cheek.L", "Cheek1_L", "Cheek_Root_L", "Cheek_root_L", "Hoppe.L" };
-					string[] Cheek_R_Names = new string[] { "Cheek.R", "Cheek1_R", "Cheek_Root_R", "Cheek_root_R", "Hoppe.R" };
+					string[] Cheek_L_Names = new string[] { "Cheek_L", "Cheek.L", "Cheek1_L", "Cheek_Root_L", "Cheek_root_L", "Hoppe.L" };
+					string[] Cheek_R_Names = new string[] { "Cheek_R", "Cheek.R", "Cheek1_R", "Cheek_Root_R", "Cheek_root_R", "Hoppe.R" };
 					Transform[] HeadTransforms = TargetAnimator.GetBoneTransform(HumanBodyBones.Head).GetComponentsInChildren<Transform>(true);
 					Transform Cheek_L_Transform = HeadTransforms.FirstOrDefault(Item => Cheek_L_Names.Contains(Item.name));
 					Transform Cheek_R_Transform = HeadTransforms.FirstOrDefault(Item => Cheek_R_Names.Contains(Item.name));
