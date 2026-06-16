@@ -76,7 +76,7 @@ namespace VRSuya.Installer {
 			string TargetFileName = Path.GetFileNameWithoutExtension(TargetFilePath);
 			string Date = DateTime.Now.ToString("yyMMdd");
 			string RandomSuffix = Guid.NewGuid().ToString("N").Substring(0, 2).ToUpper();
-			string NewAssetName = $"VRSuya_{TargetFileName}_{Date}_{RandomSuffix}.fbx";
+			string NewAssetName = $"{TargetFileName}_{Date}_{RandomSuffix}.fbx";
 			return Path.Combine(TargetFileDirectory, NewAssetName);
 		}
 
