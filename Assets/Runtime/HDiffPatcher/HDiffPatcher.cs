@@ -17,7 +17,7 @@ using Debug = UnityEngine.Debug;
 
 namespace VRSuya.Installer {
 
-	public class AvatarFBXHDiffPatcher {
+	public class HDiffPatcher {
 
 		public string RequestHDiffPatch(string TargetFilePath, string HDiffFilePath) {
 			if (!IsValidInputFilePath(TargetFilePath, HDiffFilePath)) return null;
@@ -30,7 +30,7 @@ namespace VRSuya.Installer {
 			bool PatchResult = false;
 			try {
 				EditorUtility.DisplayProgressBar(
-					"VRSuya AvatarFBXHDiffPatcher",
+					"VRSuya HDiffPatcher",
 					$"Processing : {Path.GetFileName(TargetFilePath)}",
 					0.5f
 				);
@@ -51,11 +51,11 @@ namespace VRSuya.Installer {
 
 		bool IsValidInputFilePath(string TargetFilePath, string HDiffFilePath) {
 			if (string.IsNullOrEmpty(TargetFilePath) || !File.Exists(TargetFilePath)) {
-				Debug.LogError($"[VRSuya] AvatarHDiffPatcher : {GetTranslatedString("ERROR_FBX")}");
+				Debug.LogError($"[VRSuya] HDiffPatcher : {GetTranslatedString("ERROR_FBX")}");
 				return false;
 			}
 			if (string.IsNullOrEmpty(HDiffFilePath) || !File.Exists(HDiffFilePath)) {
-				Debug.LogError($"[VRSuya] AvatarHDiffPatcher : {GetTranslatedString("ERROR_HDIFF")}");
+				Debug.LogError($"[VRSuya] HDiffPatcher : {GetTranslatedString("ERROR_HDIFF")}");
 				return false;
 			}
 			return true;
@@ -65,7 +65,7 @@ namespace VRSuya.Installer {
 			string OutputFullFilePath = Path.GetFullPath(OutputFilePath);
 			string AssetDatabasePath = Path.GetFullPath(Application.dataPath);
 			if (!OutputFullFilePath.StartsWith(AssetDatabasePath, StringComparison.OrdinalIgnoreCase)) {
-				Debug.LogError($"[VRSuya] AvatarHDiffPatcher : {GetTranslatedString("ERROR_OUTPUTPATH")}");
+				Debug.LogError($"[VRSuya] HDiffPatcher : {GetTranslatedString("ERROR_OUTPUTPATH")}");
 				return false;
 			}
 			return true;
@@ -89,7 +89,7 @@ namespace VRSuya.Installer {
 		string GetHDiffPatchFilePath() {
 			string Platform = GetPlatform();
 			if (Platform == null) {
-				Debug.LogError($"[VRSuya] AvatarHDiffPatcher : {GetTranslatedString("ERROR_PLATFORM")}");
+				Debug.LogError($"[VRSuya] HDiffPatcher : {GetTranslatedString("ERROR_PLATFORM")}");
 				return null;
 			}
 			string HDiffFileName = Application.platform == RuntimePlatform.WindowsEditor ? "hpatchz.exe" : "hpatchz";
@@ -100,7 +100,7 @@ namespace VRSuya.Installer {
 					return Path.GetFullPath(AssetPath);
 				}
 			}
-			Debug.LogError($"[VRSuya] AvatarHDiffPatcher : {GetTranslatedString("ERROR_NOHDIFFPATCH")}");
+			Debug.LogError($"[VRSuya] HDiffPatcher : {GetTranslatedString("ERROR_NOHDIFFPATCH")}");
 			return null;
 		}
 
@@ -127,7 +127,7 @@ namespace VRSuya.Installer {
 				chmodProcess.WaitForExit(5000);
 				return true;
 			} catch (Exception chmodException) {
-				Debug.LogError($"[VRSuya] AvatarHDiffPatcher : {GetTranslatedString("ERROR_NOPERMISSION")}\n{chmodException.Message}");
+				Debug.LogError($"[VRSuya] HDiffPatcher : {GetTranslatedString("ERROR_NOPERMISSION")}\n{chmodException.Message}");
 				return false;
 			}
 		}
@@ -140,9 +140,9 @@ namespace VRSuya.Installer {
 				out string ProcessStandardError
 			);
 			if (!ProcessResult) {
-				Debug.LogError($"[VRSuya] AvatarHDiffPatcher : {GetTranslatedString("ERROR_FAILEDRUN")}\n{ProcessStandardError}");
+				Debug.LogError($"[VRSuya] HDiffPatcher : {GetTranslatedString("ERROR_FAILEDRUN")}\n{ProcessStandardError}");
 				if (ProcessStandardError.Contains("oldDataSize")) {
-					Debug.LogError($"[VRSuya] AvatarHDiffPatcher : {GetTranslatedString("NOT_MATCH")}");
+					Debug.LogError($"[VRSuya] HDiffPatcher : {GetTranslatedString("NOT_MATCH")}");
 				}
 				return false;
 			}
@@ -166,13 +166,13 @@ namespace VRSuya.Installer {
 					StandardErrorOutput = HDiffPatchProcess.StandardError.ReadToEnd();
 					if (!ProcessCompleted) {
 						HDiffPatchProcess.Kill();
-						Debug.LogError($"[VRSuya] AvatarHDiffPatcher : {GetTranslatedString("ERROR_TIMEDOUT")}");
+						Debug.LogError($"[VRSuya] HDiffPatcher : {GetTranslatedString("ERROR_TIMEDOUT")}");
 						return false;
 					}
 					return HDiffPatchProcess.ExitCode == 0;
 				}
 			} catch (Exception HDiffPatchException) {
-				Debug.LogError($"[VRSuya] AvatarHDiffPatcher : {HDiffPatchException.Message}");
+				Debug.LogError($"[VRSuya] HDiffPatcher : {HDiffPatchException.Message}");
 				return false;
 			}
 		}

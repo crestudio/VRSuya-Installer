@@ -15,16 +15,16 @@ using Animator = UnityEngine.Animator;
 
 namespace VRSuya.Installer {
 
-	public class AvatarHDiffPatcherEditorWindow : EditorWindow {
+	public class HDiffPatcherEditorWindow : EditorWindow {
 
 		public GameObject AvatarGameObject;
 		public string HDiffFilePath = string.Empty;
 
 		const float BorderX = 30f;
 
-		[MenuItem("Tools/VRSuya/Installer/AvatarHDiffPatcher", priority = 1000)]
-		static void OpenAvatarHDiffPatcherEditorWindow() {
-			AvatarHDiffPatcherEditorWindow AppWindow = GetWindowWithRect<AvatarHDiffPatcherEditorWindow>(new Rect(0, 0, 400, 180), true, "VRSuya AvatarHDiffPatcher");
+		[MenuItem("Tools/VRSuya/Installer/HDiffPatcher", priority = 1000)]
+		static void CreateWindow() {
+			HDiffPatcherEditorWindow AppWindow = GetWindowWithRect<HDiffPatcherEditorWindow>(new Rect(0, 0, 400, 180), true, "VRSuya HDiffPatcher");
 			AppWindow.Initialize();
 		}
 
@@ -52,9 +52,9 @@ namespace VRSuya.Installer {
 			EditorGUILayout.LabelField(GetTranslatedString("String_PatchData"), GUILayout.Width(99));
 			HDiffFilePath = EditorGUILayout.TextField(HDiffFilePath);
 			if (GUILayout.Button(GetTranslatedString("String_Browse"), GUILayout.Width(72))) {
-				string SelectedPath = EditorUtility.OpenFilePanel("VRSuya AvatarHDiffPatcher", Application.dataPath, "hdiff");
-				if (!string.IsNullOrEmpty(SelectedPath)) {
-					HDiffFilePath = SelectedPath;
+				string TargetPath = EditorUtility.OpenFilePanel("VRSuya HDiffPatcher", Application.dataPath, "hdiff");
+				if (!string.IsNullOrEmpty(TargetPath)) {
+					HDiffFilePath = TargetPath;
 					GUI.FocusControl(null);
 				}
 			}
@@ -81,19 +81,19 @@ namespace VRSuya.Installer {
 		}
 
 		bool RequestAvatarPatch() {
-			AvatarFBXHDiffPatcher AvatarPatcherInstance = new AvatarFBXHDiffPatcher();
+			HDiffPatcher HDiffPatcherInstance = new HDiffPatcher();
 			string AvatarFilePath = GetAvatarFilePath();
-			string OutputAssetPath = AvatarPatcherInstance.RequestHDiffPatch(AvatarFilePath, HDiffFilePath);
+			string OutputAssetPath = HDiffPatcherInstance.RequestHDiffPatch(AvatarFilePath, HDiffFilePath);
 			if (string.IsNullOrEmpty(OutputAssetPath)) {
 				EditorUtility.DisplayDialog(
-					"AvatarFBXHDiffPatcher",
+					"VRSuya HDiffPatcher",
 					GetTranslatedString("ERROR_CONSOLE"),
 					GetTranslatedString("String_Okay")
 				);
 				return false;
 			}
 			EditorUtility.DisplayDialog(
-				"AvatarFBXHDiffPatcher",
+				"VRSuya HDiffPatcher",
 				$"{string.Format(GetTranslatedString("COMPLETED_PATCH"), AvatarGameObject.name)}\n\n{OutputAssetPath}",
 				GetTranslatedString("String_Okay")
 			);
