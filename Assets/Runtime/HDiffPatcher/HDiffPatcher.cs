@@ -162,7 +162,7 @@ namespace VRSuya.Installer {
 						CreateNoWindow = true
 					};
 					HDiffPatchProcess.Start();
-					bool ProcessCompleted = HDiffPatchProcess.WaitForExit(60000);
+					bool ProcessCompleted = HDiffPatchProcess.WaitForExit(300000);
 					StandardErrorOutput = HDiffPatchProcess.StandardError.ReadToEnd();
 					if (!ProcessCompleted) {
 						HDiffPatchProcess.Kill();
