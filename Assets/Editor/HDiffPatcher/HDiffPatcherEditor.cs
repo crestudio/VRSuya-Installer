@@ -145,7 +145,7 @@ namespace VRSuya.Installer {
 		bool ReplaceAvatarModel(string TargetAssetPath) {
 			GameObject NewAvatarGameObject = AssetDatabase.LoadAssetAtPath<GameObject>(TargetAssetPath);
 			AvatarRebuilder AvatarRebuilderInstance = new AvatarRebuilder(AvatarGameObject, NewAvatarGameObject);
-			string StatusString = AvatarRebuilderInstance.RequestRebuildAvatar(true);
+			string StatusString = AvatarRebuilderInstance.RequestRebuildAvatar();
 			if (StatusString == "COMPLETED") {
 				EditorUtility.DisplayDialog(
 					"VRSuya HDiffPatcher",

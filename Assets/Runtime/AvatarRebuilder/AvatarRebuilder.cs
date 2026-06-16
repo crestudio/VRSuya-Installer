@@ -36,13 +36,13 @@ namespace VRSuya.Installer {
 		int UndoGroupIndex;
 		string StatusString;
 
-		public string RequestRebuildAvatar(bool Backuped = false) {
+		public string RequestRebuildAvatar() {
 			UndoGroupIndex = InitializeUndoGroup(UndoGroupName);
 			if (!CheckOldAvatar()) return StatusString;
 			CopyModelImporter();
 			if (!CheckNewAvatar()) return StatusString;
 			if (IsVariantModelPrefab()) {
-				ReplaceModelAsset(Backuped);
+				ReplaceModelAsset();
 				StatusString = "COMPLETED";
 			} else {
 				CreateBackup();
@@ -126,11 +126,11 @@ namespace VRSuya.Installer {
 			return PrefabSourceAssetPath.EndsWith(".fbx", StringComparison.OrdinalIgnoreCase);
 		}
 
-		void ReplaceModelAsset(bool Backuped) {
+		void ReplaceModelAsset() {
 			string OldModelPath = AssetDatabase.GetAssetPath(OldAvatarAnimator.avatar);
 			string NewModelPath = AssetDatabase.GetAssetPath(NewAvatarAnimator.avatar);
 			ReplaceModelAsset ReplaceModelAssetInstance = new ReplaceModelAsset();
-			ReplaceModelAssetInstance.RequestReplaceModelAsset(OldModelPath, NewModelPath, Backuped, UndoGroupIndex);
+			ReplaceModelAssetInstance.RequestReplaceModelAsset(OldModelPath, NewModelPath, UndoGroupIndex);
 		}
 
 		void CreateBackup() {
