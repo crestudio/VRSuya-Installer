@@ -17,9 +17,17 @@ namespace VRSuya.Installer {
 
 	public class HDiffPatcherEditorWindow : EditorWindow {
 
+		public HDiffPatcherEditorWindow(GameObject NewAvatarGameObject, string NewHDiffFilePath, bool NewReplaceModel, bool NewSilenceMode) {
+			AvatarGameObject = NewAvatarGameObject;
+			HDiffFilePath = NewHDiffFilePath;
+			ReplaceModel = NewReplaceModel;
+			SilenceMode = NewSilenceMode;
+		}
+
 		public GameObject AvatarGameObject;
 		public string HDiffFilePath = string.Empty;
 		public bool ReplaceModel = true;
+		public bool SilenceMode = false;
 
 		const float BorderX = 30f;
 
@@ -72,12 +80,7 @@ namespace VRSuya.Installer {
 			GUI.backgroundColor = Color.cyan;
 			EditorGUI.BeginDisabledGroup(!IsReadyToPatch());
 			if (GUILayout.Button(GetTranslatedString("String_Update"), GUILayout.Height(40))) {
-				string OutputAssetPath = RequestAvatarPatch();
-				if (!string.IsNullOrEmpty(OutputAssetPath) && ReplaceModel) {
-					if (ReplaceAvatarModel(OutputAssetPath)) {
-						Close();
-					}
-				}
+				if (RequestAvatarPatch()) Close();
 			}
 			EditorGUI.EndDisabledGroup();
 			GUI.backgroundColor = Color.white;
@@ -89,19 +92,31 @@ namespace VRSuya.Installer {
 			return AvatarGameObject && !string.IsNullOrEmpty(HDiffFilePath);
 		}
 
-		string RequestAvatarPatch() {
+		public bool RequestAvatarPatch() {
+			string OutputAssetPath = ApplyAvatarPatch();
+			if (!string.IsNullOrEmpty(OutputAssetPath) && ReplaceModel) {
+				if (ReplaceAvatarModel(OutputAssetPath)) {
+					return true;
+				}
+			}
+			return false;
+		}
+
+		string ApplyAvatarPatch() {
 			HDiffPatcher HDiffPatcherInstance = new HDiffPatcher();
 			string AvatarFilePath = GetAvatarFilePath();
 			string OutputAssetPath = HDiffPatcherInstance.RequestHDiffPatch(AvatarFilePath, HDiffFilePath);
 			if (string.IsNullOrEmpty(OutputAssetPath)) {
-				EditorUtility.DisplayDialog(
-					"VRSuya HDiffPatcher",
-					GetTranslatedString("ERROR_CONSOLE"),
-					GetTranslatedString("String_Okay")
-				);
+				if (!SilenceMode) {
+					EditorUtility.DisplayDialog(
+						"VRSuya HDiffPatcher",
+						GetTranslatedString("ERROR_CONSOLE"),
+						GetTranslatedString("String_Okay")
+					);
+				}
 				return null;
 			}
-			if (!ReplaceModel) {
+			if (!ReplaceModel && !SilenceMode) {
 				EditorUtility.DisplayDialog(
 					"VRSuya HDiffPatcher",
 					$"{string.Format(GetTranslatedString("COMPLETED_PATCH"), AvatarGameObject.name)}\n\n{OutputAssetPath}",
@@ -119,11 +134,13 @@ namespace VRSuya.Installer {
 				string AvatarAssetPath = AssetDatabase.GetAssetPath(AvatarAnimator.avatar);
 				return GetFilePath(AvatarAssetPath);
 			} else {
-				EditorUtility.DisplayDialog(
-					"AvatarFBXHDiffPatcher",
-					GetTranslatedString("NO_OLD_ANIMATOR"),
-					GetTranslatedString("String_Okay")
-				);
+				if (!SilenceMode) {
+					EditorUtility.DisplayDialog(
+						"AvatarFBXHDiffPatcher",
+						GetTranslatedString("NO_OLD_ANIMATOR"),
+						GetTranslatedString("String_Okay")
+					);
+				}
 				return string.Empty;
 			}
 		}
@@ -147,18 +164,22 @@ namespace VRSuya.Installer {
 			AvatarRebuilder AvatarRebuilderInstance = new AvatarRebuilder(AvatarGameObject, NewAvatarGameObject);
 			string StatusString = AvatarRebuilderInstance.RequestRebuildAvatar();
 			if (StatusString == "COMPLETED") {
-				EditorUtility.DisplayDialog(
-					"VRSuya HDiffPatcher",
-					$"{string.Format(GetTranslatedString("COMPLETED_PATCH"), AvatarGameObject.name)}\n\n{TargetAssetPath}",
-					GetTranslatedString("String_Okay")
-				);
+				if (!SilenceMode) {
+					EditorUtility.DisplayDialog(
+						"VRSuya HDiffPatcher",
+						$"{string.Format(GetTranslatedString("COMPLETED_PATCH"), AvatarGameObject.name)}\n\n{TargetAssetPath}",
+						GetTranslatedString("String_Okay")
+					);
+				}
 				return true;
 			} else {
-				EditorUtility.DisplayDialog(
-					"VRSuya HDiffPatcher",
-					GetTranslatedString(StatusString),
-					GetTranslatedString("String_Okay")
-				);
+				if (!SilenceMode) {
+					EditorUtility.DisplayDialog(
+						"VRSuya HDiffPatcher",
+						GetTranslatedString(StatusString),
+						GetTranslatedString("String_Okay")
+					);
+				}
 				return false;
 			}
 		}
