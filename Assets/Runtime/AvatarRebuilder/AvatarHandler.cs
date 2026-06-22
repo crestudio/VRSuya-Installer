@@ -26,6 +26,7 @@ namespace VRSuya.Installer {
 		static readonly string[] RestoreBoneNames = new string[] {
 			"Cheek_Root_L", "Cheek_Root_R", "Cheek_L", "Cheek_R", "ho_L", "ho_R"
 		};
+		const float Threshold = 0.01f;
 
 		const string UndoGroupName = "VRSuya AvatarRebuilder";
 
@@ -162,6 +163,8 @@ namespace VRSuya.Installer {
 				foreach (Transform TargetTransform in RestoreBoneList) {
 					Transform NewTransform = NewAvatarBoneTransform.FirstOrDefault(Item => Item.name == TargetTransform.name);
 					if (NewTransform) {
+						float PositionDifference = Vector3.Distance(TargetTransform.localPosition, NewTransform.localPosition);
+						if (PositionDifference <= Threshold) continue;
 						Undo.RecordObject(TargetTransform, UndoGroupName);
 						TargetTransform.transform.localPosition = NewTransform.localPosition;
 						TargetTransform.transform.localRotation = NewTransform.localRotation;
