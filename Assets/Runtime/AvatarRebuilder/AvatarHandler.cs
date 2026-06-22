@@ -39,6 +39,7 @@ namespace VRSuya.Installer {
 				RestoreCheekTransform();
 				UpdateSkinnedMeshRenderer();
 				UpdateAnimatorAvatar();
+				RestoreCheekTransform();
 			} finally {
 				Object.DestroyImmediate(Context.NewAvatarGameObject);
 			}
