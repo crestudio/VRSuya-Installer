@@ -39,17 +39,13 @@ namespace VRSuya.Modular.Editor {
 		protected override void Execute(BuildContext TargetBuildContext) {
 			RemovePhysBone[] RemovePhysBoneComponents = TargetBuildContext.AvatarRootObject.GetComponentsInChildren<RemovePhysBone>(true);
 			if (RemovePhysBoneComponents.Length > 0) {
-				string[] Cheek_Names = new string[] { 
-					"Cheek_L", "Cheek.L", "Cheek1_L", "Cheek_Root_L", "Cheek_root_L", "Hoppe.L",
-					"Cheek_R", "Cheek.R", "Cheek1_R", "Cheek_Root_R", "Cheek_root_R", "Hoppe.R"
-				};
 				VRCPhysBone[] AvatarPhysBoneComponents = TargetBuildContext.AvatarRootObject.GetComponentsInChildren<VRCPhysBone>(true);
 				List<VRCPhysBone> TargetPhysBoneComponents = new List<VRCPhysBone>();
 				TargetPhysBoneComponents.AddRange(AvatarPhysBoneComponents
 					.Where(Item => Item.rootTransform != null)
-					.Where(Item => Cheek_Names.Contains(Item.rootTransform.name, StringComparer.OrdinalIgnoreCase)));
+					.Where(Item => VRSuya.Core.Avatar.CheekBoneNames.Contains(Item.rootTransform.name, StringComparer.OrdinalIgnoreCase)));
 				TargetPhysBoneComponents.AddRange(AvatarPhysBoneComponents
-					.Where(Item => Cheek_Names.Contains(Item.gameObject.name, StringComparer.OrdinalIgnoreCase)));
+					.Where(Item => VRSuya.Core.Avatar.CheekBoneNames.Contains(Item.gameObject.name, StringComparer.OrdinalIgnoreCase)));
 				if (TargetPhysBoneComponents.Count > 0) {
 					foreach (VRCPhysBone TargetComponent in TargetPhysBoneComponents) {
 						if (TargetComponent) Object.DestroyImmediate(TargetComponent);
