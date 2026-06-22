@@ -24,7 +24,8 @@ namespace VRSuya.Installer {
 		Transform[] MissingBoneTransforms = new Transform[0];
 
 		static readonly string[] RestoreBoneNames = new string[] {
-			"Cheek_Root_L", "Cheek_Root_R", "Cheek_L", "Cheek_R", "ho_L", "ho_R"
+			"Cheek_Root_L", "Cheek_L", "Cheek_L_end", "ho_L", "Cheek_L_root",
+			"Cheek_Root_R", "Cheek_R", "Cheek_R_end", "ho_R"
 		};
 		const float Threshold = 0.01f;
 
