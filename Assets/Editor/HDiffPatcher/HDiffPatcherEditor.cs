@@ -17,13 +17,6 @@ namespace VRSuya.Installer {
 
 	public class HDiffPatcherEditorWindow : EditorWindow {
 
-		public HDiffPatcherEditorWindow(GameObject NewAvatarGameObject, string NewHDiffFilePath, bool NewReplaceModel, bool NewSilenceMode) {
-			AvatarGameObject = NewAvatarGameObject;
-			HDiffFilePath = NewHDiffFilePath;
-			ReplaceModel = NewReplaceModel;
-			SilenceMode = NewSilenceMode;
-		}
-
 		public GameObject AvatarGameObject;
 		public string HDiffFilePath = string.Empty;
 		public bool ReplaceModel = true;
