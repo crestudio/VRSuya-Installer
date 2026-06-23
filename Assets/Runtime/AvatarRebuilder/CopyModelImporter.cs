@@ -22,6 +22,11 @@ namespace VRSuya.Installer {
 		public void RequestCopyModelImporter(string OldModelPath, string NewModelPath, int UndoGroupIndex = -1) {
 			OldModelImporter = AssetImporter.GetAtPath(OldModelPath) as ModelImporter;
 			NewModelImporter = AssetImporter.GetAtPath(NewModelPath) as ModelImporter;
+			if (NewModelImporter.animationType != ModelImporterAnimationType.Human) {
+				NewModelImporter.animationType = ModelImporterAnimationType.Human;
+				NewModelImporter.avatarSetup = ModelImporterAvatarSetup.CreateFromThisModel;
+				NewModelImporter.SaveAndReimport();
+			}
 			Undo.RecordObject(NewModelImporter, UndoGroupName);
 			NewModelImporter.addCollider = OldModelImporter.addCollider;
 			NewModelImporter.animationCompression = OldModelImporter.animationCompression;
@@ -39,7 +44,7 @@ namespace VRSuya.Installer {
 			NewModelImporter.generateAnimations = OldModelImporter.generateAnimations;
 			NewModelImporter.generateSecondaryUV = OldModelImporter.generateSecondaryUV;
 			NewModelImporter.globalScale = OldModelImporter.globalScale;
-			NewModelImporter.humanDescription = OldModelImporter.humanDescription;
+			NewModelImporter.humanDescription = CopyHumanDescription();
 			NewModelImporter.humanoidOversampling = OldModelImporter.humanoidOversampling;
 			NewModelImporter.importAnimatedCustomProperties = OldModelImporter.importAnimatedCustomProperties;
 			NewModelImporter.importAnimation = OldModelImporter.importAnimation;
@@ -110,6 +115,23 @@ namespace VRSuya.Installer {
 				if (!(OldModelExternalObject.Value is Material OldMaterial)) continue;
 				NewModelImporter.AddRemap(OldModelExternalObject.Key, OldMaterial);
 			}
+		}
+
+		HumanDescription CopyHumanDescription() {
+			HumanDescription OldHumanDescription = OldModelImporter.humanDescription;
+			HumanDescription NewHumanDescription = NewModelImporter.humanDescription;
+			return new HumanDescription {
+				human = OldHumanDescription.human,
+				skeleton = NewHumanDescription.skeleton,
+				upperArmTwist = OldHumanDescription.upperArmTwist,
+				lowerArmTwist = OldHumanDescription.lowerArmTwist,
+				upperLegTwist = OldHumanDescription.upperLegTwist,
+				lowerLegTwist = OldHumanDescription.lowerLegTwist,
+				armStretch = OldHumanDescription.armStretch,
+				legStretch = OldHumanDescription.legStretch,
+				feetSpacing = OldHumanDescription.feetSpacing,
+				hasTranslationDoF = OldHumanDescription.hasTranslationDoF
+			};
 		}
 	}
 }
