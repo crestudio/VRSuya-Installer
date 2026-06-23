@@ -199,6 +199,39 @@ namespace VRSuya.Installer {
 			}
 			return null;
 		}
+
+		void DebugArmatureMatrix() {
+			Dictionary<string, Transform> NewAvatarBoneDictionary = new HashSet<Transform>(
+				Context.NewAvatarGameObject
+					.GetComponentsInChildren<SkinnedMeshRenderer>(true)
+					.SelectMany(Item => Item.bones)
+					.Where(Item => Item != null)
+				)
+				.GroupBy(Item => Item.name)
+				.ToDictionary(Group => Group.Key, Group => Group.First());
+			System.Text.StringBuilder DebugStringBuilder = new System.Text.StringBuilder();
+			DebugStringBuilder.AppendLine("[VRSuya] AvatarRebuilder: Armature WorldToLocalMatrix 비교");
+			DebugStringBuilder.AppendLine("========================================");
+			foreach (KeyValuePair<string, Transform> AvatarBone in AvatarBoneDictionary) {
+				if (!NewAvatarBoneDictionary.TryGetValue(AvatarBone.Key, out Transform NewBoneTransform)) continue;
+				Transform OldBoneTransform = AvatarBone.Value;
+				Matrix4x4 OldAvatarBoneMatrix = OldBoneTransform.worldToLocalMatrix;
+				Matrix4x4 NewAvararBoneMatrix = NewBoneTransform.worldToLocalMatrix;
+				if (OldAvatarBoneMatrix == NewAvararBoneMatrix) continue;
+				Vector3 OldAvatarBoneWorldPosition = OldBoneTransform.position;
+				Vector3 NewAvatarBoneWorldPosition = NewBoneTransform.position;
+				float PositionDifference = Vector3.Distance(OldAvatarBoneWorldPosition, NewAvatarBoneWorldPosition);
+				Quaternion OldAvatarBoneWorldRotation = OldBoneTransform.rotation;
+				Quaternion NewAvatarBoneWorldRotation = NewBoneTransform.rotation;
+				float RotationDifference = Quaternion.Angle(OldAvatarBoneWorldRotation, NewAvatarBoneWorldRotation);
+				DebugStringBuilder.AppendLine($"[{AvatarBone.Key}]");
+				DebugStringBuilder.AppendLine($"  World Position  | 기존: {OldAvatarBoneWorldPosition} | 신규: {NewAvatarBoneWorldPosition} | 차이: {PositionDifference:F6}");
+				DebugStringBuilder.AppendLine($"  World Rotation  | 기존: {OldAvatarBoneWorldRotation.eulerAngles} | 신규: {NewAvatarBoneWorldRotation.eulerAngles} | 차이: {RotationDifference:F6}°");
+				DebugStringBuilder.AppendLine($"  Local Position  | 기존: {OldBoneTransform.localPosition} | 신규: {NewBoneTransform.localPosition}");
+				DebugStringBuilder.AppendLine($"  Local Rotation  | 기존: {OldBoneTransform.localRotation.eulerAngles} | 신규: {NewBoneTransform.localRotation.eulerAngles}");
+			}
+			Debug.Log(DebugStringBuilder.ToString());
+		}
 	}
 }
 #endif
