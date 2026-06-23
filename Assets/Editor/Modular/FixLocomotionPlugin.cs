@@ -44,8 +44,7 @@ namespace VRSuya.Modular.Editor {
 		protected override void Execute(BuildContext TargetBuildContext) {
 			FixLocomotion[] FixLocomotionComponents = TargetBuildContext.AvatarRootObject.GetComponentsInChildren<FixLocomotion>(true);
 			if (FixLocomotionComponents.Length > 0) {
-				Avatar AvatarInstance = new Avatar();
-				AnimatorController TargetAnimator = AvatarInstance.GetAnimatorController(TargetBuildContext.AvatarRootObject, VRCAvatarDescriptor.AnimLayerType.Base);
+				AnimatorController TargetAnimator = Avatar.GetAnimatorController(TargetBuildContext.AvatarRootObject, VRCAvatarDescriptor.AnimLayerType.Base);
 				if (TargetAnimator) {
 					AnimationClip TargetAnimationClip = FixLocomotionComponents
 						.Select(Item => Item.TargetAnimationClip)
@@ -64,14 +63,12 @@ namespace VRSuya.Modular.Editor {
 
 		bool FixLocomotion(AnimatorController TargetAnimator, AnimationClip TargetAnimationClip) {
 			if (TargetAnimator.layers.Length > 0) {
-				Animator AnimatorInstance = new Animator();
-				Avatar AvatarInstance = new Avatar();
 				AnimatorStateMachine TargetStateMachine = TargetAnimator.layers[0].stateMachine;
-				AnimatorState[] AllAnimatorStates = AnimatorInstance.GetAllStates(TargetStateMachine);
-				AnimatorState StandingState = AvatarInstance.GetStandingState(TargetAnimator);
+				AnimatorState[] AllAnimatorStates = Animator.GetAllStates(TargetStateMachine);
+				AnimatorState StandingState = Avatar.GetStandingState(TargetAnimator);
 				if (StandingState) {
 					bool TargetWriteDefaults = GetWriteDefaults(AllAnimatorStates);
-					AnimationClip NewStandingClip = AvatarInstance.GetStandingAnimation(TargetAnimator);
+					AnimationClip NewStandingClip = Avatar.GetStandingAnimation(TargetAnimator);
 					if (!NewStandingClip) NewStandingClip = TargetAnimationClip;
 					AnimatorState ActionState = GetActionState(TargetStateMachine, AllAnimatorStates, NewStandingClip, TargetWriteDefaults);
 					bool IsVerify = VerifyTransitions(ActionState.transitions);

@@ -39,8 +39,7 @@ namespace VRSuya.Modular.Editor {
 		protected override void Execute(BuildContext TargetBuildContext) {
 			RemoveFXMask[] RemoveFXMaskComponents = TargetBuildContext.AvatarRootObject.GetComponentsInChildren<RemoveFXMask>(true);
 			if (RemoveFXMaskComponents.Length > 0) {
-				Avatar AvatarInstance = new Avatar();
-				AnimatorController TargetAnimator = AvatarInstance.GetAnimatorController(TargetBuildContext.AvatarRootObject, VRCAvatarDescriptor.AnimLayerType.FX);
+				AnimatorController TargetAnimator = Avatar.GetAnimatorController(TargetBuildContext.AvatarRootObject, VRCAvatarDescriptor.AnimLayerType.FX);
 				if (TargetAnimator) {
 					if (RemoveFXMask(TargetAnimator)) {
 						AssetDatabase.SaveAssets();

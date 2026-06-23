@@ -33,14 +33,10 @@ namespace VRSuya.Installer {
 		Vector3 LeftOriginPosition = Vector3.zero;
 		Vector3 RightOriginPosition = Vector3.zero;
 
-		static readonly string[] Cheek_L_Names = new string[] { "Cheek_L", "Cheek.L", "Cheek1_L", "Cheek_Root_L", "Cheek_root_L", "Hoppe.L", "ho_L" };
-		static readonly string[] Cheek_R_Names = new string[] { "Cheek_R", "Cheek.R", "Cheek1_R", "Cheek_Root_R", "Cheek_root_R", "Hoppe.R", "ho_R" };
-
 		string StatusCode;
 
 		void OnEnable() {
-			Avatar AvatarInstance = new Avatar();
-			AvatarGameObject = AvatarInstance.GetAvatarGameObject();
+			AvatarGameObject = Avatar.GetAvatarGameObject();
 			if (AvatarGameObject) {
 				AvatarAnimationClips = GetVRSuyaMogumoguAnimations(AvatarGameObject);
 			}
@@ -91,8 +87,8 @@ namespace VRSuya.Installer {
 
 		void GetCheekBoneTransforms() {
 			Transform[] HeadChildTransforms = AvatarGameObject.GetComponent<Animator>().GetBoneTransform(HumanBodyBones.Head).GetComponentsInChildren<Transform>(true);
-			LeftCheekBone = HeadChildTransforms.FirstOrDefault(Item => Cheek_L_Names.Contains(Item.name));
-			RightCheekBone = HeadChildTransforms.FirstOrDefault(Item => Cheek_R_Names.Contains(Item.name));
+			LeftCheekBone = HeadChildTransforms.FirstOrDefault(Item => Avatar.CheekLeftBoneNames.Contains(Item.name));
+			RightCheekBone = HeadChildTransforms.FirstOrDefault(Item => Avatar.CheekRightBoneNames.Contains(Item.name));
 			if (LeftCheekBone) LeftCheekPosition = LeftCheekBone.transform.localPosition;
 			if (RightCheekBone) RightCheekPosition = RightCheekBone.transform.localPosition;
 		}

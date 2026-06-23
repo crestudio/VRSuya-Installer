@@ -3,6 +3,7 @@
 using UnityEditor;
 using UnityEngine;
 
+using VRSuya.Core;
 using static VRSuya.Core.Translator;
 
 using Avatar = VRSuya.Core.Avatar;
@@ -31,8 +32,7 @@ namespace VRSuya.Installer {
 		}
 
 		void Initialize() {
-			Avatar AvatarInstance = new Avatar();
-			AvatarGameObject = AvatarInstance.GetAvatarGameObject();
+			AvatarGameObject = Avatar.GetAvatarGameObject();
 		}
 
 		void OnGUI() {
@@ -116,8 +116,7 @@ namespace VRSuya.Installer {
 					GetTranslatedString("String_Okay")
 				);
 			}
-			VRSuya.Core.Asset AssetInstance = new VRSuya.Core.Asset();
-			AssetInstance.PingAsset(OutputAssetPath);
+			Asset.PingAsset(OutputAssetPath);
 			return OutputAssetPath;
 		}
 

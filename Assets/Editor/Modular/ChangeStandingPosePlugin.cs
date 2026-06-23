@@ -42,12 +42,11 @@ namespace VRSuya.Modular.Editor {
 		protected override void Execute(BuildContext TargetBuildContext) {
 			ChangeStandingPose[] ChangeStandingPoseComponents = TargetBuildContext.AvatarRootObject.GetComponentsInChildren<ChangeStandingPose>(true);
 			if (ChangeStandingPoseComponents.Length > 0) {
-				Avatar AvatarInstance = new Avatar();
-				AnimatorController BaseAnimator = AvatarInstance.GetAnimatorController(TargetBuildContext.AvatarRootObject, VRCAvatarDescriptor.AnimLayerType.Base);
-				AnimatorController ActionAnimator = AvatarInstance.GetAnimatorController(TargetBuildContext.AvatarRootObject, VRCAvatarDescriptor.AnimLayerType.Action);
+				AnimatorController BaseAnimator = Avatar.GetAnimatorController(TargetBuildContext.AvatarRootObject, VRCAvatarDescriptor.AnimLayerType.Base);
+				AnimatorController ActionAnimator = Avatar.GetAnimatorController(TargetBuildContext.AvatarRootObject, VRCAvatarDescriptor.AnimLayerType.Action);
 				if (BaseAnimator && ActionAnimator) {
 					if (HasDefaultPose(ActionAnimator, out AnimatorState[] TargetAnimatorStates)) {
-						AnimationClip TargetAnimationClip = AvatarInstance.GetStandingAnimation(BaseAnimator);
+						AnimationClip TargetAnimationClip = Avatar.GetStandingAnimation(BaseAnimator);
 						if (TargetAnimationClip) {
 							foreach (AnimatorState TargetAnimatorState in TargetAnimatorStates) {
 								TargetAnimatorState.motion = TargetAnimationClip;
@@ -67,8 +66,7 @@ namespace VRSuya.Modular.Editor {
 			if (TargetAnimator) {
 				if (TargetAnimator.layers.Length > 0) {
 					string[] TargetAnimationNames = new string[] { "proxy_stand_still", "VRSuya_Wotagei_Wotagei_Stand" };
-					Animator AnimatorInstance = new Animator();
-					TargetAnimatorStates = AnimatorInstance.GetAllAnimatorStates(TargetAnimator)
+					TargetAnimatorStates = Animator.GetAllAnimatorStates(TargetAnimator)
 						.Where(Item => Item.motion != null)
 						.Where(Item => Item.motion is AnimationClip)
 						.Where(Item => TargetAnimationNames.Contains(Item.motion.name))

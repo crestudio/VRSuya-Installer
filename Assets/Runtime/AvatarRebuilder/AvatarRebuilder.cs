@@ -7,8 +7,6 @@ using UnityEngine;
 
 using VRSuya.Core;
 
-using static VRSuya.Core.Unity;
-
 using Animator = UnityEngine.Animator;
 
 /*
@@ -37,7 +35,7 @@ namespace VRSuya.Installer {
 		string StatusString;
 
 		public string RequestRebuildAvatar() {
-			UndoGroupIndex = InitializeUndoGroup(UndoGroupName);
+			UndoGroupIndex = VRSuya.Core.Unity.InitializeUndoGroup(UndoGroupName);
 			if (!CheckOldAvatar()) return StatusString;
 			CopyModelImporter();
 			if (!CheckNewAvatar()) return StatusString;
@@ -134,8 +132,7 @@ namespace VRSuya.Installer {
 		}
 
 		void CreateBackup() {
-			DuplicateGameObject DuplicatorInstance = new DuplicateGameObject();
-			GameObject DuplicatedAvatar = DuplicatorInstance.DuplicateGameObjectInstance(OldAvatarGameObject);
+			GameObject DuplicatedAvatar = DuplicateGameObject.DuplicateGameObjectInstance(OldAvatarGameObject);
 			Undo.RegisterCreatedObjectUndo(DuplicatedAvatar, UndoGroupName);
 			DuplicatedAvatar.name = $"{OldAvatarGameObject.name} (Backup)";
 			DuplicatedAvatar.transform.SetSiblingIndex(OldAvatarGameObject.transform.GetSiblingIndex() + 1);

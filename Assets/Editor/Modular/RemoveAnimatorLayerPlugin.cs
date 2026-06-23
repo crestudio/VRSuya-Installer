@@ -46,8 +46,7 @@ namespace VRSuya.Modular.Editor {
 			if (RemoveAnimatorLayerComponents.Length > 0) {
 				VRCAvatarDescriptor TargetAvatarDescriptor = TargetBuildContext.VRChatAvatarDescriptor();
 				if (TargetAvatarDescriptor) {
-					Avatar AvatarInstance = new Avatar();
-					AnimatorController TargetFXLayer = AvatarInstance.GetAnimatorController(TargetBuildContext.AvatarRootObject, AnimLayerType.FX);
+					AnimatorController TargetFXLayer = Avatar.GetAnimatorController(TargetBuildContext.AvatarRootObject, AnimLayerType.FX);
 					if (TargetFXLayer) {
 						if (TargetFXLayer.layers.Length > 0) {
 							List<string> RemoveLayerNames = new List<string>();

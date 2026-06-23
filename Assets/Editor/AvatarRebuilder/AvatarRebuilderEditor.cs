@@ -27,8 +27,7 @@ namespace VRSuya.Installer {
 			SerializedAvatarRebuilder = new SerializedObject(AvatarRebuilderInstance);
 			SerializedOldAvatarGameObject = SerializedAvatarRebuilder.FindProperty("OldAvatarGameObject");
 			SerializedNewAvatarGameObject = SerializedAvatarRebuilder.FindProperty("NewAvatarGameObject");
-			Avatar AvatarInstance = new Avatar();
-			AvatarRebuilderInstance.OldAvatarGameObject = AvatarInstance.GetAvatarGameObject();
+			AvatarRebuilderInstance.OldAvatarGameObject = Avatar.GetAvatarGameObject();
 		}
 
 		void OnEnable() {

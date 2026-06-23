@@ -73,8 +73,7 @@ namespace VRSuya.Installer {
 		}
 
 		void Initialize() {
-			Avatar AvatarInstance = new Avatar();
-			AvatarGameObject = AvatarInstance.GetAvatarGameObject();
+			AvatarGameObject = Avatar.GetAvatarGameObject();
 		}
 
 		public GameObject RequestPatchAvatar() {
@@ -166,8 +165,7 @@ namespace VRSuya.Installer {
 			if (!JSON_Asset) {
 				return false;
 			}
-			DuplicateGameObject DuplicateInstance = new DuplicateGameObject();
-			NewAvatarGameObject = DuplicateInstance.DuplicateGameObjectInstance(AvatarGameObject);
+			NewAvatarGameObject = DuplicateGameObject.DuplicateGameObjectInstance(AvatarGameObject);
 			if (!NewAvatarGameObject) {
 				return false;
 			}

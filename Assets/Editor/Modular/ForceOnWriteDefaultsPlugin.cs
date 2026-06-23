@@ -10,6 +10,7 @@ using nadena.dev.ndmf;
 
 using static VRSuya.Core.Translator;
 
+using Animator = VRSuya.Core.Animator;
 using Avatar = VRSuya.Core.Avatar;
 using Object = UnityEngine.Object;
 
@@ -39,8 +40,7 @@ namespace VRSuya.Modular.Editor {
 		protected override void Execute(BuildContext TargetBuildContext) {
 			ForceOnWriteDefaults[] ForceOnWriteDefaultsComponents = TargetBuildContext.AvatarRootObject.GetComponentsInChildren<ForceOnWriteDefaults>(true);
 			if (ForceOnWriteDefaultsComponents.Length > 0) {
-				Avatar AvatarInstance = new Avatar();
-				AnimatorController TargetAnimator = AvatarInstance.GetAnimatorController(TargetBuildContext.AvatarRootObject, VRCAvatarDescriptor.AnimLayerType.FX);
+				AnimatorController TargetAnimator = Avatar.GetAnimatorController(TargetBuildContext.AvatarRootObject, VRCAvatarDescriptor.AnimLayerType.FX);
 				if (TargetAnimator) {
 					if (ForceOnWriteDefaults(TargetAnimator)) {
 						AssetDatabase.SaveAssets();
@@ -54,8 +54,7 @@ namespace VRSuya.Modular.Editor {
 
 		bool ForceOnWriteDefaults(AnimatorController TargetAnimator) {
 			if (TargetAnimator.layers.Length > 0) {
-				VRSuya.Core.Animator AnimatorInstance = new VRSuya.Core.Animator();
-				AnimatorState[] WDOffStates = AnimatorInstance.GetAllAnimatorStates(TargetAnimator)
+				AnimatorState[] WDOffStates = Animator.GetAllAnimatorStates(TargetAnimator)
 					.Where(Item => Item != null)
 					.Where(Item => Item.writeDefaultValues == false)
 					.ToArray();
