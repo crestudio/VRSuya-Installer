@@ -148,6 +148,9 @@ namespace VRSuya.Installer {
 		void PlaceGameObjectInScene() {
 			GameObject NewAvatarGameObjectInstance = Instantiate(NewAvatarGameObject);
 			NewAvatarGameObjectInstance.name = NewAvatarGameObject.name;
+			NewAvatarGameObjectInstance.transform.position = OldAvatarGameObject.transform.position;
+			NewAvatarGameObjectInstance.transform.rotation = OldAvatarGameObject.transform.rotation;
+			NewAvatarGameObjectInstance.transform.localScale = OldAvatarGameObject.transform.localScale;
 			NewAvatarGameObjectInstance.hideFlags = HideFlags.HideAndDontSave;
 			Undo.RegisterCreatedObjectUndo(NewAvatarGameObjectInstance, UndoGroupName);
 			Undo.CollapseUndoOperations(UndoGroupIndex);
