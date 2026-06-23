@@ -11,6 +11,7 @@ using nadena.dev.ndmf;
 
 using static VRSuya.Core.Translator;
 
+using Avatar = VRSuya.Core.Avatar;
 using Object = UnityEngine.Object;
 
 /*
@@ -39,17 +40,17 @@ namespace VRSuya.Modular.Editor {
 		protected override void Execute(BuildContext TargetBuildContext) {
 			RemovePhysBone[] RemovePhysBoneComponents = TargetBuildContext.AvatarRootObject.GetComponentsInChildren<RemovePhysBone>(true);
 			if (RemovePhysBoneComponents.Length > 0) {
-				VRCPhysBone[] AvatarPhysBoneComponents = TargetBuildContext.AvatarRootObject.GetComponentsInChildren<VRCPhysBone>(true);
+				VRCPhysBone[] PrefabPhysBoneComponents = RemovePhysBoneComponents.SelectMany(Item => Item.gameObject.GetComponentsInChildren<VRCPhysBone>(true)).ToArray();
+				VRCPhysBone[] AvatarPhysBoneComponents = TargetBuildContext.AvatarRootObject.GetComponentsInChildren<VRCPhysBone>(true)
+					.Where(Item => !PrefabPhysBoneComponents.Contains(Item)).ToArray();
 				List<VRCPhysBone> TargetPhysBoneComponents = new List<VRCPhysBone>();
 				TargetPhysBoneComponents.AddRange(AvatarPhysBoneComponents
 					.Where(Item => Item.rootTransform != null)
-					.Where(Item => VRSuya.Core.Avatar.CheekBoneNames.Contains(Item.rootTransform.name, StringComparer.OrdinalIgnoreCase)));
+					.Where(Item => Avatar.CheekBoneNames.Contains(Item.rootTransform.gameObject.name, StringComparer.OrdinalIgnoreCase)));
 				TargetPhysBoneComponents.AddRange(AvatarPhysBoneComponents
-					.Where(Item => VRSuya.Core.Avatar.CheekBoneNames.Contains(Item.gameObject.name, StringComparer.OrdinalIgnoreCase)));
-				if (TargetPhysBoneComponents.Count > 0) {
-					foreach (VRCPhysBone TargetComponent in TargetPhysBoneComponents) {
-						if (TargetComponent) Object.DestroyImmediate(TargetComponent);
-					}
+					.Where(Item => Avatar.CheekBoneNames.Contains(Item.gameObject.name, StringComparer.OrdinalIgnoreCase)));
+				foreach (VRCPhysBone TargetComponent in TargetPhysBoneComponents) {
+					if (TargetComponent) Object.DestroyImmediate(TargetComponent);
 				}
 				foreach (RemovePhysBone TargetComponent in RemovePhysBoneComponents) {
 					if (TargetComponent) Object.DestroyImmediate(TargetComponent);
