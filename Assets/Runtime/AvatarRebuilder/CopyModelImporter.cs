@@ -19,10 +19,10 @@ namespace VRSuya.Installer {
 		ModelImporter OldModelImporter;
 		ModelImporter NewModelImporter;
 
-		public void RequestCopyModelImporter(string OldModelPath, string NewModelPath, int UndoGroupIndex = -1) {
+		public void RequestCopyModelImporter(string OldModelPath, string NewModelPath, bool HardCopy, int UndoGroupIndex = -1) {
 			OldModelImporter = AssetImporter.GetAtPath(OldModelPath) as ModelImporter;
 			NewModelImporter = AssetImporter.GetAtPath(NewModelPath) as ModelImporter;
-			if (NewModelImporter.animationType != ModelImporterAnimationType.Human) {
+			if (!HardCopy && NewModelImporter.animationType != ModelImporterAnimationType.Human) {
 				NewModelImporter.animationType = ModelImporterAnimationType.Human;
 				NewModelImporter.avatarSetup = ModelImporterAvatarSetup.CreateFromThisModel;
 				NewModelImporter.SaveAndReimport();
@@ -44,7 +44,7 @@ namespace VRSuya.Installer {
 			NewModelImporter.generateAnimations = OldModelImporter.generateAnimations;
 			NewModelImporter.generateSecondaryUV = OldModelImporter.generateSecondaryUV;
 			NewModelImporter.globalScale = OldModelImporter.globalScale;
-			NewModelImporter.humanDescription = CopyHumanDescription();
+			NewModelImporter.humanDescription = (HardCopy) ? OldModelImporter.humanDescription : CopyHumanDescription();
 			NewModelImporter.humanoidOversampling = OldModelImporter.humanoidOversampling;
 			NewModelImporter.importAnimatedCustomProperties = OldModelImporter.importAnimatedCustomProperties;
 			NewModelImporter.importAnimation = OldModelImporter.importAnimation;

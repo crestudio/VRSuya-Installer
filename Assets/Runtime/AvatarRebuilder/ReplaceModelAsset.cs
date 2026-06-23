@@ -22,7 +22,7 @@ namespace VRSuya.Installer {
 			File.Copy(OldAvatarFullPath, BackupFullPath);
 			AssetDatabase.ImportAsset(BackupAssetPath);
 			CopyModelImporter CopyModelImporterInstance = new CopyModelImporter();
-			CopyModelImporterInstance.RequestCopyModelImporter(OldModelPath, BackupAssetPath, UndoGroupIndex);
+			CopyModelImporterInstance.RequestCopyModelImporter(OldModelPath, BackupAssetPath, true, UndoGroupIndex);
 			File.Copy(NewAvatarFullPath, OldAvatarFullPath, overwrite: true);
 			File.Delete(NewAvatarFullPath);
 			File.Delete(NewAvatarMetaFullPath);

@@ -107,7 +107,7 @@ namespace VRSuya.Installer {
 			string NewModelPath = AssetDatabase.GetAssetPath(NewAvatarGameObject);
 			if (!string.IsNullOrEmpty(NewModelPath)) {
 				CopyModelImporter CopyModelImporterInstance = new CopyModelImporter();
-				CopyModelImporterInstance.RequestCopyModelImporter(OldModelPath, NewModelPath, UndoGroupIndex);
+				CopyModelImporterInstance.RequestCopyModelImporter(OldModelPath, NewModelPath, false, UndoGroupIndex);
 			}
 		}
 
