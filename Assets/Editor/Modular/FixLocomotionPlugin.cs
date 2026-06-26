@@ -66,7 +66,7 @@ namespace VRSuya.Modular.Editor {
 				AnimatorState[] AllAnimatorStates = AnimatorHelper.GetAllStates(TargetStateMachine);
 				AnimatorState StandingState = AnimatorHelper.GetStandingState(TargetAnimator);
 				if (StandingState) {
-					bool TargetWriteDefaults = GetWriteDefaults(AllAnimatorStates);
+					bool TargetWriteDefaults = AnimatorHelper.IsAnimatorWriteDefaults(TargetAnimator);
 					AnimationClip NewStandingClip = AvatarUtility.GetStandingAnimation(TargetAnimator);
 					if (!NewStandingClip) NewStandingClip = TargetAnimationClip;
 					AnimatorState ActionState = GetActionState(TargetStateMachine, AllAnimatorStates, NewStandingClip, TargetWriteDefaults);
@@ -106,13 +106,6 @@ namespace VRSuya.Modular.Editor {
 			ActionState.motion = TargetAnimationClip;
 			ActionState.writeDefaultValues = TargetWriteDefaults;
 			return ActionState;
-		}
-
-		bool GetWriteDefaults(AnimatorState[] AllAnimatorStates) {
-			bool[] WriteDefaults = AllAnimatorStates.Select(Item => Item.writeDefaultValues).ToArray();
-			int WriteDefaultsOffCount = WriteDefaults.Where(Item => Item == false).Count();
-			bool ResultWriteDefaults = ((WriteDefaultsOffCount / WriteDefaults.Length) <= 0.5) ? true : false;
-			return ResultWriteDefaults;
 		}
 
 		bool VerifyTransitions(AnimatorStateTransition[] TargetTransitions) {
