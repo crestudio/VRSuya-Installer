@@ -48,10 +48,8 @@ namespace VRSuya.Modular.Editor {
 					AnimationClip TargetAnimationClip = FixLocomotionComponents
 						.Select(Item => Item.TargetAnimationClip)
 						.FirstOrDefault(Item => Item != null);
-					if (TargetAnimationClip) {
-						if (FixLocomotion(TargetAnimator, TargetAnimationClip)) {
-							AssetDatabase.SaveAssets();
-						}
+					if (FixLocomotion(TargetAnimator, TargetAnimationClip)) {
+						AssetDatabase.SaveAssets();
 					}
 				}
 				foreach (FixLocomotion TargetComponent in FixLocomotionComponents) {
