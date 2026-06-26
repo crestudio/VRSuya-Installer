@@ -32,7 +32,7 @@ namespace VRSuya.Modular.Editor {
 		public override string DisplayName => "VRSuya FixLocomotion";
 
 		protected override void Configure() {
-			InPhase(BuildPhase.Generating).Run(FixLocomotionPass.Instance);
+			InPhase(BuildPhase.Optimizing).Run(FixLocomotionPass.Instance);
 		}
 	}
 
