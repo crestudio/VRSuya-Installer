@@ -13,5 +13,6 @@ namespace VRSuya.Modular {
 	[HelpURL("https://vrsuya.booth.pm/")]
 	public class FixLocomotion : MonoBehaviour, IEditorOnly {
 		public AnimationClip TargetAnimationClip;
+		public string[] TargetParameters;
 	}
 }

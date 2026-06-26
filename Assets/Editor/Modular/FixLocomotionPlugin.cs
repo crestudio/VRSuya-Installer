@@ -45,10 +45,16 @@ namespace VRSuya.Modular.Editor {
 			if (FixLocomotionComponents.Length > 0) {
 				AnimatorController TargetAnimator = AvatarUtility.GetAnimatorController(TargetBuildContext.AvatarRootObject, VRCAvatarDescriptor.AnimLayerType.Base);
 				if (TargetAnimator) {
+					string[] DefaultParameters = new string[] { "AFK", "VRCEmote", "Wotagei/Action/Type" };
 					AnimationClip TargetAnimationClip = FixLocomotionComponents
 						.Select(Item => Item.TargetAnimationClip)
 						.FirstOrDefault(Item => Item != null);
-					if (FixLocomotion(TargetAnimator, TargetAnimationClip)) {
+					string[] TargetParameters = FixLocomotionComponents
+						.SelectMany(Item => Item.TargetParameters)
+						.Where(Item => !DefaultParameters.Contains(Item, StringComparer.OrdinalIgnoreCase))
+						.Where(Item => !string.IsNullOrEmpty(Item))
+						.ToArray();
+					if (FixLocomotion(TargetAnimator, TargetAnimationClip, TargetParameters)) {
 						AssetDatabase.SaveAssets();
 					}
 				}
@@ -58,7 +64,7 @@ namespace VRSuya.Modular.Editor {
 			}
 		}
 
-		bool FixLocomotion(AnimatorController TargetAnimator, AnimationClip TargetAnimationClip) {
+		bool FixLocomotion(AnimatorController TargetAnimator, AnimationClip TargetAnimationClip, string[] TargetParameters) {
 			if (TargetAnimator.layers.Length > 0) {
 				AnimatorStateMachine TargetStateMachine = TargetAnimator.layers[0].stateMachine;
 				AnimatorState[] AllAnimatorStates = AnimatorHelper.GetAllStates(TargetStateMachine);
@@ -67,19 +73,23 @@ namespace VRSuya.Modular.Editor {
 					bool TargetWriteDefaults = AnimatorHelper.IsAnimatorWriteDefaults(TargetAnimator);
 					AnimationClip NewStandingClip = AvatarUtility.GetStandingAnimation(TargetAnimator);
 					if (!NewStandingClip) NewStandingClip = TargetAnimationClip;
-					AnimatorState ActionState = GetActionState(TargetStateMachine, AllAnimatorStates, NewStandingClip, TargetWriteDefaults);
-					bool IsVerify = VerifyTransitions(ActionState.transitions);
+					AnimatorState ActionState = GetActionState(TargetStateMachine, AllAnimatorStates, NewStandingClip, TargetWriteDefaults, TargetParameters);
+					bool IsVerify = VerifyTransitions(ActionState.transitions, TargetParameters);
 					if (!IsVerify) {
 						SetStatePosition(TargetStateMachine, StandingState, ActionState);
 						AnimatorStateTransition AnyStateToAction_AFK = TargetStateMachine.AddAnyStateTransition(ActionState);
 						AnimatorStateTransition AnyStateToAction_Emote = TargetStateMachine.AddAnyStateTransition(ActionState);
 						AnimatorStateTransition AnyStateToAction_Wotagei = TargetStateMachine.AddAnyStateTransition(ActionState);
 						AnimatorStateTransition ActionToStanding = ActionState.AddTransition(StandingState);
-						AddParameters(TargetAnimator);
+						AddParameters(TargetAnimator, TargetParameters);
 						SetTransition(AnyStateToAction_AFK, "AFK");
 						SetTransition(AnyStateToAction_Emote, "VRCEmote");
 						SetTransition(AnyStateToAction_Wotagei, "Wotagei/Action/Type");
-						SetTransition(ActionToStanding);
+						SetTransition(ActionToStanding, string.Empty, TargetParameters);
+						foreach (string TargetParameter in TargetParameters) {
+							AnimatorStateTransition AnyStateToAction_NewParameter = TargetStateMachine.AddAnyStateTransition(ActionState);
+							SetTransition(AnyStateToAction_NewParameter, TargetParameter);
+						}
 						EditorUtility.SetDirty(TargetAnimator);
 						return true;
 					}
@@ -88,10 +98,10 @@ namespace VRSuya.Modular.Editor {
 			return false;
 		}
 
-		AnimatorState GetActionState(AnimatorStateMachine TargetStateMachine, AnimatorState[] AllAnimatorStates, AnimationClip TargetAnimationClip, bool TargetWriteDefaults) {
+		AnimatorState GetActionState(AnimatorStateMachine TargetStateMachine, AnimatorState[] AllAnimatorStates, AnimationClip TargetAnimationClip, bool TargetWriteDefaults, string[] TargetNewParameters) {
 			AnimatorState ActionState = AllAnimatorStates.FirstOrDefault(Item => Item.name == "Action");
 			if (ActionState) {
-				if (VerifyTransitions(ActionState.transitions)) {
+				if (VerifyTransitions(ActionState.transitions, TargetNewParameters)) {
 					return ActionState;
 				} 
 			}
@@ -106,8 +116,8 @@ namespace VRSuya.Modular.Editor {
 			return ActionState;
 		}
 
-		bool VerifyTransitions(AnimatorStateTransition[] TargetTransitions) {
-			string[] TargetParameters = new string[] { "AFK", "VRCEmote", "Wotagei/Action/Type" };
+		bool VerifyTransitions(AnimatorStateTransition[] TargetTransitions, string[] TargetNewParameters) {
+			string[] TargetParameters = new string[] { "AFK", "VRCEmote", "Wotagei/Action/Type" }.Concat(TargetNewParameters).ToArray();
 			foreach (AnimatorStateTransition TargetTransition in TargetTransitions) {
 				string[] AllParameters = TargetTransition.conditions.Select(Item => Item.parameter).ToArray();
 				bool IsAllContained = TargetParameters.All(item => AllParameters.Contains(item));
@@ -140,7 +150,7 @@ namespace VRSuya.Modular.Editor {
 			TargetStateMachine.states = AllStates;
 		}
 
-		void AddParameters(AnimatorController TargetAnimator) {
+		void AddParameters(AnimatorController TargetAnimator, string[] TargetNewParameters) {
 			List<AnimatorControllerParameter> NewAnimatorParameters = TargetAnimator.parameters.ToList();
 			List<string> ParameterNames = TargetAnimator.parameters.Select(Item => Item.name).ToList();
 			bool IsModifed = false;
@@ -171,12 +181,21 @@ namespace VRSuya.Modular.Editor {
 				NewAnimatorParameters.Add(WotageiParameter);
 				IsModifed = true;
 			}
+			foreach (string TargetParameter in TargetNewParameters) {
+				AnimatorControllerParameter NewParameter = new AnimatorControllerParameter {
+					name = TargetParameter,
+					type = AnimatorControllerParameterType.Bool,
+					defaultBool = false
+				};
+				NewAnimatorParameters.Add(NewParameter);
+				IsModifed = true;
+			}
 			if (IsModifed) {
 				TargetAnimator.parameters = NewAnimatorParameters.ToArray();
 			}
 		}
 
-		void SetTransition(AnimatorStateTransition TargetTransition, string TargetParameter = null) {
+		void SetTransition(AnimatorStateTransition TargetTransition, string TargetParameter, string[] TargetParameters = null) {
 			TargetTransition.hasExitTime = false;
 			TargetTransition.exitTime = 0;
 			TargetTransition.hasFixedDuration = true;
@@ -184,32 +203,35 @@ namespace VRSuya.Modular.Editor {
 			TargetTransition.offset = 0;
 			TargetTransition.interruptionSource = TransitionInterruptionSource.None;
 			TargetTransition.canTransitionToSelf = false;
-			switch (TargetParameter) {
-				case "AFK":
-					TargetTransition.AddCondition(AnimatorConditionMode.If, 1f, "AFK");
-					break;
-				case "VRCEmote":
-					TargetTransition.AddCondition(AnimatorConditionMode.Greater, 0f, "VRCEmote");
-					break;
-				case "Wotagei/Action/Type":
-					TargetTransition.AddCondition(AnimatorConditionMode.Greater, 0f, "Wotagei/Action/Type");
-					break;
-				default:
-					TargetTransition.AddCondition(AnimatorConditionMode.IfNot, 0f, "AFK");
-					TargetTransition.AddCondition(AnimatorConditionMode.Equals, 0f, "VRCEmote");
-					TargetTransition.AddCondition(AnimatorConditionMode.Equals, 0f, "Wotagei/Action/Type");
-					break;
+			if (TargetParameter == "AFK") {
+				TargetTransition.AddCondition(AnimatorConditionMode.If, 1f, "AFK");
+			} else if (TargetParameter == "VRCEmote") {
+				TargetTransition.AddCondition(AnimatorConditionMode.Greater, 0f, "VRCEmote");
+			} else if (TargetParameter == "Wotagei/Action/Type") {
+				TargetTransition.AddCondition(AnimatorConditionMode.Greater, 0f, "Wotagei/Action/Type");
+			} else if (!string.IsNullOrEmpty(TargetParameter)) {
+				TargetTransition.AddCondition(AnimatorConditionMode.If, 1f, TargetParameter);
+			} else {
+				TargetTransition.AddCondition(AnimatorConditionMode.IfNot, 0f, "AFK");
+				TargetTransition.AddCondition(AnimatorConditionMode.Equals, 0f, "VRCEmote");
+				TargetTransition.AddCondition(AnimatorConditionMode.Equals, 0f, "Wotagei/Action/Type");
+				foreach (string TargetNewParameter in TargetParameters) {
+					TargetTransition.AddCondition(AnimatorConditionMode.IfNot, 0f, TargetNewParameter);
+				}
 			}
 		}
+
 	}
 
 	[CustomEditor(typeof(FixLocomotion))]
 	public class FixLocomotionEditor : UnityEditor.Editor {
 
 		SerializedProperty SerializedTargetAnimationClip;
+		SerializedProperty SerializedTargetParameters;
 
 		void OnEnable() {
 			SerializedTargetAnimationClip = serializedObject.FindProperty("TargetAnimationClip");
+			SerializedTargetParameters = serializedObject.FindProperty("TargetParameters");
 		}
 
 		public override void OnInspectorGUI() {
@@ -217,6 +239,7 @@ namespace VRSuya.Modular.Editor {
 			LanguageIndex = EditorGUILayout.Popup(GetTranslatedString("String_Language"), LanguageIndex, LanguageOption);
 			EditorGUILayout.Space();
 			EditorGUILayout.PropertyField(SerializedTargetAnimationClip, new GUIContent(GetTranslatedString("String_AnimationClip")));
+			EditorGUILayout.PropertyField(SerializedTargetParameters, new GUIContent(GetTranslatedString("String_Parameter")));
 			serializedObject.ApplyModifiedProperties();
 		}
 	}
