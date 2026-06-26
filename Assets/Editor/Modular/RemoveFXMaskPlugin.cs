@@ -1,6 +1,7 @@
 ﻿#if MODULAR_AVATAR
 using System.Linq;
 
+using UnityEngine;
 using UnityEditor;
 using UnityEditor.Animations;
 
@@ -8,10 +9,8 @@ using VRC.SDK3.Avatars.Components;
 
 using nadena.dev.ndmf;
 
+using VRSuya.Core;
 using static VRSuya.Core.Translator;
-
-using Avatar = VRSuya.Core.Avatar;
-using Object = UnityEngine.Object;
 
 /*
  * VRSuya Modular Component
@@ -39,7 +38,7 @@ namespace VRSuya.Modular.Editor {
 		protected override void Execute(BuildContext TargetBuildContext) {
 			RemoveFXMask[] RemoveFXMaskComponents = TargetBuildContext.AvatarRootObject.GetComponentsInChildren<RemoveFXMask>(true);
 			if (RemoveFXMaskComponents.Length > 0) {
-				AnimatorController TargetAnimator = Avatar.GetAnimatorController(TargetBuildContext.AvatarRootObject, VRCAvatarDescriptor.AnimLayerType.FX);
+				AnimatorController TargetAnimator = AvatarUtility.GetAnimatorController(TargetBuildContext.AvatarRootObject, VRCAvatarDescriptor.AnimLayerType.FX);
 				if (TargetAnimator) {
 					if (RemoveFXMask(TargetAnimator)) {
 						AssetDatabase.SaveAssets();

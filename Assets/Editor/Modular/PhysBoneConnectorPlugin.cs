@@ -7,9 +7,9 @@ using UnityEngine;
 
 using nadena.dev.ndmf;
 
+using VRSuya.Core;
 using static VRSuya.Core.Translator;
 
-using Avatar = VRSuya.Core.Avatar;
 using Object = UnityEngine.Object;
 
 /*
@@ -44,8 +44,8 @@ namespace VRSuya.Modular.Editor {
 						if (!TargetComponent) continue;
 						if (TargetComponent.TargetType == PhysBoneType.Cheek) {
 							Transform[] HeadTransforms = TargetAnimator.GetBoneTransform(HumanBodyBones.Head).GetComponentsInChildren<Transform>(true);
-							Transform Cheek_L_Transform = HeadTransforms.FirstOrDefault(Item => VRSuya.Core.Avatar.CheekLeftBoneNames.Contains(Item.name));
-							Transform Cheek_R_Transform = HeadTransforms.FirstOrDefault(Item => VRSuya.Core.Avatar.CheekRightBoneNames.Contains(Item.name));
+							Transform Cheek_L_Transform = HeadTransforms.FirstOrDefault(Item => AvatarUtility.CheekLeftBoneNames.Contains(Item.name));
+							Transform Cheek_R_Transform = HeadTransforms.FirstOrDefault(Item => AvatarUtility.CheekRightBoneNames.Contains(Item.name));
 							if (Cheek_L_Transform && TargetComponent.TargetCheek_L) {
 								TargetComponent.TargetCheek_L.rootTransform = Cheek_L_Transform;
 								EditorUtility.SetDirty(TargetComponent.TargetCheek_L);
@@ -57,16 +57,16 @@ namespace VRSuya.Modular.Editor {
 						} else {
 							Transform[] Toe_L_Transform = TargetAnimator.GetBoneTransform(HumanBodyBones.LeftFoot).GetComponentsInChildren<Transform>(true);
 							Transform[] Toe_R_Transform = TargetAnimator.GetBoneTransform(HumanBodyBones.RightFoot).GetComponentsInChildren<Transform>(true);
-							Transform ThumbToe1_L_Transform = Toe_L_Transform.FirstOrDefault(Item => Avatar.ToeBoneDictionary["ThumbToe1_L"].Contains(Item.name));
-							Transform ThumbToe1_R_Transform = Toe_R_Transform.FirstOrDefault(Item => Avatar.ToeBoneDictionary["ThumbToe1_R"].Contains(Item.name));
-							Transform IndexToe1_L_Transform = Toe_L_Transform.FirstOrDefault(Item => Avatar.ToeBoneDictionary["IndexToe1_L"].Contains(Item.name));
-							Transform IndexToe1_R_Transform = Toe_R_Transform.FirstOrDefault(Item => Avatar.ToeBoneDictionary["IndexToe1_R"].Contains(Item.name));
-							Transform MiddleToe1_L_Transform = Toe_L_Transform.FirstOrDefault(Item => Avatar.ToeBoneDictionary["MiddleToe1_L"].Contains(Item.name));
-							Transform MiddleToe1_R_Transform = Toe_R_Transform.FirstOrDefault(Item => Avatar.ToeBoneDictionary["MiddleToe1_R"].Contains(Item.name));
-							Transform RingToe1_L_Transform = Toe_L_Transform.FirstOrDefault(Item => Avatar.ToeBoneDictionary["RingToe1_L"].Contains(Item.name));
-							Transform RingToe1_R_Transform = Toe_R_Transform.FirstOrDefault(Item => Avatar.ToeBoneDictionary["RingToe1_R"].Contains(Item.name));
-							Transform LittleToe1_L_Transform = Toe_L_Transform.FirstOrDefault(Item => Avatar.ToeBoneDictionary["LittleToe1_L"].Contains(Item.name));
-							Transform LittleToe1_R_Transform = Toe_R_Transform.FirstOrDefault(Item => Avatar.ToeBoneDictionary["LittleToe1_R"].Contains(Item.name));
+							Transform ThumbToe1_L_Transform = Toe_L_Transform.FirstOrDefault(Item => AvatarUtility.ToeBoneDictionary["ThumbToe1_L"].Contains(Item.name));
+							Transform ThumbToe1_R_Transform = Toe_R_Transform.FirstOrDefault(Item => AvatarUtility.ToeBoneDictionary["ThumbToe1_R"].Contains(Item.name));
+							Transform IndexToe1_L_Transform = Toe_L_Transform.FirstOrDefault(Item => AvatarUtility.ToeBoneDictionary["IndexToe1_L"].Contains(Item.name));
+							Transform IndexToe1_R_Transform = Toe_R_Transform.FirstOrDefault(Item => AvatarUtility.ToeBoneDictionary["IndexToe1_R"].Contains(Item.name));
+							Transform MiddleToe1_L_Transform = Toe_L_Transform.FirstOrDefault(Item => AvatarUtility.ToeBoneDictionary["MiddleToe1_L"].Contains(Item.name));
+							Transform MiddleToe1_R_Transform = Toe_R_Transform.FirstOrDefault(Item => AvatarUtility.ToeBoneDictionary["MiddleToe1_R"].Contains(Item.name));
+							Transform RingToe1_L_Transform = Toe_L_Transform.FirstOrDefault(Item => AvatarUtility.ToeBoneDictionary["RingToe1_L"].Contains(Item.name));
+							Transform RingToe1_R_Transform = Toe_R_Transform.FirstOrDefault(Item => AvatarUtility.ToeBoneDictionary["RingToe1_R"].Contains(Item.name));
+							Transform LittleToe1_L_Transform = Toe_L_Transform.FirstOrDefault(Item => AvatarUtility.ToeBoneDictionary["LittleToe1_L"].Contains(Item.name));
+							Transform LittleToe1_R_Transform = Toe_R_Transform.FirstOrDefault(Item => AvatarUtility.ToeBoneDictionary["LittleToe1_R"].Contains(Item.name));
 							if (ThumbToe1_L_Transform && TargetComponent.TargetThumbToe1_L) {
 								TargetComponent.TargetThumbToe1_L.rootTransform = ThumbToe1_L_Transform;
 								EditorUtility.SetDirty(TargetComponent.TargetThumbToe1_L);

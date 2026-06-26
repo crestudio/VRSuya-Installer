@@ -10,10 +10,9 @@ using VRC.SDK3.Avatars.Components;
 
 using nadena.dev.ndmf;
 
+using VRSuya.Core;
 using static VRSuya.Core.Translator;
 
-using Animator = VRSuya.Core.Animator;
-using Avatar = VRSuya.Core.Avatar;
 using Object = UnityEngine.Object;
 
 /*
@@ -42,11 +41,11 @@ namespace VRSuya.Modular.Editor {
 		protected override void Execute(BuildContext TargetBuildContext) {
 			ChangeStandingPose[] ChangeStandingPoseComponents = TargetBuildContext.AvatarRootObject.GetComponentsInChildren<ChangeStandingPose>(true);
 			if (ChangeStandingPoseComponents.Length > 0) {
-				AnimatorController BaseAnimator = Avatar.GetAnimatorController(TargetBuildContext.AvatarRootObject, VRCAvatarDescriptor.AnimLayerType.Base);
-				AnimatorController ActionAnimator = Avatar.GetAnimatorController(TargetBuildContext.AvatarRootObject, VRCAvatarDescriptor.AnimLayerType.Action);
+				AnimatorController BaseAnimator = AvatarUtility.GetAnimatorController(TargetBuildContext.AvatarRootObject, VRCAvatarDescriptor.AnimLayerType.Base);
+				AnimatorController ActionAnimator = AvatarUtility.GetAnimatorController(TargetBuildContext.AvatarRootObject, VRCAvatarDescriptor.AnimLayerType.Action);
 				if (BaseAnimator && ActionAnimator) {
 					if (HasDefaultPose(ActionAnimator, out AnimatorState[] TargetAnimatorStates)) {
-						AnimationClip TargetAnimationClip = Avatar.GetStandingAnimation(BaseAnimator);
+						AnimationClip TargetAnimationClip = AvatarUtility.GetStandingAnimation(BaseAnimator);
 						if (TargetAnimationClip) {
 							foreach (AnimatorState TargetAnimatorState in TargetAnimatorStates) {
 								TargetAnimatorState.motion = TargetAnimationClip;
@@ -66,7 +65,7 @@ namespace VRSuya.Modular.Editor {
 			if (TargetAnimator) {
 				if (TargetAnimator.layers.Length > 0) {
 					string[] TargetAnimationNames = new string[] { "proxy_stand_still", "VRSuya_Wotagei_Wotagei_Stand" };
-					TargetAnimatorStates = Animator.GetAllAnimatorStates(TargetAnimator)
+					TargetAnimatorStates = AnimatorHelper.GetAllAnimatorStates(TargetAnimator)
 						.Where(Item => Item.motion != null)
 						.Where(Item => Item.motion is AnimationClip)
 						.Where(Item => TargetAnimationNames.Contains(Item.motion.name))

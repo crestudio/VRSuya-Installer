@@ -9,9 +9,9 @@ using VRC.SDK3.Dynamics.PhysBone.Components;
 
 using nadena.dev.ndmf;
 
+using VRSuya.Core;
 using static VRSuya.Core.Translator;
 
-using Avatar = VRSuya.Core.Avatar;
 using Object = UnityEngine.Object;
 
 /*
@@ -46,9 +46,9 @@ namespace VRSuya.Modular.Editor {
 				List<VRCPhysBone> TargetPhysBoneComponents = new List<VRCPhysBone>();
 				TargetPhysBoneComponents.AddRange(AvatarPhysBoneComponents
 					.Where(Item => Item.rootTransform != null)
-					.Where(Item => Avatar.CheekBoneNames.Contains(Item.rootTransform.gameObject.name, StringComparer.OrdinalIgnoreCase)));
+					.Where(Item => AvatarUtility.CheekBoneNames.Contains(Item.rootTransform.gameObject.name, StringComparer.OrdinalIgnoreCase)));
 				TargetPhysBoneComponents.AddRange(AvatarPhysBoneComponents
-					.Where(Item => Avatar.CheekBoneNames.Contains(Item.gameObject.name, StringComparer.OrdinalIgnoreCase)));
+					.Where(Item => AvatarUtility.CheekBoneNames.Contains(Item.gameObject.name, StringComparer.OrdinalIgnoreCase)));
 				foreach (VRCPhysBone TargetComponent in TargetPhysBoneComponents) {
 					if (TargetComponent) Object.DestroyImmediate(TargetComponent);
 				}

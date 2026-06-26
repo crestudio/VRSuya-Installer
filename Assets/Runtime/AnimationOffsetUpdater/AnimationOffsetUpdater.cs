@@ -10,7 +10,7 @@ using UnityEngine;
 using nadena.dev.modular_avatar.core;
 #endif
 
-using Avatar = VRSuya.Core.Avatar;
+using VRSuya.Core;
 
 /*
  * VRSuya Installer
@@ -36,7 +36,7 @@ namespace VRSuya.Installer {
 		string StatusCode;
 
 		void OnEnable() {
-			AvatarGameObject = Avatar.GetAvatarGameObject();
+			AvatarGameObject = AvatarUtility.GetAvatarGameObject();
 			if (AvatarGameObject) {
 				AvatarAnimationClips = GetVRSuyaMogumoguAnimations(AvatarGameObject);
 			}
@@ -87,8 +87,8 @@ namespace VRSuya.Installer {
 
 		void GetCheekBoneTransforms() {
 			Transform[] HeadChildTransforms = AvatarGameObject.GetComponent<Animator>().GetBoneTransform(HumanBodyBones.Head).GetComponentsInChildren<Transform>(true);
-			LeftCheekBone = HeadChildTransforms.FirstOrDefault(Item => Avatar.CheekLeftBoneNames.Contains(Item.name));
-			RightCheekBone = HeadChildTransforms.FirstOrDefault(Item => Avatar.CheekRightBoneNames.Contains(Item.name));
+			LeftCheekBone = HeadChildTransforms.FirstOrDefault(Item => AvatarUtility.CheekLeftBoneNames.Contains(Item.name));
+			RightCheekBone = HeadChildTransforms.FirstOrDefault(Item => AvatarUtility.CheekRightBoneNames.Contains(Item.name));
 			if (LeftCheekBone) LeftCheekPosition = LeftCheekBone.transform.localPosition;
 			if (RightCheekBone) RightCheekPosition = RightCheekBone.transform.localPosition;
 		}

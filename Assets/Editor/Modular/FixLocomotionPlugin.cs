@@ -11,10 +11,9 @@ using VRC.SDK3.Avatars.Components;
 
 using nadena.dev.ndmf;
 
+using VRSuya.Core;
 using static VRSuya.Core.Translator;
 
-using Animator = VRSuya.Core.Animator;
-using Avatar = VRSuya.Core.Avatar;
 using Object = UnityEngine.Object;
 using Random = System.Random;
 
@@ -44,7 +43,7 @@ namespace VRSuya.Modular.Editor {
 		protected override void Execute(BuildContext TargetBuildContext) {
 			FixLocomotion[] FixLocomotionComponents = TargetBuildContext.AvatarRootObject.GetComponentsInChildren<FixLocomotion>(true);
 			if (FixLocomotionComponents.Length > 0) {
-				AnimatorController TargetAnimator = Avatar.GetAnimatorController(TargetBuildContext.AvatarRootObject, VRCAvatarDescriptor.AnimLayerType.Base);
+				AnimatorController TargetAnimator = AvatarUtility.GetAnimatorController(TargetBuildContext.AvatarRootObject, VRCAvatarDescriptor.AnimLayerType.Base);
 				if (TargetAnimator) {
 					AnimationClip TargetAnimationClip = FixLocomotionComponents
 						.Select(Item => Item.TargetAnimationClip)
@@ -64,11 +63,11 @@ namespace VRSuya.Modular.Editor {
 		bool FixLocomotion(AnimatorController TargetAnimator, AnimationClip TargetAnimationClip) {
 			if (TargetAnimator.layers.Length > 0) {
 				AnimatorStateMachine TargetStateMachine = TargetAnimator.layers[0].stateMachine;
-				AnimatorState[] AllAnimatorStates = Animator.GetAllStates(TargetStateMachine);
-				AnimatorState StandingState = Avatar.GetStandingState(TargetAnimator);
+				AnimatorState[] AllAnimatorStates = AnimatorHelper.GetAllStates(TargetStateMachine);
+				AnimatorState StandingState = AnimatorHelper.GetStandingState(TargetAnimator);
 				if (StandingState) {
 					bool TargetWriteDefaults = GetWriteDefaults(AllAnimatorStates);
-					AnimationClip NewStandingClip = Avatar.GetStandingAnimation(TargetAnimator);
+					AnimationClip NewStandingClip = AvatarUtility.GetStandingAnimation(TargetAnimator);
 					if (!NewStandingClip) NewStandingClip = TargetAnimationClip;
 					AnimatorState ActionState = GetActionState(TargetStateMachine, AllAnimatorStates, NewStandingClip, TargetWriteDefaults);
 					bool IsVerify = VerifyTransitions(ActionState.transitions);

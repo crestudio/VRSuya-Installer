@@ -6,9 +6,6 @@ using UnityEngine;
 using VRSuya.Core;
 using static VRSuya.Core.Translator;
 
-using Avatar = VRSuya.Core.Avatar;
-using Animator = UnityEngine.Animator;
-
 /*
  * VRSuya Installer
  * Contact : vrsuya@gmail.com // Twitter : https://twitter.com/VRSuya
@@ -32,7 +29,7 @@ namespace VRSuya.Installer {
 		}
 
 		void Initialize() {
-			AvatarGameObject = Avatar.GetAvatarGameObject();
+			AvatarGameObject = AvatarUtility.GetAvatarGameObject();
 		}
 
 		void OnGUI() {
@@ -116,7 +113,7 @@ namespace VRSuya.Installer {
 					GetTranslatedString("String_Okay")
 				);
 			}
-			Asset.PingAsset(OutputAssetPath);
+			AssetUtility.PingAsset(OutputAssetPath);
 			return OutputAssetPath;
 		}
 

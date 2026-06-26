@@ -7,11 +7,9 @@ using UnityEngine;
 
 using nadena.dev.ndmf;
 
+using VRSuya.Core;
 using static VRSuya.Core.Translator;
 using static VRSuya.Modular.AnimationClipRenamer;
-
-using Avatar = VRSuya.Core.Avatar;
-using Object = UnityEngine.Object;
 
 /*
  * VRSuya Modular Component
@@ -39,7 +37,7 @@ namespace VRSuya.Modular.Editor {
 		protected override void Execute(BuildContext TargetBuildContext) {
 			AnimationClipRenamer[] AnimationClipRenamerComponents = TargetBuildContext.AvatarRootObject.GetComponentsInChildren<AnimationClipRenamer>(true);
 			if (AnimationClipRenamerComponents.Length > 0) {
-				AnimationClip[] AvatarAnimationClips = Avatar.GetAllAvatarAnimationClips(TargetBuildContext.AvatarRootObject);
+				AnimationClip[] AvatarAnimationClips = AnimatorHelper.GetAllAvatarAnimationClips(TargetBuildContext.AvatarRootObject);
 				foreach (AnimationClipRenamer TargetComponent in AnimationClipRenamerComponents) {
 					if (!TargetComponent) continue;
 					if (TargetComponent.TargetAnimationClips.Length == 0) continue;

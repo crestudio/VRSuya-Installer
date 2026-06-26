@@ -1,6 +1,7 @@
 ﻿#if MODULAR_AVATAR
 using System.Linq;
 
+using UnityEngine;
 using UnityEditor;
 using UnityEditor.Animations;
 
@@ -8,11 +9,8 @@ using VRC.SDK3.Avatars.Components;
 
 using nadena.dev.ndmf;
 
+using VRSuya.Core;
 using static VRSuya.Core.Translator;
-
-using Animator = VRSuya.Core.Animator;
-using Avatar = VRSuya.Core.Avatar;
-using Object = UnityEngine.Object;
 
 /*
  * VRSuya Modular Component
@@ -40,7 +38,7 @@ namespace VRSuya.Modular.Editor {
 		protected override void Execute(BuildContext TargetBuildContext) {
 			ForceOnWriteDefaults[] ForceOnWriteDefaultsComponents = TargetBuildContext.AvatarRootObject.GetComponentsInChildren<ForceOnWriteDefaults>(true);
 			if (ForceOnWriteDefaultsComponents.Length > 0) {
-				AnimatorController TargetAnimator = Avatar.GetAnimatorController(TargetBuildContext.AvatarRootObject, VRCAvatarDescriptor.AnimLayerType.FX);
+				AnimatorController TargetAnimator = AvatarUtility.GetAnimatorController(TargetBuildContext.AvatarRootObject, VRCAvatarDescriptor.AnimLayerType.FX);
 				if (TargetAnimator) {
 					if (ForceOnWriteDefaults(TargetAnimator)) {
 						AssetDatabase.SaveAssets();
@@ -54,7 +52,7 @@ namespace VRSuya.Modular.Editor {
 
 		bool ForceOnWriteDefaults(AnimatorController TargetAnimator) {
 			if (TargetAnimator.layers.Length > 0) {
-				AnimatorState[] WDOffStates = Animator.GetAllAnimatorStates(TargetAnimator)
+				AnimatorState[] WDOffStates = AnimatorHelper.GetAllAnimatorStates(TargetAnimator)
 					.Where(Item => Item != null)
 					.Where(Item => Item.writeDefaultValues == false)
 					.ToArray();

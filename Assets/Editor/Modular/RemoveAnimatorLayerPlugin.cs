@@ -12,10 +12,8 @@ using static VRC.SDK3.Avatars.Components.VRCAvatarDescriptor;
 using nadena.dev.ndmf;
 using nadena.dev.ndmf.vrchat;
 
+using VRSuya.Core;
 using static VRSuya.Core.Translator;
-
-using Avatar = VRSuya.Core.Avatar;
-using Object = UnityEngine.Object;
 
 /*
  * VRSuya Modular Component
@@ -46,7 +44,7 @@ namespace VRSuya.Modular.Editor {
 			if (RemoveAnimatorLayerComponents.Length > 0) {
 				VRCAvatarDescriptor TargetAvatarDescriptor = TargetBuildContext.VRChatAvatarDescriptor();
 				if (TargetAvatarDescriptor) {
-					AnimatorController TargetFXLayer = Avatar.GetAnimatorController(TargetBuildContext.AvatarRootObject, AnimLayerType.FX);
+					AnimatorController TargetFXLayer = AvatarUtility.GetAnimatorController(TargetBuildContext.AvatarRootObject, AnimLayerType.FX);
 					if (TargetFXLayer) {
 						if (TargetFXLayer.layers.Length > 0) {
 							List<string> RemoveLayerNames = new List<string>();

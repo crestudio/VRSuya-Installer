@@ -1,9 +1,8 @@
 ﻿using UnityEngine;
 using UnityEditor;
 
+using VRSuya.Core;
 using static VRSuya.Core.Translator;
-
-using Avatar = VRSuya.Core.Avatar;
 
 /*
  * VRSuya Installer
@@ -27,7 +26,7 @@ namespace VRSuya.Installer {
 			SerializedAvatarRebuilder = new SerializedObject(AvatarRebuilderInstance);
 			SerializedOldAvatarGameObject = SerializedAvatarRebuilder.FindProperty("OldAvatarGameObject");
 			SerializedNewAvatarGameObject = SerializedAvatarRebuilder.FindProperty("NewAvatarGameObject");
-			AvatarRebuilderInstance.OldAvatarGameObject = Avatar.GetAvatarGameObject();
+			AvatarRebuilderInstance.OldAvatarGameObject = AvatarUtility.GetAvatarGameObject();
 		}
 
 		void OnEnable() {

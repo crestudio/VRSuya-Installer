@@ -11,9 +11,6 @@ using Newtonsoft.Json.Linq;
 using VRSuya.Core;
 using static VRSuya.Core.Translator;
 
-using Avatar = VRSuya.Core.Avatar;
-using Animator = UnityEngine.Animator;
-
 /*
  * VRSuya AvatarPatcher
  * Contact : vrsuya@gmail.com // Twitter : https://twitter.com/VRSuya
@@ -73,7 +70,7 @@ namespace VRSuya.Installer {
 		}
 
 		void Initialize() {
-			AvatarGameObject = Avatar.GetAvatarGameObject();
+			AvatarGameObject = AvatarUtility.GetAvatarGameObject();
 		}
 
 		public GameObject RequestPatchAvatar() {
@@ -165,7 +162,7 @@ namespace VRSuya.Installer {
 			if (!JSON_Asset) {
 				return false;
 			}
-			NewAvatarGameObject = DuplicateGameObject.DuplicateGameObjectInstance(AvatarGameObject);
+			NewAvatarGameObject = DuplicateUtility.DuplicateGameObject(AvatarGameObject);
 			if (!NewAvatarGameObject) {
 				return false;
 			}
