@@ -67,21 +67,20 @@ namespace VRSuya.Modular.Editor {
 
 		bool FixLocomotion(AnimatorController TargetAnimator, AnimationClip TargetAnimationClip, string[] TargetParameters) {
 			bool IsModified = false;
+			bool TargetWriteDefaults = AnimatorHelper.IsAnimatorWriteDefaults(TargetAnimator);
+			AnimationClip NewStandingClip = AvatarUtility.GetStandingAnimation(TargetAnimator);
+			if (!NewStandingClip) NewStandingClip = TargetAnimationClip;
+			string[] TargetNewParameters = DefaultParameters.Concat(TargetParameters).Distinct().ToArray();
+			AddParameters(TargetAnimator, TargetNewParameters);
 			for (int Index = 0; Index < TargetAnimator.layers.Length; Index++) {
 				AnimatorStateMachine TargetStateMachine = TargetAnimator.layers[Index].stateMachine;
-				bool TargetWriteDefaults = AnimatorHelper.IsAnimatorWriteDefaults(TargetAnimator);
-				AnimationClip NewStandingClip = AvatarUtility.GetStandingAnimation(TargetAnimator);
-				if (!NewStandingClip) NewStandingClip = TargetAnimationClip;
-				string[] TargetNewParameters = DefaultParameters.Concat(TargetParameters).Distinct().ToArray();
 				if (Index == 0) {
 					AnimatorState[] AllAnimatorStates = AnimatorHelper.GetAllStates(TargetStateMachine);
 					AnimatorState StandingState = AnimatorHelper.GetStandingState(TargetAnimator);
 					if (StandingState) {
 						AnimatorState ActionState = GetActionState(TargetStateMachine, AllAnimatorStates, NewStandingClip, TargetWriteDefaults, TargetNewParameters);
-						bool IsVerify = VerifyTransitions(ActionState.transitions, TargetNewParameters);
-						if (!IsVerify) {
+						if (!VerifyTransitions(ActionState.transitions, TargetNewParameters)) {
 							SetStatePosition(TargetStateMachine, StandingState, ActionState);
-							AddParameters(TargetAnimator, TargetNewParameters);
 							foreach (string TargetParameter in TargetNewParameters) {
 								AnimatorStateTransition AnyStateToAction_NewParameter = TargetStateMachine.AddAnyStateTransition(ActionState);
 								SetTransition(AnyStateToAction_NewParameter, TargetParameter);
@@ -97,16 +96,19 @@ namespace VRSuya.Modular.Editor {
 					if (VRCTrackingControls.Length == 0) continue;
 					AnimatorState DefaultState = TargetStateMachine.defaultState;
 					if (!DefaultState) continue;
-					AnimatorState ActionState = GetNewState(TargetStateMachine, NewStandingClip, TargetWriteDefaults);
-					SetStatePosition(TargetStateMachine, DefaultState, ActionState);
-					foreach (string TargetParameter in TargetNewParameters) {
-						AnimatorStateTransition AnyStateToAction_NewParameter = TargetStateMachine.AddAnyStateTransition(ActionState);
-						SetTransition(AnyStateToAction_NewParameter, TargetParameter);
+					AnimatorState[] AllAnimatorStates = AnimatorHelper.GetAllStates(TargetStateMachine);
+					AnimatorState ActionState = GetActionState(TargetStateMachine, AllAnimatorStates, NewStandingClip, TargetWriteDefaults, TargetNewParameters);
+					if (!VerifyTransitions(ActionState.transitions, TargetNewParameters)) {
+						SetStatePosition(TargetStateMachine, DefaultState, ActionState);
+						foreach (string TargetParameter in TargetNewParameters) {
+							AnimatorStateTransition AnyStateToAction_NewParameter = TargetStateMachine.AddAnyStateTransition(ActionState);
+							SetTransition(AnyStateToAction_NewParameter, TargetParameter);
+						}
+						AnimatorStateTransition ActionToDefault = ActionState.AddTransition(DefaultState);
+						SetTransition(ActionToDefault, string.Empty, TargetNewParameters);
+						EditorUtility.SetDirty(TargetAnimator);
+						IsModified = true;
 					}
-					AnimatorStateTransition ActionToDefault = ActionState.AddTransition(DefaultState);
-					SetTransition(ActionToDefault, string.Empty, TargetNewParameters);
-					EditorUtility.SetDirty(TargetAnimator);
-					IsModified = true;
 				}
 			}
 			return IsModified;
@@ -130,13 +132,6 @@ namespace VRSuya.Modular.Editor {
 			return ActionState;
 		}
 
-		AnimatorState GetNewState(AnimatorStateMachine TargetStateMachine, AnimationClip TargetAnimationClip, bool TargetWriteDefaults) {
-			AnimatorState ActionState = TargetStateMachine.AddState("Action");
-			ActionState.motion = TargetAnimationClip;
-			ActionState.writeDefaultValues = TargetWriteDefaults;
-			return ActionState;
-		}
-
 		bool VerifyTransitions(AnimatorStateTransition[] TargetTransitions, string[] TargetParameters) {
 			foreach (AnimatorStateTransition TargetTransition in TargetTransitions) {
 				string[] AllParameters = TargetTransition.conditions.Select(Item => Item.parameter).ToArray();
@@ -148,21 +143,21 @@ namespace VRSuya.Modular.Editor {
 			return false;
 		}
 
-		void SetStatePosition(AnimatorStateMachine TargetStateMachine, AnimatorState StandingState, AnimatorState ActionState) {
+		void SetStatePosition(AnimatorStateMachine TargetStateMachine, AnimatorState TargetState, AnimatorState TargetNewState) {
 			ChildAnimatorState[] AllStates = TargetStateMachine.states;
-			Vector3 StandingPosition = Vector3.zero;
-			bool HasStanding = false;
+			Vector3 AnchorPosition = Vector3.zero;
+			bool HasAnchor = false;
 			for (int Index = 0; Index < AllStates.Length; Index++) {
-				if (AllStates[Index].state == StandingState) {
-					StandingPosition = AllStates[Index].position;
-					HasStanding = true;
+				if (AllStates[Index].state == TargetState) {
+					AnchorPosition = AllStates[Index].position;
+					HasAnchor = true;
 					break;
 				}
 			}
-			if (HasStanding) {
+			if (HasAnchor) {
 				for (int Index = 0; Index < AllStates.Length; Index++) {
-					if (AllStates[Index].state == ActionState) {
-						AllStates[Index].position = new Vector3(StandingPosition.x, StandingPosition.y - 100f, StandingPosition.z);
+					if (AllStates[Index].state == TargetNewState) {
+						AllStates[Index].position = new Vector3(AnchorPosition.x, AnchorPosition.y - 100f, AnchorPosition.z);
 						break;
 					}
 				}
@@ -192,24 +187,26 @@ namespace VRSuya.Modular.Editor {
 				NewAnimatorParameters.Add(VRCEmoteParameter);
 				IsModifed = true;
 			}
-			if (!ParameterNames.Contains("Wotagei/Action/Type")) {
-				AnimatorControllerParameter WotageiParameter = new AnimatorControllerParameter {
-					name = "Wotagei/Action/Type",
-					type = AnimatorControllerParameterType.Int,
-					defaultInt = 0
-				};
-				NewAnimatorParameters.Add(WotageiParameter);
-				IsModifed = true;
-			}
+
 			foreach (string TargetParameter in TargetNewParameters) {
-				if (!DefaultParameters.Contains(TargetParameter, StringComparer.OrdinalIgnoreCase)) {
-					AnimatorControllerParameter NewParameter = new AnimatorControllerParameter {
-						name = TargetParameter,
-						type = AnimatorControllerParameterType.Bool,
-						defaultBool = false
-					};
-					NewAnimatorParameters.Add(NewParameter);
-					IsModifed = true;
+				if (!DefaultParameters.Contains(TargetParameter) && !ParameterNames.Contains(TargetParameter)) {
+					if (TargetParameter == "Wotagei/Action/Type") {
+						AnimatorControllerParameter WotageiParameter = new AnimatorControllerParameter {
+							name = "Wotagei/Action/Type",
+							type = AnimatorControllerParameterType.Int,
+							defaultInt = 0
+						};
+						NewAnimatorParameters.Add(WotageiParameter);
+						IsModifed = true;
+					} else {
+						AnimatorControllerParameter NewParameter = new AnimatorControllerParameter {
+							name = TargetParameter,
+							type = AnimatorControllerParameterType.Bool,
+							defaultBool = false
+						};
+						NewAnimatorParameters.Add(NewParameter);
+						IsModifed = true;
+					}
 				}
 			}
 			if (IsModifed) {
@@ -236,9 +233,10 @@ namespace VRSuya.Modular.Editor {
 			} else {
 				TargetTransition.AddCondition(AnimatorConditionMode.IfNot, 0f, "AFK");
 				TargetTransition.AddCondition(AnimatorConditionMode.Equals, 0f, "VRCEmote");
-				TargetTransition.AddCondition(AnimatorConditionMode.Equals, 0f, "Wotagei/Action/Type");
 				foreach (string TargetNewParameter in TargetParameters) {
-					if (!DefaultParameters.Contains(TargetNewParameter, StringComparer.OrdinalIgnoreCase)) {
+					if (TargetNewParameter == "Wotagei/Action/Type") {
+						TargetTransition.AddCondition(AnimatorConditionMode.Equals, 0f, "Wotagei/Action/Type");
+					} else if (!DefaultParameters.Contains(TargetNewParameter, StringComparer.OrdinalIgnoreCase)) {
 						TargetTransition.AddCondition(AnimatorConditionMode.IfNot, 0f, TargetNewParameter);
 					}
 				}
