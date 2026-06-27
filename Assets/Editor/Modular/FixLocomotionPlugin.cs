@@ -40,7 +40,7 @@ namespace VRSuya.Modular.Editor {
 
 		public override string DisplayName => "FixLocomotion";
 
-		static readonly string[] DefaultParameters = new string[] { "AFK", "VRCEmote", "Wotagei/Action/Type" };
+		static readonly string[] DefaultParameters = new string[] { "AFK", "VRCEmote" };
 
 		protected override void Execute(BuildContext TargetBuildContext) {
 			FixLocomotion[] FixLocomotionComponents = TargetBuildContext.AvatarRootObject.GetComponentsInChildren<FixLocomotion>(true);
