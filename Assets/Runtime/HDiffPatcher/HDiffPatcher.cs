@@ -107,7 +107,7 @@ namespace VRSuya.Installer {
 		string GetPlatform() {
 			switch (Application.platform) {
 				case RuntimePlatform.WindowsEditor: return "Windows";
-				case RuntimePlatform.OSXEditor: return "Max";
+				case RuntimePlatform.OSXEditor: return "Mac";
 				case RuntimePlatform.LinuxEditor: return "Linux";
 				default: return null;
 			}
