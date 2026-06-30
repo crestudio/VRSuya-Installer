@@ -6,6 +6,7 @@ using System.IO;
 using UnityEditor;
 using UnityEngine;
 
+using VRSuya.Core;
 using static VRSuya.Core.Translator;
 
 using Debug = UnityEngine.Debug;
@@ -44,7 +45,7 @@ namespace VRSuya.Installer {
 				EditorUtility.ClearProgressBar();
 			}
 			if (!PatchResult) return null;
-			string OutputAssetPath = GetUnityAssetPath(OutputFilePath);
+			string OutputAssetPath = AssetUtility.GetUnityAssetPath(OutputFilePath);
 			AssetDatabase.ImportAsset(OutputAssetPath, ImportAssetOptions.ForceUpdate);
 			return OutputAssetPath;
 		}
@@ -78,12 +79,6 @@ namespace VRSuya.Installer {
 			string RandomSuffix = Guid.NewGuid().ToString("N").Substring(0, 2).ToUpper();
 			string NewAssetName = $"{TargetFileName}_{Date}_{RandomSuffix}.fbx";
 			return Path.Combine(TargetFileDirectory, NewAssetName);
-		}
-
-		string GetUnityAssetPath(string TargetFilePath) {
-			string AssetPath = Path.GetFullPath(TargetFilePath).Replace('\\', '/');
-			string UnityProjectAssetsPath = Path.GetFullPath(Application.dataPath + "/..").Replace('\\', '/');
-			return AssetPath.Substring(UnityProjectAssetsPath.Length + 1);
 		}
 
 		string GetHDiffPatchFilePath() {
