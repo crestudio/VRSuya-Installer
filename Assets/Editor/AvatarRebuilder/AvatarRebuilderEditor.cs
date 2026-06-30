@@ -38,7 +38,7 @@ namespace VRSuya.Installer {
 
 		[MenuItem("Tools/VRSuya/Installer/AvatarRebuilder", priority = 1000)]
 		static void CreateWindow() {
-			AvatarRebuilderEditor AppWindow = GetWindowWithRect<AvatarRebuilderEditor>(new Rect(0, 0, 400, 195), true, "VRSuya AvatarRebuilder");
+			AvatarRebuilderEditor AppWindow = GetWindowWithRect<AvatarRebuilderEditor>(new Rect(0, 0, 400, 200), true, "VRSuya AvatarRebuilder");
 		}
 
 		void OnGUI() {

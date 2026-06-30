@@ -27,7 +27,7 @@ namespace VRSuya.Installer {
 
 		[MenuItem("Tools/VRSuya/Installer/HDiffPatcher", priority = 1000)]
 		static void CreateWindow() {
-			HDiffPatcherEditorWindow AppWindow = GetWindowWithRect<HDiffPatcherEditorWindow>(new Rect(0, 0, 400, 215), true, "VRSuya HDiffPatcher");
+			HDiffPatcherEditorWindow AppWindow = GetWindowWithRect<HDiffPatcherEditorWindow>(new Rect(0, 0, 400, 220), true, "VRSuya HDiffPatcher");
 			AppWindow.Initialize();
 		}
 
