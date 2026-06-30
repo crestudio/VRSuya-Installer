@@ -13,19 +13,27 @@ namespace VRSuya.Installer {
 
 	public class ReplaceModelAsset {
 
+		AvatarRebuilderContext Context;
+
+		internal ReplaceModelAsset(ref AvatarRebuilderContext Context) {
+			this.Context = Context;
+		}
+
 		public void RequestReplaceModelAsset(string OldModelPath, string NewModelPath, int UndoGroupIndex) {
-			string OldAvatarFullPath = Path.GetFullPath(OldModelPath);
-			string NewAvatarFullPath = Path.GetFullPath(NewModelPath);
-			string NewAvatarMetaFullPath = $"{NewAvatarFullPath}.meta";
+			string OldAvatarFilePath = Path.GetFullPath(OldModelPath);
+			string NewAvatarFilePath = Path.GetFullPath(NewModelPath);
+			string NewAvatarMetaFilePath = $"{NewAvatarFilePath}.meta";
 			string BackupAssetPath = GetBackupModelPath(OldModelPath);
-			string BackupFullPath = Path.GetFullPath(BackupAssetPath);
-			File.Copy(OldAvatarFullPath, BackupFullPath);
+			string BackupFilePath = Path.GetFullPath(BackupAssetPath);
+			File.Copy(OldAvatarFilePath, BackupFilePath);
+			Context.OverwriteModelFilePath = OldAvatarFilePath;
+			Context.BackupModelFilePath = BackupFilePath;
 			AssetDatabase.ImportAsset(BackupAssetPath);
 			CopyModelImporter CopyModelImporterInstance = new CopyModelImporter();
 			CopyModelImporterInstance.RequestCopyModelImporter(OldModelPath, BackupAssetPath, true, UndoGroupIndex);
-			File.Copy(NewAvatarFullPath, OldAvatarFullPath, overwrite: true);
-			File.Delete(NewAvatarFullPath);
-			File.Delete(NewAvatarMetaFullPath);
+			File.Copy(NewAvatarFilePath, OldAvatarFilePath, overwrite: true);
+			File.Delete(NewAvatarFilePath);
+			File.Delete(NewAvatarMetaFilePath);
 			AssetDatabase.Refresh();
 		}
 

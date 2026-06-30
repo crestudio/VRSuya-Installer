@@ -17,9 +17,9 @@ namespace VRSuya.Installer {
 
 	internal class PrefabCleaner {
 
-		readonly AvatarRebuilderContext Context;
+		AvatarRebuilderContext Context;
 
-		internal PrefabCleaner(AvatarRebuilderContext Context) {
+		internal PrefabCleaner(ref AvatarRebuilderContext Context) {
 			this.Context = Context;
 		}
 
@@ -37,8 +37,9 @@ namespace VRSuya.Installer {
 		void CreatePrefabBackup(string TargetPrefabAssetPath) {
 			string TargetPrefabFilePath = Path.GetFullPath(TargetPrefabAssetPath);
 			string BackupAssetPath = GetPrefabBackupAssetPath(TargetPrefabAssetPath);
-			string BackupFullPath = Path.GetFullPath(BackupAssetPath);
-			File.Copy(TargetPrefabFilePath, BackupFullPath);
+			string BackupFilePath = Path.GetFullPath(BackupAssetPath);
+			File.Copy(TargetPrefabFilePath, BackupFilePath);
+			Context.BackupPrefabFilePath.Add(BackupFilePath, TargetPrefabFilePath);
 			AssetDatabase.Refresh();
 		}
 

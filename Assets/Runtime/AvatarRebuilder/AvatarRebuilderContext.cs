@@ -1,4 +1,6 @@
 ﻿#if UNITY_EDITOR
+using System.Collections.Generic;
+
 using UnityEngine;
 
 /*
@@ -8,15 +10,22 @@ using UnityEngine;
 
 namespace VRSuya.Installer {
 
-	internal class AvatarRebuilderContext {
+	public class AvatarRebuilderContext {
 
-		internal GameObject OldAvatarGameObject;
-		internal GameObject NewAvatarGameObject;
+		public GameObject OldAvatarGameObject;
+		public GameObject NewAvatarGameObject;
 
-		internal Animator OldAvatarAnimator;
-		internal Animator NewAvatarAnimator;
+		public Animator OldAvatarAnimator;
+		public Animator NewAvatarAnimator;
 
-		internal int UndoGroupIndex;
+		public GameObject BackupAvatarGameObject;
+
+		public string OverwriteModelFilePath;
+		public string BackupModelFilePath;
+
+		public Dictionary<string, string> BackupPrefabFilePath = new Dictionary<string, string>();
+
+		public int UndoGroupIndex;
 	}
 }
 #endif

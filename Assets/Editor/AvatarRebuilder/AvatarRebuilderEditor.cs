@@ -19,6 +19,8 @@ namespace VRSuya.Installer {
 		SerializedProperty SerializedOldAvatarGameObject;
 		SerializedProperty SerializedNewAvatarGameObject;
 
+		SerializedProperty SerializedCanRevert;
+
 		const float BorderX = 30f;
 
 		void Reinitialize() {
@@ -26,6 +28,7 @@ namespace VRSuya.Installer {
 			SerializedAvatarRebuilder = new SerializedObject(AvatarRebuilderInstance);
 			SerializedOldAvatarGameObject = SerializedAvatarRebuilder.FindProperty("OldAvatarGameObject");
 			SerializedNewAvatarGameObject = SerializedAvatarRebuilder.FindProperty("NewAvatarGameObject");
+			SerializedCanRevert = SerializedAvatarRebuilder.FindProperty("CanRevert");
 			AvatarRebuilderInstance.OldAvatarGameObject = AvatarUtility.GetAvatarGameObject();
 		}
 
@@ -35,7 +38,7 @@ namespace VRSuya.Installer {
 
 		[MenuItem("Tools/VRSuya/Installer/AvatarRebuilder", priority = 1000)]
 		static void CreateWindow() {
-			AvatarRebuilderEditor AppWindow = GetWindowWithRect<AvatarRebuilderEditor>(new Rect(0, 0, 400, 180), true, "VRSuya AvatarRebuilder");
+			AvatarRebuilderEditor AppWindow = GetWindowWithRect<AvatarRebuilderEditor>(new Rect(0, 0, 400, 195), true, "VRSuya AvatarRebuilder");
 		}
 
 		void OnGUI() {
@@ -78,9 +81,17 @@ namespace VRSuya.Installer {
 							DialogString,
 							GetTranslatedString("String_Okay")
 						);
-				if (ReturnCode == "COMPLETED") Close();
 			}
 			GUI.backgroundColor = Color.white;
+			GUILayout.Space(BorderX);
+			EditorGUILayout.EndHorizontal();
+			EditorGUILayout.BeginHorizontal();
+			GUILayout.Space(BorderX);
+			GUI.enabled = SerializedCanRevert.boolValue;
+			if (GUILayout.Button(GetTranslatedString("String_Undo"))) {
+				AvatarRebuilderInstance.RequestRevertAvatar();
+			}
+			GUI.enabled = true;
 			GUILayout.Space(BorderX);
 			EditorGUILayout.EndHorizontal();
 			SerializedAvatarRebuilder.ApplyModifiedProperties();
