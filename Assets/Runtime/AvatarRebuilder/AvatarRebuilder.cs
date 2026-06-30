@@ -41,6 +41,15 @@ namespace VRSuya.Installer {
 			if (!CheckNewAvatar()) return StatusString;
 			if (UnityUtility.IsVariantModelPrefab(OldAvatarGameObject)) {
 				ReplaceModelAsset();
+				AvatarRebuilderContext Context = new AvatarRebuilderContext {
+					OldAvatarGameObject = OldAvatarGameObject,
+					NewAvatarGameObject = NewAvatarGameObject,
+					OldAvatarAnimator = OldAvatarAnimator,
+					NewAvatarAnimator = NewAvatarAnimator,
+					UndoGroupIndex = UndoGroupIndex
+				};
+				PrefabCleaner PrefabCleanerInstance = new PrefabCleaner(Context);
+				PrefabCleanerInstance.RequestCleanupPrefab();
 				StatusString = "COMPLETED";
 			} else {
 				CreateBackup();
