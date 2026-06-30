@@ -20,11 +20,14 @@ namespace VRSuya.Installer {
 		public bool ReplaceModel = true;
 		public bool SilenceMode = false;
 
+		AvatarRebuilder AvatarRebuilderInstance;
+		bool CanRevert = false;
+
 		const float BorderX = 30f;
 
 		[MenuItem("Tools/VRSuya/Installer/HDiffPatcher", priority = 1000)]
 		static void CreateWindow() {
-			HDiffPatcherEditorWindow AppWindow = GetWindowWithRect<HDiffPatcherEditorWindow>(new Rect(0, 0, 400, 200), true, "VRSuya HDiffPatcher");
+			HDiffPatcherEditorWindow AppWindow = GetWindowWithRect<HDiffPatcherEditorWindow>(new Rect(0, 0, 400, 215), true, "VRSuya HDiffPatcher");
 			AppWindow.Initialize();
 		}
 
@@ -70,10 +73,19 @@ namespace VRSuya.Installer {
 			GUI.backgroundColor = Color.cyan;
 			EditorGUI.BeginDisabledGroup(!IsReadyToPatch());
 			if (GUILayout.Button(GetTranslatedString("String_Update"), GUILayout.Height(40))) {
-				if (RequestAvatarPatch()) Close();
+				CanRevert = RequestAvatarPatch();
 			}
 			EditorGUI.EndDisabledGroup();
 			GUI.backgroundColor = Color.white;
+			GUILayout.Space(BorderX);
+			EditorGUILayout.EndHorizontal();
+			EditorGUILayout.BeginHorizontal();
+			GUILayout.Space(BorderX);
+			GUI.enabled = CanRevert;
+			if (GUILayout.Button(GetTranslatedString("String_Undo"))) {
+				AvatarRebuilderInstance.RequestRevertAvatar();
+			}
+			GUI.enabled = true;
 			GUILayout.Space(BorderX);
 			EditorGUILayout.EndHorizontal();
 		}
@@ -150,7 +162,7 @@ namespace VRSuya.Installer {
 
 		bool ReplaceAvatarModel(string TargetAssetPath) {
 			GameObject NewAvatarGameObject = AssetDatabase.LoadAssetAtPath<GameObject>(TargetAssetPath);
-			AvatarRebuilder AvatarRebuilderInstance = new AvatarRebuilder(AvatarGameObject, NewAvatarGameObject);
+			AvatarRebuilderInstance = new AvatarRebuilder(AvatarGameObject, NewAvatarGameObject);
 			string StatusString = AvatarRebuilderInstance.RequestRebuildAvatar();
 			if (StatusString == "COMPLETED") {
 				if (!SilenceMode) {
