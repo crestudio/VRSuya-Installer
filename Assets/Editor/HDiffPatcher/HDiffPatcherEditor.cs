@@ -76,11 +76,11 @@ namespace VRSuya.Installer {
 			EditorGUILayout.BeginHorizontal();
 			GUILayout.Space(BorderX);
 			GUI.backgroundColor = Color.cyan;
-			EditorGUI.BeginDisabledGroup(!IsReadyToPatch());
+			GUI.enabled = IsReadyToPatch();
 			if (GUILayout.Button(GetTranslatedString("String_Update"), GUILayout.Height(40))) {
 				CanRevert = RequestAvatarPatch();
 			}
-			EditorGUI.EndDisabledGroup();
+			GUI.enabled = true;
 			GUI.backgroundColor = Color.white;
 			GUILayout.Space(BorderX);
 			EditorGUILayout.EndHorizontal();
