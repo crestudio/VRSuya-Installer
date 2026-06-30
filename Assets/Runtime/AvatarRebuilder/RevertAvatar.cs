@@ -54,6 +54,15 @@ namespace VRSuya.Installer {
 			Selection.activeGameObject = Context.BackupAvatarGameObject;
 			return Context.OldAvatarGameObject;
 		}
+
+		internal void RequestRemovePatchedModelAsset() {
+			if (!string.IsNullOrEmpty(Context.PatchedAvatarFilePath)) {
+				File.Delete(Context.PatchedAvatarFilePath);
+				File.Delete($"{Context.PatchedAvatarFilePath}.meta");
+				Context.PatchedAvatarFilePath = null;
+				AssetDatabase.Refresh();
+			}
+		}
 	}
 }
 #endif

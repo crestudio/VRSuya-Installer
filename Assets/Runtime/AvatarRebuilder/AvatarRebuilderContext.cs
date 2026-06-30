@@ -19,6 +19,7 @@ namespace VRSuya.Installer {
 		public Animator NewAvatarAnimator;
 
 		public GameObject BackupAvatarGameObject;
+		public string PatchedAvatarFilePath;
 
 		public string OverwriteModelFilePath;
 		public string BackupModelFilePath;

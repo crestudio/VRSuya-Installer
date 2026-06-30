@@ -84,6 +84,8 @@ namespace VRSuya.Installer {
 			GUI.enabled = CanRevert;
 			if (GUILayout.Button(GetTranslatedString("String_Undo"))) {
 				AvatarRebuilderInstance.RequestRevertAvatar();
+				AvatarGameObject = AvatarRebuilderInstance.OldAvatarGameObject;
+				CanRevert = false;
 			}
 			GUI.enabled = true;
 			GUILayout.Space(BorderX);

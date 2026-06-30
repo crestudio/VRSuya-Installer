@@ -1,5 +1,6 @@
 ﻿#if UNITY_EDITOR
 using System;
+using System.IO;
 using System.Linq;
 
 using UnityEditor;
@@ -49,6 +50,8 @@ namespace VRSuya.Installer {
 				StatusString = "COMPLETED";
 			} else {
 				CreateBackup();
+				string PatchedAvatarAssetPath = AssetDatabase.GetAssetPath(Context.NewAvatarGameObject);
+				Context.PatchedAvatarFilePath = Path.GetFullPath(PatchedAvatarAssetPath);
 				if (!Context.NewAvatarGameObject.scene.IsValid()) {
 					PlaceGameObjectInScene();
 					if (!CheckNewAvatar()) return StatusString;
@@ -76,6 +79,7 @@ namespace VRSuya.Installer {
 					}
 				} else {
 					OldAvatarGameObject = RevertAvatarInstance.RequestRevertPrefabGameObject();
+					RevertAvatarInstance.RequestRemovePatchedModelAsset();
 				}
 				CanRevert = false;
 			}
