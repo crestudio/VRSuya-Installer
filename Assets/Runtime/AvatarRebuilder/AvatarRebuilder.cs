@@ -39,7 +39,7 @@ namespace VRSuya.Installer {
 			if (!CheckOldAvatar()) return StatusString;
 			CopyModelImporter();
 			if (!CheckNewAvatar()) return StatusString;
-			if (IsVariantModelPrefab()) {
+			if (UnityUtility.IsVariantModelPrefab(OldAvatarGameObject)) {
 				ReplaceModelAsset();
 				StatusString = "COMPLETED";
 			} else {
@@ -107,21 +107,6 @@ namespace VRSuya.Installer {
 				CopyModelImporter CopyModelImporterInstance = new CopyModelImporter();
 				CopyModelImporterInstance.RequestCopyModelImporter(OldModelPath, NewModelPath, false, UndoGroupIndex);
 			}
-		}
-
-		bool IsVariantModelPrefab() {
-			if (!PrefabUtility.IsPartOfVariantPrefab(OldAvatarGameObject)) return false;
-			GameObject PrefabSourceGameObject = OldAvatarGameObject;
-			string PrefabSourceAssetPath = AssetDatabase.GetAssetPath(OldAvatarGameObject);
-			while (PrefabSourceGameObject) {
-				string CurrentAssetPath = AssetDatabase.GetAssetPath(PrefabSourceGameObject);
-				if (!string.IsNullOrEmpty(CurrentAssetPath)) PrefabSourceAssetPath = CurrentAssetPath;
-				GameObject ParentPrefabSourceGameObject = PrefabUtility.GetCorrespondingObjectFromSource(PrefabSourceGameObject);
-				if (!ParentPrefabSourceGameObject) break;
-				PrefabSourceGameObject = ParentPrefabSourceGameObject;
-			}
-			if (string.IsNullOrEmpty(PrefabSourceAssetPath)) return false;
-			return PrefabSourceAssetPath.EndsWith(".fbx", StringComparison.OrdinalIgnoreCase);
 		}
 
 		void ReplaceModelAsset() {
