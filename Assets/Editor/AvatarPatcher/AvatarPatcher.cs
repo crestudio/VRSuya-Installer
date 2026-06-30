@@ -33,7 +33,7 @@ namespace VRSuya.Installer {
 
 		[MenuItem("Tools/VRSuya/Installer/AvatarPatcher", priority = 1000)]
 		static void CreateWindow() {
-			AvatarPatcher AppWindow = GetWindowWithRect<AvatarPatcher>(new Rect(0, 0, 400, 180), true, "VRSuya AvatarPatcher");
+			AvatarPatcher AppWindow = GetWindowWithRect<AvatarPatcher>(new Rect(0, 0, 400, 215), true, "VRSuya AvatarPatcher");
 			AppWindow.Initialize();
 		}
 
@@ -57,6 +57,11 @@ namespace VRSuya.Installer {
 			GUILayout.Space(BorderX);
 			EditorGUILayout.EndHorizontal();
 			EditorGUILayout.Space(EditorGUIUtility.singleLineHeight);
+			EditorGUILayout.BeginHorizontal();
+			GUILayout.Space(BorderX);
+			EditorGUILayout.HelpBox(GetTranslatedString("String_AvatarPatcher"), MessageType.Error);
+			GUILayout.Space(BorderX);
+			EditorGUILayout.EndHorizontal();
 			EditorGUILayout.BeginHorizontal();
 			GUILayout.Space(BorderX);
 			GUI.backgroundColor = Color.cyan;

@@ -38,7 +38,7 @@ namespace VRSuya.Installer {
 
 		[MenuItem("Tools/VRSuya/Installer/AvatarRebuilder", priority = 1000)]
 		static void CreateWindow() {
-			AvatarRebuilderEditor AppWindow = GetWindowWithRect<AvatarRebuilderEditor>(new Rect(0, 0, 400, 200), true, "VRSuya AvatarRebuilder");
+			AvatarRebuilderEditor AppWindow = GetWindowWithRect<AvatarRebuilderEditor>(new Rect(0, 0, 400, 270), true, "VRSuya AvatarRebuilder");
 		}
 
 		void OnGUI() {
@@ -69,6 +69,11 @@ namespace VRSuya.Installer {
 			GUILayout.Space(BorderX);
 			EditorGUILayout.EndHorizontal();
 			EditorGUILayout.Space(EditorGUIUtility.singleLineHeight);
+			EditorGUILayout.BeginHorizontal();
+			GUILayout.Space(BorderX);
+			EditorGUILayout.HelpBox(GetTranslatedString("String_AvatarRebuilder"), MessageType.Warning);
+			GUILayout.Space(BorderX);
+			EditorGUILayout.EndHorizontal();
 			EditorGUILayout.BeginHorizontal();
 			GUILayout.Space(BorderX);
 			GUI.backgroundColor = Color.cyan;

@@ -27,7 +27,7 @@ namespace VRSuya.Installer {
 
 		[MenuItem("Tools/VRSuya/Installer/HDiffPatcher", priority = 1000)]
 		static void CreateWindow() {
-			HDiffPatcherEditorWindow AppWindow = GetWindowWithRect<HDiffPatcherEditorWindow>(new Rect(0, 0, 400, 220), true, "VRSuya HDiffPatcher");
+			HDiffPatcherEditorWindow AppWindow = GetWindowWithRect<HDiffPatcherEditorWindow>(new Rect(0, 0, 400, 280), true, "VRSuya HDiffPatcher");
 			AppWindow.Initialize();
 		}
 
@@ -68,6 +68,11 @@ namespace VRSuya.Installer {
 			GUILayout.Space(BorderX);
 			EditorGUILayout.EndHorizontal();
 			EditorGUILayout.Space(EditorGUIUtility.singleLineHeight);
+			EditorGUILayout.BeginHorizontal();
+			GUILayout.Space(BorderX);
+			EditorGUILayout.HelpBox(GetTranslatedString("String_HDiffPatcher"), MessageType.Info);
+			GUILayout.Space(BorderX);
+			EditorGUILayout.EndHorizontal();
 			EditorGUILayout.BeginHorizontal();
 			GUILayout.Space(BorderX);
 			GUI.backgroundColor = Color.cyan;
