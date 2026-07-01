@@ -21,7 +21,7 @@ namespace VRSuya.Modular.Editor {
 
     public class MenuSelectorPlugin : Plugin<MenuSelectorPlugin> {
 
-		public override string QualifiedName => "com.vrsuya.modular.MenuSelector";
+		public override string QualifiedName => "com.vrsuya.modular.menuselector";
 		public override string DisplayName => "VRSuya MenuSelector";
 
 		protected override void Configure() {
