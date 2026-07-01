@@ -158,7 +158,7 @@ namespace VRSuya.Modular.Editor {
 			serializedObject.Update();
 			LanguageIndex = EditorGUILayout.Popup(GetTranslatedString("String_Language"), LanguageIndex, LanguageOption);
 			EditorGUILayout.Space(EditorGUIUtility.singleLineHeight);
-			EditorGUILayout.PropertyField(SerializedTargetType, new GUIContent(GetTranslatedString("String_PhysBoneType")));
+			SerializedTargetType.enumValueIndex = EditorGUILayout.Popup(GetTranslatedString("String_PhysBoneType"), SerializedTargetType.enumValueIndex, GetPhysBoneOption());
 			EditorGUILayout.Space();
 			PhysBoneType TargetType = (PhysBoneType)SerializedTargetType.enumValueIndex;
 			if (TargetType == 0) {
