@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿#if UNITY_EDITOR
+using UnityEngine;
 
 using VRC.SDKBase;
 
@@ -14,3 +15,4 @@ namespace VRSuya.Modular {
 	public class ChangeStandingPose : MonoBehaviour, IEditorOnly {
 	}
 }
+#endif

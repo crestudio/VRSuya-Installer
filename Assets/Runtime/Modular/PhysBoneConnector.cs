@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿#if UNITY_EDITOR
+using UnityEngine;
 
 using VRC.SDK3.Dynamics.PhysBone.Components;
 using VRC.SDKBase;
@@ -32,3 +33,4 @@ namespace VRSuya.Modular {
 		public VRCPhysBone TargetLittleToe1_R;
 	}
 }
+#endif

@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿#if UNITY_EDITOR
+using UnityEngine;
 
 using VRC.SDKBase;
 
@@ -15,3 +16,4 @@ namespace VRSuya.Modular {
 
 	}
 }
+#endif

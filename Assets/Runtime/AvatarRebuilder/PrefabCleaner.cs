@@ -82,10 +82,10 @@ namespace VRSuya.Installer {
 		}
 
 		bool ClearPrefabObject(GameObject TargetGameObject) {
-			bool IsChanged = false;
-			if (!PrefabUtility.IsPartOfPrefabInstance(TargetGameObject)) return IsChanged;
+			bool IsModified = false;
+			if (!PrefabUtility.IsPartOfPrefabInstance(TargetGameObject)) return IsModified;
 			PropertyModification[] OldPropertyModifications = PrefabUtility.GetPropertyModifications(TargetGameObject);
-			if (OldPropertyModifications == null || OldPropertyModifications.Length == 0) return IsChanged;
+			if (OldPropertyModifications == null || OldPropertyModifications.Length == 0) return IsModified;
 			PropertyModification[] NewPropertyModifications = OldPropertyModifications
 				.Where(Item => !Item.propertyPath.StartsWith(TargetPropertyPath))
 				.ToArray();
@@ -96,7 +96,7 @@ namespace VRSuya.Installer {
 				Undo.CollapseUndoOperations(Context.UndoGroupIndex);
 				AssetDatabase.SaveAssetIfDirty(TargetGameObject);
 			}
-			return IsChanged;
+			return IsModified;
 		}
 	}
 }

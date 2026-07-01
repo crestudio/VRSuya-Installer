@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿#if UNITY_EDITOR
+using UnityEngine;
 
 using VRC.SDK3.Dynamics.Constraint.Components;
 using VRC.SDKBase;
@@ -17,3 +18,4 @@ namespace VRSuya.Modular {
 		public VRCParentConstraint RightHandConstraint;
 	}
 }
+#endif

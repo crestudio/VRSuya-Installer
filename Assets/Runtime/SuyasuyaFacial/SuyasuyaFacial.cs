@@ -7,6 +7,7 @@ using UnityEngine;
 using UnityEditor;
 using UnityEditor.Animations;
 
+using VRC.SDKBase;
 using VRC.SDK3.Avatars.Components;
 
 /*
@@ -44,7 +45,8 @@ namespace VRSuya.Installer {
 
 	[ExecuteInEditMode]
 	[AddComponentMenu("VRSuya/VRSuya SuyasuyaFacial")]
-	public class SuyasuyaFacial : MonoBehaviour {
+	[HelpURL("https://vrsuya.booth.pm/")]
+	public class SuyasuyaFacial : MonoBehaviour, IEditorOnly {
 
         public GameObject AvatarGameObject;
 		public SkinnedMeshRenderer AvatarHeadSkinnedMeshRenderer;
@@ -55,6 +57,7 @@ namespace VRSuya.Installer {
 
 		public string StatusCode = string.Empty;
 		public int CountUpdatedCurve = 0;
+		const string UndoGroupName = "VRSuya VRSuya SuyasuyaFacial";
 		int UndoGroupIndex;
 
 		void OnEnable() {
@@ -231,7 +234,7 @@ namespace VRSuya.Installer {
 			foreach (AnimationClip CurrentAnimationClip in TargetAnimationClips) {
 				string[] AddBlendshapeList = GetAddBlendshapeList(CurrentAnimationClip);
 				if (AddBlendshapeList.Length > 0) {
-					Undo.RecordObject(CurrentAnimationClip, "Added new blendshape animation");
+					Undo.RecordObject(CurrentAnimationClip, UndoGroupName);
 					foreach (string TargetBlendshape in AddBlendshapeList) {
 						EditorCurveBinding newEditorCurveBinding = new EditorCurveBinding {
 							type = typeof(SkinnedMeshRenderer),

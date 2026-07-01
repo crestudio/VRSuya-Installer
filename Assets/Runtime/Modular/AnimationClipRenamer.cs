@@ -1,4 +1,5 @@
-﻿using System;
+﻿#if UNITY_EDITOR
+using System;
 using System.Collections.Generic;
 
 using UnityEngine;
@@ -32,3 +33,4 @@ namespace VRSuya.Modular {
 		public List<RenameExpression> TargetBlendshapeRenameList;
 	}
 }
+#endif
