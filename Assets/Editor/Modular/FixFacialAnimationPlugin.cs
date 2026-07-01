@@ -96,7 +96,9 @@ namespace VRSuya.Modular.Editor {
 			}
 			foreach (AnimationClip TargetAnimationClip in TargetAnimationClips) {
 				AnimationClip BuildContextAnimationClip = AvatarAnimationClips.FirstOrDefault(Item => Item.name == TargetAnimationClip.name);
+				if (!BuildContextAnimationClip) continue;
 				string[] AnimationBlendshapeNames = AnimationUtility.GetCurveBindings(BuildContextAnimationClip)
+					.Where(Item => Item != null)
 					.Where(Item => Item.type == typeof(SkinnedMeshRenderer))
 					.Where(Item => Item.path == FaceMeshName)
 					.Select(Item => Item.propertyName.Remove(0, 11))
