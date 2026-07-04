@@ -21,6 +21,8 @@ namespace VRSuya.Modular {
 		public PhysBoneType TargetType = PhysBoneType.Cheek;
 		public VRCPhysBone TargetCheek_L;
 		public VRCPhysBone TargetCheek_R;
+		public VRCPhysBone TargetToe_L;
+		public VRCPhysBone TargetToe_R;
 		public VRCPhysBone TargetThumbToe1_L;
 		public VRCPhysBone TargetThumbToe1_R;
 		public VRCPhysBone TargetIndexToe1_L;
