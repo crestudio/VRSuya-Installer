@@ -41,14 +41,15 @@ namespace VRSuya.Installer {
 				UndoGroupIndex = UnityUtility.InitializeUndoGroup(UndoGroupName)
 			};
 			if (!CheckOldAvatar()) return StatusString;
-			CopyModelImporter();
 			if (!CheckNewAvatar()) return StatusString;
 			if (UnityUtility.IsVariantModelPrefab(Context.OldAvatarGameObject)) {
-				ReplaceModelAsset();
+				if (!ReplaceModelAsset()) return StatusString;
 				PrefabCleaner PrefabCleanerInstance = new PrefabCleaner(ref Context);
 				PrefabCleanerInstance.RequestCleanupPrefab();
 				StatusString = "COMPLETED";
 			} else {
+				CopyModelImporter();
+				if (!CheckNewAvatarAnimator()) return StatusString;
 				CreateBackup();
 				string PatchedAvatarAssetPath = AssetDatabase.GetAssetPath(Context.NewAvatarGameObject);
 				Context.PatchedAvatarFilePath = Path.GetFullPath(PatchedAvatarAssetPath);
@@ -111,6 +112,10 @@ namespace VRSuya.Installer {
 				StatusString = "SAME_AVATAR";
 				return false;
 			}
+			return true;
+		}
+
+		bool CheckNewAvatarAnimator() {
 			Context.NewAvatarAnimator = Context.NewAvatarGameObject.GetComponent<Animator>();
 			if (!Context.NewAvatarAnimator) {
 				StatusString = "NO_NEW_ANIMATOR";
@@ -132,11 +137,19 @@ namespace VRSuya.Installer {
 			}
 		}
 
-		void ReplaceModelAsset() {
+		bool ReplaceModelAsset() {
 			string OldModelPath = AssetDatabase.GetAssetPath(Context.OldAvatarAnimator.avatar);
-			string NewModelPath = AssetDatabase.GetAssetPath(Context.NewAvatarAnimator.avatar);
-			ReplaceModelAsset ReplaceModelAssetInstance = new ReplaceModelAsset(ref Context);
-			ReplaceModelAssetInstance.RequestReplaceModelAsset(OldModelPath, NewModelPath, Context.UndoGroupIndex);
+			string NewModelPath = AssetDatabase.GetAssetPath(Context.NewAvatarGameObject);
+			if (OldModelPath == NewModelPath) {
+				StatusString = "SAME_AVATAR";
+				return false;
+			}
+			if (!string.IsNullOrEmpty(NewModelPath)) {
+				ReplaceModelAsset ReplaceModelAssetInstance = new ReplaceModelAsset(ref Context);
+				ReplaceModelAssetInstance.RequestReplaceModelAsset(OldModelPath, NewModelPath, Context.UndoGroupIndex);
+				return true;
+			}
+			return false;
 		}
 
 		void CreateBackup() {
