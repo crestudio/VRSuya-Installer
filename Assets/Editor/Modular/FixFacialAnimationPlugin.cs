@@ -89,7 +89,9 @@ namespace VRSuya.Modular.Editor {
 				if (BlinkBlendshapeIndex.Length > 0) {
 					List<string> BlinkBlendshapeNames = new List<string>();
 					foreach (int TargetIndex in BlinkBlendshapeIndex) {
-						BlinkBlendshapeNames.Add(HeadSkinnedMeshRenderer.sharedMesh.GetBlendShapeName(TargetIndex));
+						if (TargetIndex >= 0 && TargetIndex < HeadSkinnedMeshRenderer.sharedMesh.blendShapeCount) {
+							BlinkBlendshapeNames.Add(HeadSkinnedMeshRenderer.sharedMesh.GetBlendShapeName(TargetIndex));
+						}
 					}
 					NewBlendshapeNames = NewBlendshapeNames.Concat(BlinkBlendshapeNames).Distinct().ToArray();
 				}
