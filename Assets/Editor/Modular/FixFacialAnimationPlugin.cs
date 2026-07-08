@@ -157,8 +157,12 @@ namespace VRSuya.Modular.Editor {
 		SerializedProperty SerializedAddLayerControl;
 		SerializedProperty SerializedTargetLayerIndexs;
 
-		string[] AvatarBlendshapes = new string[0];
+		string[] AvatarFaceBlendshapes = new string[0];
+		string[] AvatarActiveBlendshapes = new string[0];
 		string[] ComponentBlendshapes = new string[0];
+
+		int TargetFaceBlendshapeIndex = 0;
+		string TargetFaceBlendshape;
 
 		void OnEnable() {
 			SerializedTargetAnimationClips = serializedObject.FindProperty("TargetAnimationClips");
@@ -191,13 +195,13 @@ namespace VRSuya.Modular.Editor {
 		}
 
 		void DrawAvatarBlendshapeGUI() {
-			if (AvatarBlendshapes.Length > 0) {
+			if (AvatarActiveBlendshapes.Length > 0) {
 				using (new EditorGUILayout.VerticalScope(EditorStyles.helpBox)) {
 					EditorGUI.indentLevel++;
-					foreach (string TargetBlendshape in AvatarBlendshapes) {
+					foreach (string TargetBlendshape in AvatarActiveBlendshapes) {
 						EditorGUILayout.BeginHorizontal();
 						EditorGUILayout.LabelField(TargetBlendshape);
-						if (GUILayout.Button(GetTranslatedString("String_Add"), GUILayout.Width(72))) {
+						if (GUILayout.Button(GetTranslatedString("String_Add"), GUILayout.Width(72f))) {
 							RequestAddBlendshape(TargetBlendshape);
 						}
 						EditorGUILayout.EndHorizontal();
@@ -205,13 +209,31 @@ namespace VRSuya.Modular.Editor {
 					EditorGUI.indentLevel--;
 				}
 			}
+			using (new EditorGUILayout.VerticalScope(EditorStyles.helpBox)) {
+				EditorGUI.indentLevel++;
+				EditorGUILayout.BeginHorizontal();
+				int NewFaceBlendshapeIndex = EditorGUILayout.Popup(string.Empty, TargetFaceBlendshapeIndex, AvatarFaceBlendshapes, GUILayout.Width(140f));
+				if (NewFaceBlendshapeIndex != TargetFaceBlendshapeIndex) {
+					TargetFaceBlendshapeIndex = NewFaceBlendshapeIndex;
+					if (TargetFaceBlendshapeIndex >= 0 && TargetFaceBlendshapeIndex < AvatarFaceBlendshapes.Length) {
+						TargetFaceBlendshape = AvatarFaceBlendshapes[TargetFaceBlendshapeIndex];
+					}
+				}
+				TargetFaceBlendshape = EditorGUILayout.TextField(TargetFaceBlendshape);
+				if (GUILayout.Button(GetTranslatedString("String_Add"), GUILayout.Width(72f))) {
+					RequestAddBlendshape(TargetFaceBlendshape);
+				}
+				EditorGUILayout.EndHorizontal();
+				EditorGUI.indentLevel--;
+			}
 			if (GUILayout.Button(GetTranslatedString("String_GetAvatarData"))) {
 				RequestUpdateBlendshapeList();
 			}
 		}
 
 		void RequestUpdateBlendshapeList() {
-			AvatarBlendshapes = new string[0];
+			AvatarFaceBlendshapes = new string[0];
+			AvatarActiveBlendshapes = new string[0];
 			FixFacialAnimation TargetComponentInstance = (FixFacialAnimation)target;
 			if (!TargetComponentInstance) return;
 			GameObject AvatarGameObject = AvatarUtility.GetAvatarGameObject(TargetComponentInstance.gameObject);
@@ -223,6 +245,7 @@ namespace VRSuya.Modular.Editor {
 			if (!HeadSkinnedMeshRenderer.sharedMesh) return;
 			int HeadBlendshapeCount = HeadSkinnedMeshRenderer.sharedMesh.blendShapeCount;
 			if (HeadBlendshapeCount == 0) return;
+			List<string> FaceBlendshapeNames = new List<string>();
 			List<string> ActiveBlendshapeNames = new List<string>();
 			for (int Index = 0; Index < HeadBlendshapeCount; Index++) {
 				if (HeadSkinnedMeshRenderer.GetBlendShapeWeight(Index) > 0f) {
@@ -231,8 +254,10 @@ namespace VRSuya.Modular.Editor {
 						ActiveBlendshapeNames.Add(HeadSkinnedMeshRenderer.sharedMesh.GetBlendShapeName(Index));
 					}
 				}
+				FaceBlendshapeNames.Add(HeadSkinnedMeshRenderer.sharedMesh.GetBlendShapeName(Index));
 			}
-			AvatarBlendshapes = ActiveBlendshapeNames.OrderBy(Item => Item, StringComparer.Ordinal).ToArray();
+			AvatarFaceBlendshapes = FaceBlendshapeNames.ToArray();
+			AvatarActiveBlendshapes = ActiveBlendshapeNames.OrderBy(Item => Item, StringComparer.Ordinal).ToArray();
 		}
 
 		void RequestAddBlendshape(string TargetBlendshape) {
@@ -241,9 +266,9 @@ namespace VRSuya.Modular.Editor {
 			SerializedTargetBlendshapes.arraySize++;
 			SerializedProperty NewSerializedProperty = SerializedTargetBlendshapes.GetArrayElementAtIndex(CurrentArraySize);
 			NewSerializedProperty.stringValue = TargetBlendshape;
-			List<string> NewAvatarBlendshapes = AvatarBlendshapes.ToList();
+			List<string> NewAvatarBlendshapes = AvatarActiveBlendshapes.ToList();
 			NewAvatarBlendshapes.Remove(TargetBlendshape);
-			AvatarBlendshapes = NewAvatarBlendshapes.ToArray();
+			AvatarActiveBlendshapes = NewAvatarBlendshapes.ToArray();
 		}
 
 		void GetSerializedBlendshapeList() {
