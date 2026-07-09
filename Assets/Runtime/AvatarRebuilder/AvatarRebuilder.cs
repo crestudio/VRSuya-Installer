@@ -1,5 +1,4 @@
 ﻿#if UNITY_EDITOR
-using System;
 using System.IO;
 using System.Linq;
 
@@ -35,6 +34,7 @@ namespace VRSuya.Installer {
 		public bool CanRevert = false;
 
 		public string RequestRebuildAvatar() {
+			if (!CheckPrefabMode()) return StatusString;
 			Context = new AvatarRebuilderContext {
 				OldAvatarGameObject = OldAvatarGameObject,
 				NewAvatarGameObject = NewAvatarGameObject,
@@ -84,6 +84,14 @@ namespace VRSuya.Installer {
 				}
 				CanRevert = false;
 			}
+		}
+
+		bool CheckPrefabMode() {
+			if (UnityUtility.IsPrefabEditingMode()) {
+				StatusString = "NO_PREFAB_MODE";
+				return false;
+			}
+			return true;
 		}
 
 		bool CheckOldAvatar() {

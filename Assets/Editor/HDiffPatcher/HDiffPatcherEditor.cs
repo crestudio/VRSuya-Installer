@@ -1,6 +1,7 @@
 ﻿using System.IO;
 
 using UnityEditor;
+using UnityEditor.PackageManager;
 using UnityEngine;
 
 using VRSuya.Core;
@@ -102,6 +103,7 @@ namespace VRSuya.Installer {
 		}
 
 		public bool RequestAvatarPatch() {
+			if (!VerifyVariable()) return false;
 			string OutputAssetPath = ApplyAvatarPatch();
 			if (!string.IsNullOrEmpty(OutputAssetPath) && ReplaceModel) {
 				if (ReplaceAvatarModel(OutputAssetPath)) {
@@ -109,6 +111,30 @@ namespace VRSuya.Installer {
 				}
 			}
 			return false;
+		}
+
+		bool VerifyVariable() {
+			if (!AvatarGameObject.scene.IsValid()) {
+				if (!SilenceMode) {
+					EditorUtility.DisplayDialog(
+						"VRSuya HDiffPatcher",
+						GetTranslatedString("NO_OLD_AVATAR_SCENE"),
+						GetTranslatedString("String_Okay")
+					);
+				}
+				return false;
+			}
+			if (UnityUtility.IsPrefabEditingMode()) {
+				if (!SilenceMode) {
+					EditorUtility.DisplayDialog(
+						"VRSuya HDiffPatcher",
+						GetTranslatedString("NO_PREFAB_MODE"),
+						GetTranslatedString("String_Okay")
+					);
+				}
+				return false;
+			}
+			return true;
 		}
 
 		string ApplyAvatarPatch() {
